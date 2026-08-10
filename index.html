@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medlive</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 60px;
+            background: white;
+        }
+
+        h1 {
+            color: #3f51b5;
+        }
+
+        input {
+            display: block;
+            margin: 15px auto;
+            padding: 12px;
+            width: 220px;
+            border-radius: 8px;
+            border: 1px solid #aaa;
+        }
+
+        button {
+            padding: 12px 35px;
+            background: #536dfe;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #3f51b5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🏥 Medlive</h1>
+
+    <h3>Login</h3>
+
+    <input type="text" id="username" placeholder="Login">
+
+    <input type="password" id="password" placeholder="Şifrə">
+
+    <button onclick="giris()">Daxil ol</button>
+
+    <script>
+        function giris() {
+
+            let login = document.getElementById("username").value;
+            let sifre = document.getElementById("password").value;
+
+            if (login === "admin" && sifre === "1234") {
+                window.location.href = "medistyle.html";
+            } else {
+                alert("Login və ya şifrə səhvdir!");
+            }
+        }
+    </script>
+
+</body>
+</html>
+<div>
+  <select id="languageSelect" onchange="changeLanguage()">
+    <option value="az">🇦🇿 Azərbaycan</option>
+    <option value="en">🇬🇧 English</option>
+    <option value="ru">🇷🇺 Русский</option>
+  </select>
+</div>

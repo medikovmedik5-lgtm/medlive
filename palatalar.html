@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palatalar</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        input {
+            display: block;
+            margin: 15px auto;
+            padding: 12px;
+            width: 220px;
+            border-radius: 8px;
+            border: 1px solid #aaa;
+        }
+
+        button {
+            padding: 12px 35px;
+            border: none;
+            border-radius: 8px;
+            background: #536dfe;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🏥 MedLive</h1>
+    <h2>Palatalar</h2>
+
+    <input type="text" id="username" placeholder="Login">
+
+    <input type="password" id="password" placeholder="Şifrə">
+
+    <button onclick="giris()">Daxil ol</button>
+
+    <script>
+        function giris() {
+
+            let login = document.getElementById("username").value;
+            let sifre = document.getElementById("password").value;
+
+            if (login === "palata" && sifre === "1234") {
+    window.location.href = "palata-menu.html";
+}
+
+             else {
+                alert("Login və ya şifrə səhvdir!");
+            }
+        }
+    </script>
+
+</body>
+</html>
