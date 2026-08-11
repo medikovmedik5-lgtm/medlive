@@ -29,6 +29,11 @@
             border-radius: 14px;
             background: #536dfe;
             color: white;
+            cursor: pointer;
+        }
+
+        .istək:hover {
+            opacity: 0.9;
         }
 
         textarea {
@@ -37,6 +42,27 @@
             margin-top: 15px;
             padding: 10px;
             border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .ses {
+            background: #e53935;
+        }
+
+        .dayandir {
+            background: #43a047;
+        }
+
+        #status {
+            font-weight: bold;
+            margin: 15px;
+            color: #555;
+        }
+
+        audio {
+            width: 320px;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -62,6 +88,81 @@
     <br>
 
     <button class="istək">📤 Göndər</button>
+
+    <hr>
+
+    <h2>🎙️ Səsli mesaj</h2>
+
+    <button id="sesBaslat" class="istək ses">
+        🎙️ Səs yaz
+    </button>
+
+    <button id="sesDayandir" class="istək dayandir" disabled>
+        ⏹️ Səsi dayandır
+    </button>
+
+    <div id="status">Səs yazmağa hazırdır</div>
+
+    <audio id="audio" controls></audio>
+
+    <script>
+        let recorder;
+        let audioChunks = [];
+
+        const sesBaslat = document.getElementById("sesBaslat");
+        const sesDayandir = document.getElementById("sesDayandir");
+        const status = document.getElementById("status");
+        const audio = document.getElementById("audio");
+
+        sesBaslat.addEventListener("click", async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    audio: true
+                });
+
+                audioChunks = [];
+
+                recorder = new MediaRecorder(stream);
+
+                recorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                recorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, {
+                        type: "audio/webm"
+                    });
+
+                    const audioUrl = URL.createObjectURL(audioBlob);
+
+                    audio.src = audioUrl;
+
+                    stream.getTracks().forEach(track => track.stop());
+
+                    status.textContent = "✅ Səs yazıldı. Aşağıdan dinləyə bilərsiniz.";
+                };
+
+                recorder.start();
+
+                status.textContent = "🔴 Səs yazılır...";
+                sesBaslat.disabled = true;
+                sesDayandir.disabled = false;
+
+            } catch (error) {
+                status.textContent = "❌ Mikrofon üçün icazə verilmədi.";
+                console.log(error);
+            }
+        });
+
+        sesDayandir.addEventListener("click", () => {
+            if (recorder && recorder.state !== "inactive") {
+                recorder.stop();
+
+                sesBaslat.disabled = false;
+                sesDayandir.disabled = true;
+            }
+        });
+    </script>
 
 </body>
 
