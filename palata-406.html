@@ -18,9 +18,10 @@
             color: #3f51b5;
         }
 
-        .istək {
+        .istek {
             display: block;
             width: 320px;
+            max-width: 90%;
             margin: 15px auto;
             padding: 18px;
             font-size: 19px;
@@ -32,16 +33,17 @@
             cursor: pointer;
         }
 
-        .istək:hover {
+        .istek:hover {
             opacity: 0.9;
         }
 
-        .istək:disabled {
+        .istek:disabled {
             opacity: 0.6;
         }
 
         textarea {
             width: 300px;
+            max-width: 85%;
             height: 100px;
             margin-top: 15px;
             padding: 10px;
@@ -88,19 +90,19 @@
 
     <h2>Nə lazımdır?</h2>
 
-    <button class="istək" onclick="cagirisGonder('Su istəyirəm')">
+    <button class="istek" onclick="cagirisGonder('Su istəyirəm')">
         💧 Su istəyirəm
     </button>
 
-    <button class="istək" onclick="cagirisGonder('Yemək istəyirəm')">
+    <button class="istek" onclick="cagirisGonder('Yemək istəyirəm')">
         🍽️ Yemək istəyirəm
     </button>
 
-    <button class="istək" onclick="cagirisGonder('Tibb bacısını çağır')">
+    <button class="istek" onclick="cagirisGonder('Tibb bacısını çağır')">
         🧑‍⚕️ Tibb bacısını çağır
     </button>
 
-    <button class="istək" onclick="cagirisGonder('Yataqla bağlı kömək istəyirəm')">
+    <button class="istek" onclick="cagirisGonder('Yataqla bağlı kömək istəyirəm')">
         🛏️ Yataqla bağlı kömək
     </button>
 
@@ -110,11 +112,12 @@
 
     <h3>📝 Şərh</h3>
 
-    <textarea id="serh" placeholder="İstəyinizi buraya yazın..."></textarea>
+    <textarea id="serh"
+        placeholder="İstəyinizi buraya yazın..."></textarea>
 
     <br>
 
-    <button class="istək" onclick="serhGonder()">
+    <button class="istek" onclick="serhGonder()">
         📤 Şərhi göndər
     </button>
 
@@ -122,11 +125,11 @@
 
     <h2>🎙️ Səsli mesaj</h2>
 
-    <button id="sesBaslat" class="istək ses">
+    <button id="sesBaslat" class="istek ses">
         🎙️ Səs yaz
     </button>
 
-    <button id="sesDayandir" class="istək dayandir" disabled>
+    <button id="sesDayandir" class="istek dayandir" disabled>
         ⏹️ Səsi dayandır
     </button>
 
@@ -137,233 +140,233 @@
     <audio id="audio" controls></audio>
 
 
-    <script>
+<script>
 
-        // ==========================
-        // MEDLIVE INTERNET BACKEND
-        // ==========================
+    // ==================================
+    // MEDLIVE INTERNET SERVER
+    // ==================================
 
-        const BACKEND_URL = "https://medlive.onrender.com";
+    const BACKEND_URL = "https://medlive.onrender.com";
 
-        const PALATA = "406";
+    const PALATA = "406";
 
 
-        // ==========================
-        // ÇAĞIRIŞ GÖNDƏR
-        // ==========================
+    // ==================================
+    // ÇAĞIRIŞ GÖNDƏR
+    // ==================================
 
-        async function cagirisGonder(istek) {
+    async function cagirisGonder(istek) {
 
-            const status =
-                document.getElementById("cagirisStatus");
+        const status =
+            document.getElementById("cagirisStatus");
+
+        status.textContent =
+            "⏳ Göndərilir...";
+
+        try {
+
+            const response = await fetch(
+                "https://medlive.onrender.com/api/cagir",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        palata: PALATA,
+                        istek: istek
+                    })
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    "Server xətası: " + response.status
+                );
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+
+                status.textContent =
+                    "🔔 Göndərildi: Palata " +
+                    PALATA +
+                    " — " +
+                    istek;
+
+            } else {
+
+                status.textContent =
+                    "❌ Göndərmək mümkün olmadı.";
+
+            }
+
+        } catch (error) {
+
+            console.error("Xəta:", error);
 
             status.textContent =
-                "⏳ Göndərilir...";
+                "❌ Serverə qoşulmaq olmadı.";
+
+        }
+    }
+
+
+    // ==================================
+    // ŞƏRH GÖNDƏR
+    // ==================================
+
+    async function serhGonder() {
+
+        const serh =
+            document.getElementById("serh")
+                .value
+                .trim();
+
+        if (!serh) {
+
+            alert("Əvvəl şərh yazın.");
+
+            return;
+        }
+
+        await cagirisGonder(
+            "📝 Şərh: " + serh
+        );
+
+        document.getElementById("serh").value = "";
+    }
+
+
+    // ==================================
+    // SƏS YAZMA
+    // ==================================
+
+    let recorder = null;
+    let audioChunks = [];
+
+    const sesBaslat =
+        document.getElementById("sesBaslat");
+
+    const sesDayandir =
+        document.getElementById("sesDayandir");
+
+    const status =
+        document.getElementById("status");
+
+    const audio =
+        document.getElementById("audio");
+
+
+    sesBaslat.addEventListener(
+        "click",
+        async function () {
 
             try {
 
-                const response = await fetch(
-                    BACKEND_URL + "/api/cagir",
-                    {
-                        method: "POST",
+                const stream =
+                    await navigator.mediaDevices
+                        .getUserMedia({
+                            audio: true
+                        });
 
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
+                audioChunks = [];
 
-                        body: JSON.stringify({
-                            palata: PALATA,
-                            istek: istek
-                        })
-                    }
-                );
+                recorder =
+                    new MediaRecorder(stream);
 
-                const data = await response.json();
 
-                if (data.success) {
+                recorder.ondataavailable =
+                    function (event) {
 
-                    status.textContent =
-                        "🔔 Göndərildi: Palata " +
-                        PALATA +
-                        " — " +
-                        istek;
+                        if (event.data.size > 0) {
+                            audioChunks.push(event.data);
+                        }
 
-                } else {
+                    };
 
-                    status.textContent =
-                        "❌ Göndərmək mümkün olmadı.";
 
-                }
+                recorder.onstop =
+                    function () {
 
-            } catch (error) {
+                        const audioBlob =
+                            new Blob(
+                                audioChunks,
+                                {
+                                    type: "audio/webm"
+                                }
+                            );
+
+                        const audioUrl =
+                            URL.createObjectURL(
+                                audioBlob
+                            );
+
+                        audio.src = audioUrl;
+
+
+                        stream
+                            .getTracks()
+                            .forEach(
+                                track => track.stop()
+                            );
+
+
+                        status.textContent =
+                            "✅ Səs yazıldı. Aşağıdan dinləyə bilərsiniz.";
+
+                    };
+
+
+                recorder.start();
+
+
+                status.textContent =
+                    "🔴 Səs yazılır...";
+
+
+                sesBaslat.disabled = true;
+
+                sesDayandir.disabled = false;
+
+            }
+
+            catch (error) {
 
                 console.error(error);
 
                 status.textContent =
-                    "❌ Backendə qoşulmaq olmadı.";
+                    "❌ Mikrofon üçün icazə verilmədi.";
 
             }
-        }
-
-
-        // ==========================
-        // ŞƏRH GÖNDƏR
-        // ==========================
-
-        async function serhGonder() {
-
-            const serh =
-                document.getElementById("serh").value.trim();
-
-            if (!serh) {
-
-                alert("Əvvəl şərh yazın.");
-
-                return;
-            }
-
-            await cagirisGonder(
-                "Şərh: " + serh
-            );
-
-            document.getElementById("serh").value = "";
 
         }
+    );
 
 
-        // ==========================
-        // SƏS YAZMA
-        // ==========================
+    sesDayandir.addEventListener(
+        "click",
+        function () {
 
-        let recorder;
+            if (
+                recorder &&
+                recorder.state !== "inactive"
+            ) {
 
-        let audioChunks = [];
+                recorder.stop();
 
-        const sesBaslat =
-            document.getElementById("sesBaslat");
+                sesBaslat.disabled = false;
 
-        const sesDayandir =
-            document.getElementById("sesDayandir");
-
-        const status =
-            document.getElementById("status");
-
-        const audio =
-            document.getElementById("audio");
-
-
-        sesBaslat.addEventListener(
-            "click",
-            async () => {
-
-                try {
-
-                    const stream =
-                        await navigator.mediaDevices.getUserMedia({
-                            audio: true
-                        });
-
-                    audioChunks = [];
-
-                    recorder =
-                        new MediaRecorder(stream);
-
-
-                    recorder.ondataavailable =
-                        (event) => {
-
-                            audioChunks.push(
-                                event.data
-                            );
-
-                        };
-
-
-                    recorder.onstop =
-                        () => {
-
-                            const audioBlob =
-                                new Blob(
-                                    audioChunks,
-                                    {
-                                        type: "audio/webm"
-                                    }
-                                );
-
-                            const audioUrl =
-                                URL.createObjectURL(
-                                    audioBlob
-                                );
-
-                            audio.src =
-                                audioUrl;
-
-
-                            stream
-                                .getTracks()
-                                .forEach(
-                                    track =>
-                                        track.stop()
-                                );
-
-
-                            status.textContent =
-                                "✅ Səs yazıldı. Aşağıdan dinləyə bilərsiniz.";
-
-                        };
-
-
-                    recorder.start();
-
-
-                    status.textContent =
-                        "🔴 Səs yazılır...";
-
-
-                    sesBaslat.disabled =
-                        true;
-
-                    sesDayandir.disabled =
-                        false;
-
-
-                } catch (error) {
-
-                    status.textContent =
-                        "❌ Mikrofon üçün icazə verilmədi.";
-
-                    console.log(error);
-
-                }
-
+                sesDayandir.disabled = true;
             }
-        );
 
+        }
+    );
 
-        sesDayandir.addEventListener(
-            "click",
-            () => {
-
-                if (
-                    recorder &&
-                    recorder.state !== "inactive"
-                ) {
-
-                    recorder.stop();
-
-                    sesBaslat.disabled =
-                        false;
-
-                    sesDayandir.disabled =
-                        true;
-
-                }
-
-            }
-        );
-
-    </script>
+</script>
 
 </body>
-
 </html>
