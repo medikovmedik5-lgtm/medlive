@@ -140,10 +140,10 @@
     <script>
 
         // ==========================
-        // MEDLIVE BACKEND
+        // MEDLIVE INTERNET BACKEND
         // ==========================
 
-        const BACKEND_URL = "http://localhost:3000";
+        const BACKEND_URL = "https://medlive.onrender.com";
 
         const PALATA = "406";
 
@@ -154,9 +154,11 @@
 
         async function cagirisGonder(istek) {
 
-            const status = document.getElementById("cagirisStatus");
+            const status =
+                document.getElementById("cagirisStatus");
 
-            status.textContent = "⏳ Göndərilir...";
+            status.textContent =
+                "⏳ Göndərilir...";
 
             try {
 
@@ -220,7 +222,12 @@
                 return;
             }
 
-            cagirisGonder("Şərh: " + serh);
+            await cagirisGonder(
+                "Şərh: " + serh
+            );
+
+            document.getElementById("serh").value = "";
+
         }
 
 
