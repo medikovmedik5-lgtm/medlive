@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>MedElin</title>
 
     <style>
@@ -14,263 +13,295 @@
 
         body {
             margin: 0;
+            min-height: 100vh;
             font-family: Arial, sans-serif;
-            background: #f5f7ff;
+            background:
+                radial-gradient(circle at top left, #dce8ff 0, transparent 35%),
+                linear-gradient(135deg, #eef4ff, #f9fbff);
+            color: #172033;
+        }
+
+        .page {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 430px;
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 28px;
+            padding: 35px 28px;
+            box-shadow: 0 20px 60px rgba(47, 73, 125, 0.15);
             text-align: center;
         }
 
-        .language {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-        }
-
-        select {
-            padding: 9px 12px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            background: white;
-            font-size: 14px;
-        }
-
-        .container {
-            max-width: 450px;
-            margin: 90px auto;
-            padding: 20px;
-        }
-
         .logo {
-            font-size: 65px;
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 15px;
+            border-radius: 26px;
+            background: linear-gradient(135deg, #536dfe, #3f51b5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            box-shadow: 0 12px 25px rgba(63, 81, 181, 0.25);
         }
 
         h1 {
-            color: #3f51b5;
-            font-size: 40px;
-            margin: 10px;
+            margin: 10px 0 5px;
+            font-size: 38px;
+            color: #3046a8;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: #7a8499;
+            margin-bottom: 30px;
+            font-size: 15px;
         }
 
         h2 {
-            color: #444;
+            font-size: 22px;
+            margin-bottom: 22px;
+        }
+
+        .input-box {
+            position: relative;
+            margin: 14px 0;
+        }
+
+        .input-box span {
+            position: absolute;
+            left: 16px;
+            top: 15px;
+            font-size: 20px;
         }
 
         input {
-            display: block;
-            width: 280px;
-            max-width: 90%;
-            margin: 15px auto;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            font-size: 17px;
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            border: 1px solid #dce2ef;
+            border-radius: 15px;
+            background: #f8faff;
+            font-size: 16px;
+            outline: none;
+            transition: 0.2s;
         }
 
-        .button {
-            width: 280px;
-            max-width: 90%;
-            padding: 15px;
-            margin: 10px auto;
+        input:focus {
+            border-color: #536dfe;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(83, 109, 254, 0.10);
+        }
+
+        .login-btn {
+            width: 100%;
+            margin-top: 18px;
+            padding: 17px;
             border: none;
-            border-radius: 12px;
-            background: #536dfe;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #536dfe, #3f51b5);
             color: white;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: bold;
             cursor: pointer;
+            box-shadow: 0 10px 25px rgba(63, 81, 181, 0.25);
+            transition: 0.2s;
         }
 
-        .button:hover {
-            background: #3f51b5;
+        .login-btn:hover {
+            transform: translateY(-2px);
         }
 
-        .error {
+        #xeta {
+            min-height: 22px;
+            margin-top: 15px;
             color: #e53935;
             font-weight: bold;
-            margin-top: 15px;
         }
 
         #palatalar {
             display: none;
+        }
+
+        .welcome {
+            color: #7a8499;
+            font-size: 15px;
+            margin-bottom: 25px;
+        }
+
+        .palata {
+            width: 100%;
+            margin: 12px 0;
+            padding: 19px;
+            border: none;
+            border-radius: 18px;
+            background: white;
+            color: #26345c;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: left;
+            cursor: pointer;
+            box-shadow: 0 7px 25px rgba(47, 73, 125, 0.10);
+            border: 1px solid #e8ecf5;
+            transition: 0.2s;
+        }
+
+        .palata:hover {
+            transform: translateY(-3px);
+            border-color: #536dfe;
+            box-shadow: 0 12px 30px rgba(63, 81, 181, 0.15);
+        }
+
+        .room-icon {
+            display: inline-flex;
+            width: 45px;
+            height: 45px;
+            align-items: center;
+            justify-content: center;
+            background: #eef2ff;
+            border-radius: 13px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .footer {
+            margin-top: 28px;
+            color: #9aa3b5;
+            font-size: 12px;
         }
     </style>
 </head>
 
 <body>
 
-    <!-- DİL -->
-    <div class="language">
-        <select id="language" onchange="dilDeyis()">
-            <option value="az">🇦🇿 Azərbaycan</option>
-            <option value="en">🇬🇧 English</option>
-            <option value="ru">🇷🇺 Русский</option>
-        </select>
+    <!-- LOGIN -->
+
+    <div class="page">
+
+        <div id="giris" class="card">
+
+            <div class="logo">🏥</div>
+
+            <h1>MedElin</h1>
+
+            <div class="subtitle">
+                Palata idarəetmə sistemi
+            </div>
+
+            <h2>🔐 Admin giriş</h2>
+
+            <div class="input-box">
+                <span>👤</span>
+                <input
+                    type="text"
+                    id="istifadeci"
+                    placeholder="İstifadəçi adı"
+                >
+            </div>
+
+            <div class="input-box">
+                <span>🔑</span>
+                <input
+                    type="password"
+                    id="sifre"
+                    placeholder="Şifrə"
+                >
+            </div>
+
+            <button class="login-btn" onclick="giris()">
+                Daxil ol →
+            </button>
+
+            <div id="xeta"></div>
+
+            <div class="footer">
+                MedElin • Palata sistemi
+            </div>
+
+        </div>
+
+
+        <!-- PALATALAR -->
+
+        <div id="palatalar" class="card">
+
+            <div class="logo">🏥</div>
+
+            <h1>MedElin</h1>
+
+            <div class="welcome">
+                Xoş gəlmisiniz 👋<br>
+                Palatanı seçin
+            </div>
+
+            <button class="palata"
+                onclick="window.location.href='palata-406.html'">
+
+                <span class="room-icon">🛏️</span>
+                Palata 406
+                <small> • Aktiv</small>
+
+            </button>
+
+            <button class="palata"
+                onclick="window.location.href='palata-407.html'">
+
+                <span class="room-icon">🛏️</span>
+                Palata 407
+                <small> • Aktiv</small>
+
+            </button>
+
+            <button class="palata"
+                onclick="window.location.href='palata-408.html'">
+
+                <span class="room-icon">🛏️</span>
+                Palata 408
+                <small> • Aktiv</small>
+
+            </button>
+
+            <div class="footer">
+                MedElin • Palata idarəetmə sistemi
+            </div>
+
+        </div>
+
     </div>
 
 
-    <!-- GİRİŞ SƏHİFƏSİ -->
-    <div id="loginPage" class="container">
+    <script>
 
-        <div class="logo">🏥</div>
+        function giris() {
 
-        <h1>MedElin</h1>
+            const istifadeci =
+                document.getElementById("istifadeci").value;
 
-        <h2 id="loginTitle">Daxil ol</h2>
+            const sifre =
+                document.getElementById("sifre").value;
 
-        <input
-            type="text"
-            id="username"
-            placeholder="Login"
-        >
+            if (istifadeci === "admin" && sifre === "1234") {
 
-        <input
-            type="password"
-            id="password"
-            placeholder="Şifrə"
-        >
+                document.getElementById("giris").style.display = "none";
 
-        <button class="button" onclick="giris()" id="loginButton">
-            🔐 Daxil ol
-        </button>
+                document.getElementById("palatalar").style.display = "block";
 
-        <div id="error" class="error"></div>
+            } else {
 
-    </div>
+                document.getElementById("xeta").textContent =
+                    "❌ İstifadəçi adı və ya şifrə səhvdir.";
 
-
-    <!-- PALATALAR -->
-    <div id="palatalar" class="container">
-
-        <div class="logo">🏥</div>
-
-        <h1>MedElin</h1>
-
-        <h2 id="roomsTitle">🛏️ Palatalar</h2>
-
-        <button class="button"
-            onclick="window.location.href='palata-406.html'">
-            🛏️ Palata 406
-        </button>
-
-        <button class="button"
-            onclick="window.location.href='palata-407.html'">
-            🛏️ Palata 407
-        </button>
-
-        <button class="button"
-            onclick="window.location.href='palata-408.html'">
-            🛏️ Palata 408
-        </button>
-
-    </div>
-
-
-<script>
-
-    // LOGIN: palata
-    // ŞİFRƏ: 1234
-
-    function giris() {
-
-        const login =
-            document.getElementById("username").value.trim();
-
-        const sifre =
-            document.getElementById("password").value;
-
-        if (login === "palata" && sifre === "1234") {
-
-            document.getElementById("loginPage").style.display = "none";
-
-            document.getElementById("palatalar").style.display = "block";
-
-            document.getElementById("error").textContent = "";
-
-        } else {
-
-            const dil =
-                document.getElementById("language").value;
-
-            if (dil === "az") {
-                document.getElementById("error").textContent =
-                    "❌ Login və ya şifrə səhvdir!";
             }
 
-            if (dil === "en") {
-                document.getElementById("error").textContent =
-                    "❌ Incorrect login or password!";
-            }
-
-            if (dil === "ru") {
-                document.getElementById("error").textContent =
-                    "❌ Неверный логин или пароль!";
-            }
-        }
-    }
-
-
-    function dilDeyis() {
-
-        const dil =
-            document.getElementById("language").value;
-
-        const loginTitle =
-            document.getElementById("loginTitle");
-
-        const username =
-            document.getElementById("username");
-
-        const password =
-            document.getElementById("password");
-
-        const loginButton =
-            document.getElementById("loginButton");
-
-        const roomsTitle =
-            document.getElementById("roomsTitle");
-
-
-        if (dil === "az") {
-
-            loginTitle.textContent = "Daxil ol";
-
-            username.placeholder = "Login";
-
-            password.placeholder = "Şifrə";
-
-            loginButton.textContent = "🔐 Daxil ol";
-
-            roomsTitle.textContent = "🛏️ Palatalar";
         }
 
-
-        if (dil === "en") {
-
-            loginTitle.textContent = "Login";
-
-            username.placeholder = "Username";
-
-            password.placeholder = "Password";
-
-            loginButton.textContent = "🔐 Login";
-
-            roomsTitle.textContent = "🛏️ Rooms";
-        }
-
-
-        if (dil === "ru") {
-
-            loginTitle.textContent = "Вход";
-
-            username.placeholder = "Логин";
-
-            password.placeholder = "Пароль";
-
-            loginButton.textContent = "🔐 Войти";
-
-            roomsTitle.textContent = "🛏️ Палаты";
-        }
-    }
-
-</script>
+    </script>
 
 </body>
 </html>

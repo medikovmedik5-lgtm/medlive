@@ -4,149 +4,432 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Palata 406</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
+            margin: 0;
+            min-height: 100vh;
             font-family: Arial, sans-serif;
             text-align: center;
-            background: #f5f7ff;
-            padding: 35px 20px;
+            background: #f4f8f6;
+            color: #1d2b26;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            width: 82px;
+            height: 82px;
+            margin: 0 auto 12px;
+            border-radius: 25px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+            box-shadow: 0 10px 30px rgba(30, 70, 55, 0.12);
+            border: 1px solid #e2ebe6;
         }
 
         h1 {
-            color: #3f51b5;
+            color: #244d3d;
+            font-size: 32px;
+            margin: 10px 0;
+        }
+
+        h2 {
+            font-size: 22px;
+            margin: 25px 0 18px;
+        }
+
+        .subtitle {
+            color: #748078;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        /* DİL SEÇİMİ */
+
+        #dilSechimi {
+            max-width: 430px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px 22px;
+            border-radius: 28px;
+            box-shadow: 0 15px 45px rgba(30, 70, 55, 0.12);
+        }
+
+        .dilBtn {
+            display: block;
+            width: 100%;
+            padding: 17px;
+            margin: 12px 0;
+            border: 1px solid #dce7e1;
+            border-radius: 16px;
+            background: #ffffff;
+            color: #244d3d;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .dilBtn:hover {
+            background: #edf6f1;
+            transform: translateY(-2px);
+        }
+
+        /* ƏSAS PALATA */
+
+        #palata {
+            display: none;
+            max-width: 430px;
+            margin: 20px auto;
+            background: white;
+            padding: 25px 20px;
+            border-radius: 28px;
+            box-shadow: 0 15px 45px rgba(30, 70, 55, 0.10);
         }
 
         .istek {
             display: block;
-            width: 320px;
-            max-width: 90%;
-            margin: 15px auto;
+            width: 100%;
+            margin: 12px auto;
             padding: 18px;
-            font-size: 19px;
+            font-size: 18px;
             font-weight: bold;
-            border: none;
-            border-radius: 14px;
-            background: #536dfe;
-            color: white;
+            border: 1px solid #dce7e1;
+            border-radius: 16px;
+            background: #ffffff;
+            color: #244d3d;
             cursor: pointer;
+            transition: 0.2s;
         }
 
         .istek:hover {
-            opacity: 0.9;
+            background: #edf6f1;
+            transform: translateY(-2px);
         }
 
         .istek:disabled {
             opacity: 0.6;
         }
 
-        textarea {
-            width: 300px;
-            max-width: 85%;
-            height: 100px;
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-        }
-
         .ses {
-            background: #e53935;
+            background: #fff4f2;
+            border-color: #f2d1cc;
+            color: #a33d32;
         }
 
         .dayandir {
-            background: #43a047;
+            background: #edf6f1;
+            border-color: #cfe2d8;
+            color: #2d654e;
+        }
+
+        textarea {
+            width: 100%;
+            height: 105px;
+            margin-top: 10px;
+            padding: 13px;
+            border-radius: 14px;
+            border: 1px solid #dce7e1;
+            font-size: 16px;
+            resize: vertical;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #6c9b84;
         }
 
         #status {
             font-weight: bold;
             margin: 15px;
-            color: #555;
+            color: #65736c;
         }
 
         #cagirisStatus {
             margin: 20px auto;
             padding: 15px;
-            max-width: 320px;
-            border-radius: 12px;
-            background: #e8f5e9;
-            color: #2e7d32;
+            border-radius: 14px;
+            background: #edf6f1;
+            color: #2d654e;
             font-weight: bold;
         }
 
         audio {
-            width: 320px;
-            max-width: 100%;
+            width: 100%;
             margin-top: 10px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #e5ebe7;
+            margin: 30px 0;
+        }
+
+        .footer {
+            margin-top: 25px;
+            color: #9aa59f;
+            font-size: 12px;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>🏥 Palata 406</h1>
+    <!-- DİL SEÇİMİ -->
 
-    <h2>Nə lazımdır?</h2>
+    <div id="dilSechimi">
 
-    <button class="istek" onclick="cagirisGonder('Su istəyirəm')">
-        💧 Su istəyirəm
-    </button>
+        <div class="logo">
+            🩺
+        </div>
 
-    <button class="istek" onclick="cagirisGonder('Yemək istəyirəm')">
-        🍽️ Yemək istəyirəm
-    </button>
+        <h1>MedElin</h1>
 
-    <button class="istek" onclick="cagirisGonder('Tibb bacısını çağır')">
-        🧑‍⚕️ Tibb bacısını çağır
-    </button>
+        <div class="subtitle">
+            Palata 406
+        </div>
 
-    <button class="istek" onclick="cagirisGonder('Yataqla bağlı kömək istəyirəm')">
-        🛏️ Yataqla bağlı kömək
-    </button>
+        <h2>🌍 Dil seçin</h2>
 
-    <div id="cagirisStatus">
-        Hazırdır ✅
+        <button class="dilBtn" onclick="dilSec('az')">
+            🇦🇿 Azərbaycan
+        </button>
+
+        <button class="dilBtn" onclick="dilSec('ru')">
+            🇷🇺 Русский
+        </button>
+
+        <button class="dilBtn" onclick="dilSec('en')">
+            🇬🇧 English
+        </button>
+
     </div>
 
-    <h3>📝 Şərh</h3>
 
-    <textarea id="serh"
-        placeholder="İstəyinizi buraya yazın..."></textarea>
+    <!-- PALATA -->
 
-    <br>
+    <div id="palata">
 
-    <button class="istek" onclick="serhGonder()">
-        📤 Şərhi göndər
-    </button>
+        <div class="logo">
+            🩺
+        </div>
 
-    <hr>
+        <h1 id="basliq">
+            Palata 406
+        </h1>
 
-    <h2>🎙️ Səsli mesaj</h2>
+        <div class="subtitle" id="altBasliq">
+            Sizə nə lazımdır?
+        </div>
 
-    <button id="sesBaslat" class="istek ses">
-        🎙️ Səs yaz
-    </button>
 
-    <button id="sesDayandir" class="istek dayandir" disabled>
-        ⏹️ Səsi dayandır
-    </button>
+        <button class="istek" onclick="cagirisGonder('Su istəyirəm')">
+            💧 <span id="su">Su istəyirəm</span>
+        </button>
 
-    <div id="status">
-        Səs yazmağa hazırdır
+        <button class="istek" onclick="cagirisGonder('Yemək istəyirəm')">
+            🍽️ <span id="yemek">Yemək istəyirəm</span>
+        </button>
+
+        <button class="istek" onclick="cagirisGonder('Tibb bacısını çağır')">
+            🧑‍⚕️ <span id="tibb">Tibb bacısını çağır</span>
+        </button>
+
+        <button class="istek" onclick="cagirisGonder('Yataqla bağlı kömək istəyirəm')">
+            🛏️ <span id="yataq">Yataqla bağlı kömək</span>
+        </button>
+
+
+        <div id="cagirisStatus">
+            Hazırdır ✅
+        </div>
+
+
+        <h3 id="serhBasliq">
+            📝 Şərh
+        </h3>
+
+        <textarea
+            id="serh"
+            placeholder="İstəyinizi buraya yazın..."
+        ></textarea>
+
+        <br>
+
+        <button class="istek" onclick="serhGonder()">
+            📤 <span id="serhGonder">Şərhi göndər</span>
+        </button>
+
+
+        <hr>
+
+
+        <h2 id="sesBasliq">
+            🎙️ Səsli mesaj
+        </h2>
+
+        <button id="sesBaslat" class="istek ses">
+            🎙️ <span id="sesYaz">Səs yaz</span>
+        </button>
+
+        <button id="sesDayandir" class="istek dayandir" disabled>
+            ⏹️ <span id="sesDayan">Səsi dayandır</span>
+        </button>
+
+        <div id="status">
+            Səs yazmağa hazırdır
+        </div>
+
+        <audio id="audio" controls></audio>
+
+
+        <div class="footer">
+            MedElin • Palata sistemi
+        </div>
+
     </div>
-
-    <audio id="audio" controls></audio>
 
 
 <script>
 
     // ==================================
-    // MEDLIVE INTERNET SERVER
+    // DİL SİSTEMİ
     // ==================================
 
-    const BACKEND_URL = "https://medlive.onrender.com";
+    let secilenDil = "az";
+
+    const metinler = {
+
+        az: {
+            alt: "Sizə nə lazımdır?",
+            su: "Su istəyirəm",
+            yemek: "Yemək istəyirəm",
+            tibb: "Tibb bacısını çağır",
+            yataq: "Yataqla bağlı kömək",
+            hazir: "Hazırdır ✅",
+            serh: "📝 Şərh",
+            serhPlaceholder: "İstəyinizi buraya yazın...",
+            serhGonder: "Şərhi göndər",
+            ses: "🎙️ Səsli mesaj",
+            sesYaz: "Səs yaz",
+            sesDayan: "Səsi dayandır",
+            sesHazir: "Səs yazmağa hazırdır",
+            gonderilir: "⏳ Göndərilir...",
+            serverXeta: "❌ Serverə qoşulmaq olmadı.",
+            mikrofon: "❌ Mikrofon üçün icazə verilmədi.",
+            sesYazildi: "✅ Səs yazıldı. Aşağıdan dinləyə bilərsiniz.",
+            sesYazilir: "🔴 Səs yazılır...",
+            serhBos: "Əvvəl şərh yazın."
+        },
+
+        ru: {
+            alt: "Что вам нужно?",
+            su: "Я хочу воды",
+            yemek: "Я хочу есть",
+            tibb: "Позвать медсестру",
+            yataq: "Помощь с кроватью",
+            hazir: "Готово ✅",
+            serh: "📝 Комментарий",
+            serhPlaceholder: "Напишите вашу просьбу...",
+            serhGonder: "Отправить комментарий",
+            ses: "🎙️ Голосовое сообщение",
+            sesYaz: "Записать голос",
+            sesDayan: "Остановить запись",
+            sesHazir: "Готов к записи",
+            gonderilir: "⏳ Отправляется...",
+            serverXeta: "❌ Не удалось подключиться к серверу.",
+            mikrofon: "❌ Нет доступа к микрофону.",
+            sesYazildi: "✅ Голос записан. Вы можете прослушать его ниже.",
+            sesYazilir: "🔴 Идёт запись...",
+            serhBos: "Сначала напишите комментарий."
+        },
+
+        en: {
+            alt: "What do you need?",
+            su: "I want water",
+            yemek: "I want food",
+            tibb: "Call the nurse",
+            yataq: "I need help with the bed",
+            hazir: "Ready ✅",
+            serh: "📝 Comment",
+            serhPlaceholder: "Write your request here...",
+            serhGonder: "Send comment",
+            ses: "🎙️ Voice message",
+            sesYaz: "Record voice",
+            sesDayan: "Stop recording",
+            sesHazir: "Ready to record",
+            gonderilir: "⏳ Sending...",
+            serverXeta: "❌ Could not connect to the server.",
+            mikrofon: "❌ Microphone permission was denied.",
+            sesYazildi: "✅ Voice recorded. You can listen below.",
+            sesYazilir: "🔴 Recording...",
+            serhBos: "Please write a comment first."
+        }
+
+    };
+
+
+    function dilSec(dil) {
+
+        secilenDil = dil;
+
+        const t = metinler[dil];
+
+        document.getElementById("dilSechimi").style.display = "none";
+
+        document.getElementById("palata").style.display = "block";
+
+        document.getElementById("altBasliq").textContent = t.alt;
+
+        document.getElementById("su").textContent = t.su;
+
+        document.getElementById("yemek").textContent = t.yemek;
+
+        document.getElementById("tibb").textContent = t.tibb;
+
+        document.getElementById("yataq").textContent = t.yataq;
+
+        document.getElementById("cagirisStatus").textContent = t.hazir;
+
+        document.getElementById("serhBasliq").textContent = t.serh;
+
+        document.getElementById("serh").placeholder =
+            t.serhPlaceholder;
+
+        document.getElementById("serhGonder").textContent =
+            t.serhGonder;
+
+        document.getElementById("sesBasliq").textContent =
+            t.ses;
+
+        document.getElementById("sesYaz").textContent =
+            t.sesYaz;
+
+        document.getElementById("sesDayan").textContent =
+            t.sesDayan;
+
+        document.getElementById("status").textContent =
+            t.sesHazir;
+
+        document.documentElement.lang = dil;
+    }
+
+
+    // ==================================
+    // MEDLIVE SERVER
+    // ==================================
+
+    const BACKEND_URL =
+        "https://medlive.onrender.com";
 
     const PALATA = "406";
 
@@ -160,13 +443,15 @@
         const status =
             document.getElementById("cagirisStatus");
 
+        const t = metinler[secilenDil];
+
         status.textContent =
-            "⏳ Göndərilir...";
+            t.gonderilir;
 
         try {
 
             const response = await fetch(
-                "https://medlive.onrender.com/api/cagir",
+                BACKEND_URL + "/api/cagir",
                 {
                     method: "POST",
 
@@ -176,7 +461,8 @@
 
                     body: JSON.stringify({
                         palata: PALATA,
-                        istek: istek
+                        istek: istek,
+                        dil: secilenDil
                     })
                 }
             );
@@ -187,21 +473,32 @@
                 );
             }
 
-            const data = await response.json();
+            const data =
+                await response.json();
 
             if (data.success) {
 
                 status.textContent =
-                    "🔔 Göndərildi: Palata " +
-                    PALATA +
-                    " — " +
-                    istek;
+                    "🔔 " +
+                    (secilenDil === "az"
+                        ? "Göndərildi"
+                        : secilenDil === "ru"
+                            ? "Отправлено"
+                            : "Sent"
+                    ) +
+                    ": Palata " +
+                    PALATA;
 
             } else {
 
                 status.textContent =
-                    "❌ Göndərmək mümkün olmadı.";
-
+                    "❌ " +
+                    (secilenDil === "az"
+                        ? "Göndərmək mümkün olmadı."
+                        : secilenDil === "ru"
+                            ? "Не удалось отправить."
+                            : "Could not send."
+                    );
             }
 
         } catch (error) {
@@ -209,14 +506,13 @@
             console.error("Xəta:", error);
 
             status.textContent =
-                "❌ Serverə qoşulmaq olmadı.";
-
+                t.serverXeta;
         }
     }
 
 
     // ==================================
-    // ŞƏRH GÖNDƏR
+    // ŞƏRH
     // ==================================
 
     async function serhGonder() {
@@ -226,15 +522,17 @@
                 .value
                 .trim();
 
+        const t = metinler[secilenDil];
+
         if (!serh) {
 
-            alert("Əvvəl şərh yazın.");
+            alert(t.serhBos);
 
             return;
         }
 
         await cagirisGonder(
-            "📝 Şərh: " + serh
+            "📝 " + serh
         );
 
         document.getElementById("serh").value = "";
@@ -246,6 +544,7 @@
     // ==================================
 
     let recorder = null;
+
     let audioChunks = [];
 
     const sesBaslat =
@@ -265,6 +564,8 @@
         "click",
         async function () {
 
+            const t = metinler[secilenDil];
+
             try {
 
                 const stream =
@@ -283,7 +584,11 @@
                     function (event) {
 
                         if (event.data.size > 0) {
-                            audioChunks.push(event.data);
+
+                            audioChunks.push(
+                                event.data
+                            );
+
                         }
 
                     };
@@ -305,32 +610,34 @@
                                 audioBlob
                             );
 
-                        audio.src = audioUrl;
+                        audio.src =
+                            audioUrl;
 
 
                         stream
                             .getTracks()
                             .forEach(
-                                track => track.stop()
+                                track =>
+                                    track.stop()
                             );
 
 
                         status.textContent =
-                            "✅ Səs yazıldı. Aşağıdan dinləyə bilərsiniz.";
+                            t.sesYazildi;
 
                     };
 
 
                 recorder.start();
 
-
                 status.textContent =
-                    "🔴 Səs yazılır...";
+                    t.sesYazilir;
 
+                sesBaslat.disabled =
+                    true;
 
-                sesBaslat.disabled = true;
-
-                sesDayandir.disabled = false;
+                sesDayandir.disabled =
+                    false;
 
             }
 
@@ -339,7 +646,7 @@
                 console.error(error);
 
                 status.textContent =
-                    "❌ Mikrofon üçün icazə verilmədi.";
+                    t.mikrofon;
 
             }
 
@@ -358,9 +665,12 @@
 
                 recorder.stop();
 
-                sesBaslat.disabled = false;
+                sesBaslat.disabled =
+                    false;
 
-                sesDayandir.disabled = true;
+                sesDayandir.disabled =
+                    true;
+
             }
 
         }
