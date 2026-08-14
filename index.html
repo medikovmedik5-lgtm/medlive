@@ -8,7 +8,6 @@
     <title>MedElin</title>
 
     <style>
-
         * {
             box-sizing: border-box;
         }
@@ -20,55 +19,56 @@
             text-align: center;
         }
 
-        .dil {
+        .language {
             position: absolute;
             top: 15px;
             right: 15px;
         }
 
         select {
-            padding: 9px;
+            padding: 9px 12px;
             border-radius: 10px;
             border: 1px solid #ccc;
             background: white;
+            font-size: 14px;
         }
 
         .container {
             max-width: 450px;
-            margin: 100px auto;
-            padding: 25px;
+            margin: 90px auto;
+            padding: 20px;
         }
 
         .logo {
-            font-size: 70px;
+            font-size: 65px;
         }
 
         h1 {
             color: #3f51b5;
-            font-size: 42px;
+            font-size: 40px;
             margin: 10px;
         }
 
         h2 {
-            margin-top: 20px;
+            color: #444;
         }
 
         input {
             display: block;
             width: 280px;
             max-width: 90%;
-            margin: 18px auto;
-            padding: 16px;
-            font-size: 18px;
+            margin: 15px auto;
+            padding: 15px;
             border: 1px solid #ccc;
-            border-radius: 12px;
-            text-align: center;
+            border-radius: 10px;
+            font-size: 17px;
         }
 
-        button {
+        .button {
             width: 280px;
             max-width: 90%;
-            padding: 16px;
+            padding: 15px;
+            margin: 10px auto;
             border: none;
             border-radius: 12px;
             background: #536dfe;
@@ -78,11 +78,11 @@
             cursor: pointer;
         }
 
-        button:hover {
+        .button:hover {
             background: #3f51b5;
         }
 
-        #xeta {
+        .error {
             color: #e53935;
             font-weight: bold;
             margin-top: 15px;
@@ -91,175 +91,186 @@
         #palatalar {
             display: none;
         }
-
-        .palata {
-            display: block;
-            width: 320px;
-            max-width: 90%;
-            margin: 15px auto;
-            padding: 18px;
-            background: #536dfe;
-            color: white;
-            border: none;
-            border-radius: 14px;
-            font-size: 19px;
-            font-weight: bold;
-        }
-
     </style>
-
 </head>
 
 <body>
 
-
-<!-- DİL -->
-
-<div class="dil">
-
-    <select id="languageSelect" onchange="changeLanguage()">
-
-        <option value="az">🇦🇿 Azərbaycan</option>
-        <option value="en">🇬🇧 English</option>
-        <option value="ru">🇷🇺 Русский</option>
-
-    </select>
-
-</div>
-
-
-<!-- GİRİŞ -->
-
-<div id="giris" class="container">
-
-    <div class="logo">
-        🏥
+    <!-- DİL -->
+    <div class="language">
+        <select id="language" onchange="dilDeyis()">
+            <option value="az">🇦🇿 Azərbaycan</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="ru">🇷🇺 Русский</option>
+        </select>
     </div>
 
-    <h1>MedElin</h1>
 
-    <h2 id="girisBasliq">
-        Daxil ol
-    </h2>
+    <!-- GİRİŞ SƏHİFƏSİ -->
+    <div id="loginPage" class="container">
 
-    <input
-        type="password"
-        id="sifre"
-        placeholder="Şifrə"
-    >
+        <div class="logo">🏥</div>
 
-    <button onclick="giris()">
-        🔐 Daxil ol
-    </button>
+        <h1>MedElin</h1>
 
-    <div id="xeta"></div>
+        <h2 id="loginTitle">Daxil ol</h2>
 
-</div>
+        <input
+            type="text"
+            id="username"
+            placeholder="Login"
+        >
 
+        <input
+            type="password"
+            id="password"
+            placeholder="Şifrə"
+        >
 
-<!-- PALATALAR -->
+        <button class="button" onclick="giris()" id="loginButton">
+            🔐 Daxil ol
+        </button>
 
-<div id="palatalar" class="container">
+        <div id="error" class="error"></div>
 
-    <div class="logo">
-        🏥
     </div>
 
-    <h1>MedElin</h1>
 
-    <h2 id="palataBasliq">
-        🛏️ Palatalar
-    </h2>
+    <!-- PALATALAR -->
+    <div id="palatalar" class="container">
 
+        <div class="logo">🏥</div>
 
-    <button class="palata"
-        onclick="window.location.href='palata-406.html'">
+        <h1>MedElin</h1>
 
-        🛏️ Palata 406
+        <h2 id="roomsTitle">🛏️ Palatalar</h2>
 
-    </button>
+        <button class="button"
+            onclick="window.location.href='palata-406.html'">
+            🛏️ Palata 406
+        </button>
 
+        <button class="button"
+            onclick="window.location.href='palata-407.html'">
+            🛏️ Palata 407
+        </button>
 
-    <button class="palata"
-        onclick="window.location.href='palata-407.html'">
+        <button class="button"
+            onclick="window.location.href='palata-408.html'">
+            🛏️ Palata 408
+        </button>
 
-        🛏️ Palata 407
-
-    </button>
-
-
-    <button class="palata"
-        onclick="window.location.href='palata-408.html'">
-
-        🛏️ Palata 408
-
-    </button>
-
-</div>
+    </div>
 
 
 <script>
 
-function giris() {
+    // LOGIN: palata
+    // ŞİFRƏ: 1234
 
-    const sifre =
-        document.getElementById("sifre").value;
+    function giris() {
 
-    if (sifre === "1234") {
+        const login =
+            document.getElementById("username").value.trim();
 
-        document.getElementById("giris").style.display = "none";
+        const sifre =
+            document.getElementById("password").value;
 
-        document.getElementById("palatalar").style.display = "block";
+        if (login === "palata" && sifre === "1234") {
 
-    } else {
+            document.getElementById("loginPage").style.display = "none";
 
-        document.getElementById("xeta").textContent =
-            "❌ Şifrə səhvdir!";
+            document.getElementById("palatalar").style.display = "block";
 
-    }
+            document.getElementById("error").textContent = "";
 
-}
+        } else {
 
+            const dil =
+                document.getElementById("language").value;
 
-function changeLanguage() {
+            if (dil === "az") {
+                document.getElementById("error").textContent =
+                    "❌ Login və ya şifrə səhvdir!";
+            }
 
-    const dil =
-        document.getElementById("languageSelect").value;
+            if (dil === "en") {
+                document.getElementById("error").textContent =
+                    "❌ Incorrect login or password!";
+            }
 
-    const girisBasliq =
-        document.getElementById("girisBasliq");
-
-    const palataBasliq =
-        document.getElementById("palataBasliq");
-
-
-    if (dil === "az") {
-
-        girisBasliq.textContent = "Daxil ol";
-        palataBasliq.textContent = "🛏️ Palatalar";
-
-    }
-
-
-    if (dil === "en") {
-
-        girisBasliq.textContent = "Login";
-        palataBasliq.textContent = "🛏️ Rooms";
-
+            if (dil === "ru") {
+                document.getElementById("error").textContent =
+                    "❌ Неверный логин или пароль!";
+            }
+        }
     }
 
 
-    if (dil === "ru") {
+    function dilDeyis() {
 
-        girisBasliq.textContent = "Войти";
-        palataBasliq.textContent = "🛏️ Палаты";
+        const dil =
+            document.getElementById("language").value;
 
+        const loginTitle =
+            document.getElementById("loginTitle");
+
+        const username =
+            document.getElementById("username");
+
+        const password =
+            document.getElementById("password");
+
+        const loginButton =
+            document.getElementById("loginButton");
+
+        const roomsTitle =
+            document.getElementById("roomsTitle");
+
+
+        if (dil === "az") {
+
+            loginTitle.textContent = "Daxil ol";
+
+            username.placeholder = "Login";
+
+            password.placeholder = "Şifrə";
+
+            loginButton.textContent = "🔐 Daxil ol";
+
+            roomsTitle.textContent = "🛏️ Palatalar";
+        }
+
+
+        if (dil === "en") {
+
+            loginTitle.textContent = "Login";
+
+            username.placeholder = "Username";
+
+            password.placeholder = "Password";
+
+            loginButton.textContent = "🔐 Login";
+
+            roomsTitle.textContent = "🛏️ Rooms";
+        }
+
+
+        if (dil === "ru") {
+
+            loginTitle.textContent = "Вход";
+
+            username.placeholder = "Логин";
+
+            password.placeholder = "Пароль";
+
+            loginButton.textContent = "🔐 Войти";
+
+            roomsTitle.textContent = "🛏️ Палаты";
+        }
     }
-
-}
 
 </script>
-
 
 </body>
 </html>
