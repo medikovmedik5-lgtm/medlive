@@ -1,78 +1,265 @@
 <!DOCTYPE html>
 <html lang="az">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medlive</title>
+
+    <title>MedElin</title>
 
     <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
+            margin: 0;
             font-family: Arial, sans-serif;
+            background: #f5f7ff;
             text-align: center;
-            padding-top: 60px;
+        }
+
+        .dil {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+
+        select {
+            padding: 9px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
             background: white;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: 100px auto;
+            padding: 25px;
+        }
+
+        .logo {
+            font-size: 70px;
         }
 
         h1 {
             color: #3f51b5;
+            font-size: 42px;
+            margin: 10px;
+        }
+
+        h2 {
+            margin-top: 20px;
         }
 
         input {
             display: block;
-            margin: 15px auto;
-            padding: 12px;
-            width: 220px;
-            border-radius: 8px;
-            border: 1px solid #aaa;
+            width: 280px;
+            max-width: 90%;
+            margin: 18px auto;
+            padding: 16px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            text-align: center;
         }
 
         button {
-            padding: 12px 35px;
+            width: 280px;
+            max-width: 90%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
             background: #536dfe;
             color: white;
-            border: none;
-            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
         }
 
         button:hover {
             background: #3f51b5;
         }
+
+        #xeta {
+            color: #e53935;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        #palatalar {
+            display: none;
+        }
+
+        .palata {
+            display: block;
+            width: 320px;
+            max-width: 90%;
+            margin: 15px auto;
+            padding: 18px;
+            background: #536dfe;
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 19px;
+            font-weight: bold;
+        }
+
     </style>
+
 </head>
 
 <body>
 
-    <h1>🏥 Medlive</h1>
 
-    <h3>Login</h3>
+<!-- DİL -->
 
-    <input type="text" id="username" placeholder="Login">
+<div class="dil">
 
-    <input type="password" id="password" placeholder="Şifrə">
+    <select id="languageSelect" onchange="changeLanguage()">
 
-    <button onclick="giris()">Daxil ol</button>
+        <option value="az">🇦🇿 Azərbaycan</option>
+        <option value="en">🇬🇧 English</option>
+        <option value="ru">🇷🇺 Русский</option>
 
-    <script>
-        function giris() {
+    </select>
 
-            let login = document.getElementById("username").value;
-            let sifre = document.getElementById("password").value;
+</div>
 
-            if (login === "admin" && sifre === "1234") {
-                window.location.href = "medistyle.html";
-            } else {
-                alert("Login və ya şifrə səhvdir!");
-            }
-        }
-    </script>
+
+<!-- GİRİŞ -->
+
+<div id="giris" class="container">
+
+    <div class="logo">
+        🏥
+    </div>
+
+    <h1>MedElin</h1>
+
+    <h2 id="girisBasliq">
+        Daxil ol
+    </h2>
+
+    <input
+        type="password"
+        id="sifre"
+        placeholder="Şifrə"
+    >
+
+    <button onclick="giris()">
+        🔐 Daxil ol
+    </button>
+
+    <div id="xeta"></div>
+
+</div>
+
+
+<!-- PALATALAR -->
+
+<div id="palatalar" class="container">
+
+    <div class="logo">
+        🏥
+    </div>
+
+    <h1>MedElin</h1>
+
+    <h2 id="palataBasliq">
+        🛏️ Palatalar
+    </h2>
+
+
+    <button class="palata"
+        onclick="window.location.href='palata-406.html'">
+
+        🛏️ Palata 406
+
+    </button>
+
+
+    <button class="palata"
+        onclick="window.location.href='palata-407.html'">
+
+        🛏️ Palata 407
+
+    </button>
+
+
+    <button class="palata"
+        onclick="window.location.href='palata-408.html'">
+
+        🛏️ Palata 408
+
+    </button>
+
+</div>
+
+
+<script>
+
+function giris() {
+
+    const sifre =
+        document.getElementById("sifre").value;
+
+    if (sifre === "1234") {
+
+        document.getElementById("giris").style.display = "none";
+
+        document.getElementById("palatalar").style.display = "block";
+
+    } else {
+
+        document.getElementById("xeta").textContent =
+            "❌ Şifrə səhvdir!";
+
+    }
+
+}
+
+
+function changeLanguage() {
+
+    const dil =
+        document.getElementById("languageSelect").value;
+
+    const girisBasliq =
+        document.getElementById("girisBasliq");
+
+    const palataBasliq =
+        document.getElementById("palataBasliq");
+
+
+    if (dil === "az") {
+
+        girisBasliq.textContent = "Daxil ol";
+        palataBasliq.textContent = "🛏️ Palatalar";
+
+    }
+
+
+    if (dil === "en") {
+
+        girisBasliq.textContent = "Login";
+        palataBasliq.textContent = "🛏️ Rooms";
+
+    }
+
+
+    if (dil === "ru") {
+
+        girisBasliq.textContent = "Войти";
+        palataBasliq.textContent = "🛏️ Палаты";
+
+    }
+
+}
+
+</script>
+
 
 </body>
 </html>
-<div>
-  <select id="languageSelect" onchange="changeLanguage()">
-    <option value="az">🇦🇿 Azərbaycan</option>
-    <option value="en">🇬🇧 English</option>
-    <option value="ru">🇷🇺 Русский</option>
-  </select>
-</div>
