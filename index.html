@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>MedElin</title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -15,102 +17,203 @@
             margin: 0;
             min-height: 100vh;
             font-family: Arial, sans-serif;
+
             background:
-                radial-gradient(circle at top left, #dce8ff 0, transparent 35%),
-                linear-gradient(135deg, #eef4ff, #f9fbff);
+                radial-gradient(
+                    circle at top left,
+                    #dce8ff 0,
+                    transparent 35%
+                ),
+                linear-gradient(
+                    135deg,
+                    #eef4ff,
+                    #f9fbff
+                );
+
             color: #172033;
         }
 
         .page {
             min-height: 100vh;
+
             display: flex;
             justify-content: center;
             align-items: center;
+
             padding: 25px;
         }
 
         .card {
             width: 100%;
             max-width: 430px;
-            background: rgba(255, 255, 255, 0.92);
+
+            background: rgba(
+                255,
+                255,
+                255,
+                0.92
+            );
+
             border-radius: 28px;
+
             padding: 35px 28px;
-            box-shadow: 0 20px 60px rgba(47, 73, 125, 0.15);
+
+            box-shadow:
+                0 20px 60px
+                rgba(
+                    47,
+                    73,
+                    125,
+                    0.15
+                );
+
             text-align: center;
         }
 
         .logo {
             width: 90px;
             height: 90px;
+
             margin: 0 auto 15px;
+
             border-radius: 26px;
-            background: linear-gradient(135deg, #536dfe, #3f51b5);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #536dfe,
+                    #3f51b5
+                );
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             font-size: 48px;
-            box-shadow: 0 12px 25px rgba(63, 81, 181, 0.25);
+
+            box-shadow:
+                0 12px 25px
+                rgba(
+                    63,
+                    81,
+                    181,
+                    0.25
+                );
         }
 
         h1 {
             margin: 10px 0 5px;
+
             font-size: 38px;
+
             color: #3046a8;
+
             letter-spacing: -1px;
         }
 
         .subtitle {
             color: #7a8499;
+
             margin-bottom: 30px;
+
             font-size: 15px;
         }
 
         h2 {
             font-size: 22px;
+
             margin-bottom: 22px;
         }
 
         .input-box {
             position: relative;
+
             margin: 14px 0;
         }
 
         .input-box span {
             position: absolute;
+
             left: 16px;
             top: 15px;
+
             font-size: 20px;
         }
 
         input {
             width: 100%;
-            padding: 16px 16px 16px 48px;
-            border: 1px solid #dce2ef;
+
+            padding:
+                16px
+                16px
+                16px
+                48px;
+
+            border:
+                1px solid
+                #dce2ef;
+
             border-radius: 15px;
+
             background: #f8faff;
+
             font-size: 16px;
+
             outline: none;
+
             transition: 0.2s;
         }
 
         input:focus {
             border-color: #536dfe;
+
             background: white;
-            box-shadow: 0 0 0 4px rgba(83, 109, 254, 0.10);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(
+                    83,
+                    109,
+                    254,
+                    0.10
+                );
         }
 
         .login-btn {
             width: 100%;
+
             margin-top: 18px;
+
             padding: 17px;
+
             border: none;
+
             border-radius: 15px;
-            background: linear-gradient(135deg, #536dfe, #3f51b5);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #536dfe,
+                    #3f51b5
+                );
+
             color: white;
+
             font-size: 17px;
+
             font-weight: bold;
+
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(63, 81, 181, 0.25);
+
+            box-shadow:
+                0 10px 25px
+                rgba(
+                    63,
+                    81,
+                    181,
+                    0.25
+                );
+
             transition: 0.2s;
         }
 
@@ -120,188 +223,733 @@
 
         #xeta {
             min-height: 22px;
+
             margin-top: 15px;
+
             color: #e53935;
+
             font-weight: bold;
         }
 
-        #palatalar {
+        /* HOSPİTAL SEÇİMİ */
+
+        #hospitalSecimi {
             display: none;
         }
 
         .welcome {
             color: #7a8499;
+
             font-size: 15px;
+
             margin-bottom: 25px;
+        }
+
+        .hospital-btn {
+            width: 100%;
+
+            margin: 12px 0;
+
+            padding: 22px 18px;
+
+            border: none;
+
+            border-radius: 18px;
+
+            background: white;
+
+            color: #26345c;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            text-align: left;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 7px 25px
+                rgba(
+                    47,
+                    73,
+                    125,
+                    0.10
+                );
+
+            border:
+                1px solid
+                #e8ecf5;
+
+            transition: 0.2s;
+        }
+
+        .hospital-btn:hover {
+            transform: translateY(-3px);
+
+            border-color: #536dfe;
+
+            box-shadow:
+                0 12px 30px
+                rgba(
+                    63,
+                    81,
+                    181,
+                    0.15
+                );
+        }
+
+        .hospital-icon {
+            display: inline-flex;
+
+            width: 50px;
+            height: 50px;
+
+            align-items: center;
+            justify-content: center;
+
+            background: #eef2ff;
+
+            border-radius: 14px;
+
+            margin-right: 12px;
+
+            vertical-align: middle;
+
+            font-size: 27px;
+        }
+
+        .hospital-name {
+            display: inline-block;
+
+            vertical-align: middle;
+        }
+
+        .hospital-name small {
+            display: block;
+
+            margin-top: 5px;
+
+            color: #8a93a5;
+
+            font-size: 12px;
+
+            font-weight: normal;
+        }
+
+        /* PALATALAR */
+
+        #palatalar {
+            display: none;
         }
 
         .palata {
             width: 100%;
+
             margin: 12px 0;
+
             padding: 19px;
+
             border: none;
+
             border-radius: 18px;
+
             background: white;
+
             color: #26345c;
+
             font-size: 18px;
+
             font-weight: bold;
+
             text-align: left;
+
             cursor: pointer;
-            box-shadow: 0 7px 25px rgba(47, 73, 125, 0.10);
-            border: 1px solid #e8ecf5;
+
+            box-shadow:
+                0 7px 25px
+                rgba(
+                    47,
+                    73,
+                    125,
+                    0.10
+                );
+
+            border:
+                1px solid
+                #e8ecf5;
+
             transition: 0.2s;
         }
 
         .palata:hover {
             transform: translateY(-3px);
+
             border-color: #536dfe;
-            box-shadow: 0 12px 30px rgba(63, 81, 181, 0.15);
+
+            box-shadow:
+                0 12px 30px
+                rgba(
+                    63,
+                    81,
+                    181,
+                    0.15
+                );
         }
 
         .room-icon {
             display: inline-flex;
+
             width: 45px;
             height: 45px;
+
             align-items: center;
             justify-content: center;
+
             background: #eef2ff;
+
             border-radius: 13px;
+
             margin-right: 10px;
+
             vertical-align: middle;
+        }
+
+        .geri-btn {
+            width: 100%;
+
+            margin-top: 18px;
+
+            padding: 14px;
+
+            border: 1px solid #dce2ef;
+
+            border-radius: 14px;
+
+            background: #f8faff;
+
+            color: #53607a;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .geri-btn:hover {
+            background: #eef2ff;
+        }
+
+        .lor-info {
+            padding: 20px;
+
+            margin-top: 15px;
+
+            border-radius: 18px;
+
+            background: #f8faff;
+
+            color: #6f7890;
+
+            font-size: 15px;
+
+            line-height: 1.5;
+
+            border:
+                1px solid
+                #e8ecf5;
         }
 
         .footer {
             margin-top: 28px;
+
             color: #9aa3b5;
+
             font-size: 12px;
         }
+
     </style>
+
 </head>
+
 
 <body>
 
+
+<div class="page">
+
+
+    <!-- ========================= -->
     <!-- LOGIN -->
+    <!-- ========================= -->
 
-    <div class="page">
+    <div
+        id="giris"
+        class="card"
+    >
 
-        <div id="giris" class="card">
+        <div class="logo">
+            🏥
+        </div>
 
-            <div class="logo">🏥</div>
+        <h1>
+            MedElin
+        </h1>
 
-            <h1>MedElin</h1>
+        <div class="subtitle">
+            Palata idarəetmə sistemi
+        </div>
 
-            <div class="subtitle">
-                Palata idarəetmə sistemi
-            </div>
+        <h2>
+            🔐 Admin giriş
+        </h2>
 
-            <h2>🔐 Admin giriş</h2>
 
-            <div class="input-box">
-                <span>👤</span>
-                <input
-                    type="text"
-                    id="istifadeci"
-                    placeholder="İstifadəçi adı"
-                >
-            </div>
+        <div class="input-box">
 
-            <div class="input-box">
-                <span>🔑</span>
-                <input
-                    type="password"
-                    id="sifre"
-                    placeholder="Şifrə"
-                >
-            </div>
+            <span>
+                👤
+            </span>
 
-            <button class="login-btn" onclick="giris()">
-                Daxil ol →
-            </button>
-
-            <div id="xeta"></div>
-
-            <div class="footer">
-                MedElin • Palata sistemi
-            </div>
+            <input
+                type="text"
+                id="istifadeci"
+                placeholder="İstifadəçi adı"
+            >
 
         </div>
 
 
-        <!-- PALATALAR -->
+        <div class="input-box">
 
-        <div id="palatalar" class="card">
+            <span>
+                🔑
+            </span>
 
-            <div class="logo">🏥</div>
+            <input
+                type="password"
+                id="sifre"
+                placeholder="Şifrə"
+            >
 
-            <h1>MedElin</h1>
+        </div>
 
-            <div class="welcome">
-                Xoş gəlmisiniz 👋<br>
-                Palatanı seçin
-            </div>
 
-            <button class="palata"
-                onclick="window.location.href='palata-406.html'">
+        <button
+            class="login-btn"
+            onclick="giris()"
+        >
+            Daxil ol →
+        </button>
 
-                <span class="room-icon">🛏️</span>
-                Palata 406
-                <small> • Aktiv</small>
 
-            </button>
+        <div id="xeta"></div>
 
-            <button class="palata"
-                onclick="window.location.href='palata-407.html'">
 
-                <span class="room-icon">🛏️</span>
-                Palata 407
-                <small> • Aktiv</small>
-
-            </button>
-
-            <button class="palata"
-                onclick="window.location.href='palata-408.html'">
-
-                <span class="room-icon">🛏️</span>
-                Palata 408
-                <small> • Aktiv</small>
-
-            </button>
-
-            <div class="footer">
-                MedElin • Palata idarəetmə sistemi
-            </div>
-
+        <div class="footer">
+            MedElin • Palata sistemi
         </div>
 
     </div>
 
 
-    <script>
 
-        function giris() {
+    <!-- ========================= -->
+    <!-- HOSPITAL SEÇİMİ -->
+    <!-- ========================= -->
 
-            const istifadeci =
-                document.getElementById("istifadeci").value;
+    <div
+        id="hospitalSecimi"
+        class="card"
+    >
 
-            const sifre =
-                document.getElementById("sifre").value;
+        <div class="logo">
+            🏥
+        </div>
 
-            if (istifadeci === "admin" && sifre === "1234") {
+        <h1>
+            MedElin
+        </h1>
 
-                document.getElementById("giris").style.display = "none";
+        <div class="welcome">
 
-                document.getElementById("palatalar").style.display = "block";
+            Xoş gəlmisiniz 👋
 
-            } else {
+            <br>
 
-                document.getElementById("xeta").textContent =
-                    "❌ İstifadəçi adı və ya şifrə səhvdir.";
+            Hospitalı seçin
 
-            }
+        </div>
+
+
+        <!-- MEDISTYLE -->
+
+        <button
+            class="hospital-btn"
+            onclick="medistyleSec()"
+        >
+
+            <span class="hospital-icon">
+                🏥
+            </span>
+
+            <span class="hospital-name">
+
+                Medistyle Hospital
+
+                <small>
+                    Palata sistemi
+                </small>
+
+            </span>
+
+        </button>
+
+
+        <!-- LOR -->
+
+        <button
+            class="hospital-btn"
+            onclick="lorSec()"
+        >
+
+            <span class="hospital-icon">
+                🏥
+            </span>
+
+            <span class="hospital-name">
+
+                LOR Hospital
+
+                <small>
+                    Palata sistemi
+                </small>
+
+            </span>
+
+        </button>
+
+
+        <div class="footer">
+            MedElin • Palata idarəetmə sistemi
+        </div>
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- PALATALAR -->
+    <!-- ========================= -->
+
+    <div
+        id="palatalar"
+        class="card"
+    >
+
+        <div class="logo">
+            🏥
+        </div>
+
+
+        <h1>
+            MedElin
+        </h1>
+
+
+        <div
+            class="welcome"
+            id="hospitalBasliq"
+        >
+            Medistyle Hospital
+
+            <br>
+
+            Palatanı seçin
+        </div>
+
+
+
+        <!-- ===================== -->
+        <!-- MEDISTYLE PALATALARI -->
+        <!-- ===================== -->
+
+        <div id="medistylePalatalari">
+
+
+            <button
+                class="palata"
+                onclick="
+                    window.location.href =
+                    'palata-406.html'
+                "
+            >
+
+                <span class="room-icon">
+                    🛏️
+                </span>
+
+                Palata 406
+
+                <small>
+                    • Aktiv
+                </small>
+
+            </button>
+
+
+
+            <button
+                class="palata"
+                onclick="
+                    window.location.href =
+                    'palata-407.html'
+                "
+            >
+
+                <span class="room-icon">
+                    🛏️
+                </span>
+
+                Palata 407
+
+                <small>
+                    • Aktiv
+                </small>
+
+            </button>
+
+
+
+            <button
+                class="palata"
+                onclick="
+                    window.location.href =
+                    'palata-408.html'
+                "
+            >
+
+                <span class="room-icon">
+                    🛏️
+                </span>
+
+                Palata 408
+
+                <small>
+                    • Aktiv
+                </small>
+
+            </button>
+
+        </div>
+
+
+
+        <!-- ===================== -->
+        <!-- LOR PALATALARI -->
+        <!-- ===================== -->
+
+        <div
+            id="lorPalatalari"
+            style="display:none;"
+        >
+
+            <div class="lor-info">
+
+                🏥
+
+                <br><br>
+
+                LOR Hospital üçün
+                palata sistemi hazırlanır.
+
+                <br><br>
+
+                Palata nömrələrini
+                əlavə etdikdən sonra
+                burada görünəcək.
+
+            </div>
+
+        </div>
+
+
+
+        <!-- GERİ -->
+
+        <button
+            class="geri-btn"
+            onclick="hospitalSecimineQayit()"
+        >
+
+            ← Hospital seçiminə qayıt
+
+        </button>
+
+
+        <div class="footer">
+            MedElin • Palata idarəetmə sistemi
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+    // ================================
+    // LOGIN
+    // ================================
+
+    function giris() {
+
+        const istifadeci =
+            document.getElementById(
+                "istifadeci"
+            ).value;
+
+        const sifre =
+            document.getElementById(
+                "sifre"
+            ).value;
+
+
+        if (
+            istifadeci === "admin" &&
+            sifre === "1234"
+        ) {
+
+            document.getElementById(
+                "giris"
+            ).style.display = "none";
+
+
+            document.getElementById(
+                "hospitalSecimi"
+            ).style.display = "block";
+
+
+            document.getElementById(
+                "xeta"
+            ).textContent = "";
 
         }
 
-    </script>
+        else {
+
+            document.getElementById(
+                "xeta"
+            ).textContent =
+                "❌ İstifadəçi adı və ya şifrə səhvdir.";
+
+        }
+
+    }
+
+
+
+    // ================================
+    // MEDISTYLE SEÇ
+    // ================================
+
+    function medistyleSec() {
+
+        document.getElementById(
+            "hospitalSecimi"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "palatalar"
+        ).style.display = "block";
+
+
+        document.getElementById(
+            "hospitalBasliq"
+        ).innerHTML =
+
+            "Medistyle Hospital" +
+            "<br>" +
+            "Palatanı seçin";
+
+
+        document.getElementById(
+            "medistylePalatalari"
+        ).style.display = "block";
+
+
+        document.getElementById(
+            "lorPalatalari"
+        ).style.display = "none";
+
+    }
+
+
+
+    // ================================
+    // LOR SEÇ
+    // ================================
+
+    function lorSec() {
+
+        document.getElementById(
+            "hospitalSecimi"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "palatalar"
+        ).style.display = "block";
+
+
+        document.getElementById(
+            "hospitalBasliq"
+        ).innerHTML =
+
+            "LOR Hospital" +
+            "<br>" +
+            "Palatanı seçin";
+
+
+        document.getElementById(
+            "medistylePalatalari"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "lorPalatalari"
+        ).style.display = "block";
+
+    }
+
+
+
+    // ================================
+    // GERİ
+    // ================================
+
+    function hospitalSecimineQayit() {
+
+        document.getElementById(
+            "palatalar"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "hospitalSecimi"
+        ).style.display = "block";
+
+    }
+
+
+</script>
+
 
 </body>
+
 </html>
