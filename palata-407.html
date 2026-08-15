@@ -452,19 +452,19 @@ function dilSec(dil) {
 }
 
 
-// ================================
+// ==================================
 // MEDLIVE SERVER
-// ================================
+// ==================================
 
 const BACKEND_URL =
-    "https://medlive-1.onrender.com";
+    "https://medlive.onrender.com";
 
 const PALATA = "407";
 
 
-// ================================
+// ==================================
 // ÇAĞIRIŞ
-// ================================
+// ==================================
 
 async function cagirisGonder(istek) {
 
@@ -523,9 +523,9 @@ async function cagirisGonder(istek) {
 }
 
 
-// ================================
+// ==================================
 // ŞƏRH
-// ================================
+// ==================================
 
 async function serhGonder() {
 
@@ -551,15 +551,14 @@ async function serhGonder() {
 }
 
 
-// ================================
+// ==================================
 // SƏS YAZMA
-// ================================
+// ==================================
 
 let recorder = null;
 let audioChunks = [];
 let audioBlob = null;
 let audioStream = null;
-
 
 const sesBaslat =
     document.getElementById("sesBaslat");
@@ -577,9 +576,9 @@ const audio =
     document.getElementById("audio");
 
 
-// ================================
+// ==================================
 // SƏS YAZ
-// ================================
+// ==================================
 
 sesBaslat.addEventListener(
     "click",
@@ -603,7 +602,6 @@ sesBaslat.addEventListener(
             recorder =
                 new MediaRecorder(audioStream);
 
-
             recorder.ondataavailable =
                 function (event) {
 
@@ -614,7 +612,6 @@ sesBaslat.addEventListener(
                         );
                     }
                 };
-
 
             recorder.onstop =
                 function () {
@@ -635,7 +632,6 @@ sesBaslat.addEventListener(
 
                     audio.src = audioUrl;
 
-
                     if (audioStream) {
 
                         audioStream
@@ -646,13 +642,11 @@ sesBaslat.addEventListener(
                             );
                     }
 
-
                     sesGonderBtn.disabled = false;
 
                     status.textContent =
                         t.sesYazildi;
                 };
-
 
             recorder.start();
 
@@ -670,15 +664,18 @@ sesBaslat.addEventListener(
 
             status.textContent =
                 t.mikrofon;
+
+            sesBaslat.disabled = false;
+            sesDayandir.disabled = true;
         }
 
     }
 );
 
 
-// ================================
+// ==================================
 // SƏSİ DAYANDIR
-// ================================
+// ==================================
 
 sesDayandir.addEventListener(
     "click",
@@ -699,9 +696,9 @@ sesDayandir.addEventListener(
 );
 
 
-// ================================
+// ==================================
 // SƏSİ GÖNDƏR
-// ================================
+// ==================================
 
 sesGonderBtn.addEventListener(
     "click",
@@ -710,6 +707,10 @@ sesGonderBtn.addEventListener(
         const t = metinler[secilenDil];
 
         if (!audioBlob) {
+
+            status.textContent =
+                "❌ Əvvəl səs yazın.";
+
             return;
         }
 
@@ -724,6 +725,16 @@ sesGonderBtn.addEventListener(
                 new FormData();
 
             formData.append(
+                "audio",
+                audioBlob,
+                "palata-" +
+                PALATA +
+                "-" +
+                Date.now() +
+                ".webm"
+            );
+
+            formData.append(
                 "palata",
                 PALATA
             );
@@ -733,26 +744,14 @@ sesGonderBtn.addEventListener(
                 secilenDil
             );
 
-            formData.append(
-                "ses",
-                audioBlob,
-                "palata-" +
-                PALATA +
-                "-" +
-                Date.now() +
-                ".webm"
-            );
-
-
             const response =
                 await fetch(
-                    BACKEND_URL + "/api/ses",
+                    BACKEND_URL + "/api/ses-gonder",
                     {
                         method: "POST",
                         body: formData
                     }
                 );
-
 
             if (!response.ok) {
 
@@ -762,10 +761,8 @@ sesGonderBtn.addEventListener(
                 );
             }
 
-
             const data =
                 await response.json();
-
 
             if (data.success) {
 
