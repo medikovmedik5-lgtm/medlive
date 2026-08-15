@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Palata 407</title>
+    <title>Palata 407 - Medistyle Hospital</title>
 
     <style>
         * {
@@ -81,12 +81,10 @@
             font-size: 17px;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.2s;
         }
 
         .dilBtn:hover {
             background: #edf6f1;
-            transform: translateY(-2px);
         }
 
         #palata {
@@ -111,16 +109,15 @@
             background: #ffffff;
             color: #244d3d;
             cursor: pointer;
-            transition: 0.2s;
         }
 
         .istek:hover {
             background: #edf6f1;
-            transform: translateY(-2px);
         }
 
         .istek:disabled {
             opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .ses {
@@ -135,6 +132,12 @@
             color: #2d654e;
         }
 
+        .sesGonder {
+            background: #eaf4ff;
+            border-color: #c9dff5;
+            color: #28618f;
+        }
+
         textarea {
             width: 100%;
             height: 105px;
@@ -145,10 +148,6 @@
             font-size: 16px;
             resize: vertical;
             outline: none;
-        }
-
-        textarea:focus {
-            border-color: #6c9b84;
         }
 
         #status {
@@ -191,13 +190,10 @@
 
     <div id="dilSechimi">
 
-        <div class="logo">
-            🩺
-        </div>
+        <div class="logo">🩺</div>
 
         <h1>MedElin</h1>
 
-        <!-- XƏSTƏXANA ADI -->
         <div class="hospitalName">
             Medistyle Hospital
         </div>
@@ -227,9 +223,7 @@
 
     <div id="palata">
 
-        <div class="logo">
-            🩺
-        </div>
+        <div class="logo">🩺</div>
 
         <h1 id="basliq">
             Palata 407
@@ -285,6 +279,8 @@
         <hr>
 
 
+        <!-- SƏS -->
+
         <h2 id="sesBasliq">
             🎙️ Səsli mesaj
         </h2>
@@ -295,6 +291,12 @@
 
         <button id="sesDayandir" class="istek dayandir" disabled>
             ⏹️ <span id="sesDayan">Səsi dayandır</span>
+        </button>
+
+        <!-- YENİ SƏS GÖNDƏR DÜYMƏSİ -->
+
+        <button id="sesGonder" class="istek sesGonder" disabled>
+            📤 <span id="sesGonderText">Səsi göndər</span>
         </button>
 
         <div id="status">
@@ -330,12 +332,14 @@
             ses: "🎙️ Səsli mesaj",
             sesYaz: "Səs yaz",
             sesDayan: "Səsi dayandır",
+            sesGonder: "Səsi göndər",
             sesHazir: "Səs yazmağa hazırdır",
             gonderilir: "⏳ Göndərilir...",
             serverXeta: "❌ Serverə qoşulmaq olmadı.",
             mikrofon: "❌ Mikrofon üçün icazə verilmədi.",
-            sesYazildi: "✅ Səs yazıldı. Aşağıdan dinləyə bilərsiniz.",
+            sesYazildi: "✅ Səs yazıldı.",
             sesYazilir: "🔴 Səs yazılır...",
+            sesGonderildi: "✅ Səs göndərildi.",
             serhBos: "Əvvəl şərh yazın."
         },
 
@@ -352,12 +356,14 @@
             ses: "🎙️ Голосовое сообщение",
             sesYaz: "Записать голос",
             sesDayan: "Остановить запись",
+            sesGonder: "Отправить голос",
             sesHazir: "Готов к записи",
             gonderilir: "⏳ Отправляется...",
             serverXeta: "❌ Не удалось подключиться к серверу.",
             mikrofon: "❌ Нет доступа к микрофону.",
-            sesYazildi: "✅ Голос записан. Вы можете прослушать его ниже.",
+            sesYazildi: "✅ Голос записан.",
             sesYazilir: "🔴 Идёт запись...",
+            sesGonderildi: "✅ Голос отправлен.",
             serhBos: "Сначала напишите комментарий."
         },
 
@@ -374,12 +380,14 @@
             ses: "🎙️ Voice message",
             sesYaz: "Record voice",
             sesDayan: "Stop recording",
+            sesGonder: "Send voice",
             sesHazir: "Ready to record",
             gonderilir: "⏳ Sending...",
             serverXeta: "❌ Could not connect to the server.",
             mikrofon: "❌ Microphone permission was denied.",
-            sesYazildi: "✅ Voice recorded. You can listen below.",
+            sesYazildi: "✅ Voice recorded.",
             sesYazilir: "🔴 Recording...",
+            sesGonderildi: "✅ Voice sent.",
             serhBos: "Please write a comment first."
         }
 
@@ -400,8 +408,12 @@
         document.getElementById("yemek").textContent = t.yemek;
         document.getElementById("tibb").textContent = t.tibb;
         document.getElementById("yataq").textContent = t.yataq;
-        document.getElementById("cagirisStatus").textContent = t.hazir;
-        document.getElementById("serhBasliq").textContent = t.serh;
+
+        document.getElementById("cagirisStatus").textContent =
+            t.hazir;
+
+        document.getElementById("serhBasliq").textContent =
+            t.serh;
 
         document.getElementById("serh").placeholder =
             t.serhPlaceholder;
@@ -417,6 +429,9 @@
 
         document.getElementById("sesDayan").textContent =
             t.sesDayan;
+
+        document.getElementById("sesGonderText").textContent =
+            t.sesGonder;
 
         document.getElementById("status").textContent =
             t.sesHazir;
@@ -436,7 +451,7 @@
 
 
     // ==================================
-    // ÇAĞIRIŞ GÖNDƏR
+    // ÇAĞIRIŞ
     // ==================================
 
     async function cagirisGonder(istek) {
@@ -478,31 +493,17 @@
             if (data.success) {
 
                 status.textContent =
-                    "🔔 " +
-                    (secilenDil === "az"
-                        ? "Göndərildi"
-                        : secilenDil === "ru"
-                            ? "Отправлено"
-                            : "Sent"
-                    ) +
-                    ": Palata " +
-                    PALATA;
+                    "🔔 Göndərildi: Palata " + PALATA;
 
             } else {
 
                 status.textContent =
-                    "❌ " +
-                    (secilenDil === "az"
-                        ? "Göndərmək mümkün olmadı."
-                        : secilenDil === "ru"
-                            ? "Не удалось отправить."
-                            : "Could not send."
-                    );
+                    "❌ Göndərmək mümkün olmadı.";
             }
 
         } catch (error) {
 
-            console.error("Xəta:", error);
+            console.error(error);
 
             status.textContent =
                 t.serverXeta;
@@ -530,9 +531,7 @@
             return;
         }
 
-        await cagirisGonder(
-            "📝 " + serh
-        );
+        await cagirisGonder("📝 " + serh);
 
         document.getElementById("serh").value = "";
     }
@@ -544,6 +543,7 @@
 
     let recorder = null;
     let audioChunks = [];
+    let audioBlob = null;
 
     const sesBaslat =
         document.getElementById("sesBaslat");
@@ -551,12 +551,17 @@
     const sesDayandir =
         document.getElementById("sesDayandir");
 
+    const sesGonder =
+        document.getElementById("sesGonder");
+
     const status =
         document.getElementById("status");
 
     const audio =
         document.getElementById("audio");
 
+
+    // SƏS YAZ
 
     sesBaslat.addEventListener(
         "click",
@@ -573,6 +578,7 @@
                         });
 
                 audioChunks = [];
+                audioBlob = null;
 
                 recorder =
                     new MediaRecorder(stream);
@@ -586,10 +592,11 @@
 
                     };
 
+
                 recorder.onstop =
                     function () {
 
-                        const audioBlob =
+                        audioBlob =
                             new Blob(
                                 audioChunks,
                                 {
@@ -610,7 +617,11 @@
 
                         status.textContent =
                             t.sesYazildi;
+
+                        // SƏS GÖNDƏR AKTİV OLUR
+                        sesGonder.disabled = false;
                     };
+
 
                 recorder.start();
 
@@ -619,6 +630,7 @@
 
                 sesBaslat.disabled = true;
                 sesDayandir.disabled = false;
+                sesGonder.disabled = true;
 
             }
 
@@ -629,9 +641,12 @@
                 status.textContent =
                     t.mikrofon;
             }
+
         }
     );
 
+
+    // SƏSİ DAYANDIR
 
     sesDayandir.addEventListener(
         "click",
@@ -646,6 +661,108 @@
 
                 sesBaslat.disabled = false;
                 sesDayandir.disabled = true;
+            }
+
+        }
+    );
+
+
+    // ==================================
+    // SƏSİ GÖNDƏR
+    // ==================================
+
+    sesGonder.addEventListener(
+        "click",
+        async function () {
+
+            const t = metinler[secilenDil];
+
+            if (!audioBlob) {
+
+                status.textContent =
+                    "❌ Əvvəl səs yazın.";
+
+                return;
+            }
+
+            status.textContent =
+                t.gonderilir;
+
+            sesGonder.disabled = true;
+
+            try {
+
+                const formData =
+                    new FormData();
+
+                formData.append(
+                    "audio",
+                    audioBlob,
+                    "palata-" + PALATA + ".webm"
+                );
+
+                formData.append(
+                    "palata",
+                    PALATA
+                );
+
+                formData.append(
+                    "dil",
+                    secilenDil
+                );
+
+
+                const response =
+                    await fetch(
+                        BACKEND_URL + "/api/ses-gonder",
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Server xətası: " +
+                        response.status
+                    );
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                if (data.success) {
+
+                    status.textContent =
+                        t.sesGonderildi;
+
+                    audioBlob = null;
+
+                } else {
+
+                    status.textContent =
+                        "❌ Səs göndərilmədi.";
+
+                    sesGonder.disabled = false;
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Səs göndərmə xətası:",
+                    error
+                );
+
+                status.textContent =
+                    t.serverXeta;
+
+                sesGonder.disabled = false;
             }
 
         }

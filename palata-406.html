@@ -60,8 +60,6 @@
             margin-bottom: 25px;
         }
 
-        /* DİL SEÇİMİ */
-
         #dilSechimi {
             max-width: 430px;
             margin: 40px auto;
@@ -90,8 +88,6 @@
             background: #edf6f1;
             transform: translateY(-2px);
         }
-
-        /* ƏSAS PALATA */
 
         #palata {
             display: none;
@@ -125,6 +121,7 @@
 
         .istek:disabled {
             opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .ses {
@@ -137,6 +134,12 @@
             background: #edf6f1;
             border-color: #cfe2d8;
             color: #2d654e;
+        }
+
+        .sesGonder {
+            background: #eaf3ff;
+            border-color: #c8dcf5;
+            color: #285b8f;
         }
 
         textarea {
@@ -269,6 +272,8 @@
         </div>
 
 
+        <!-- ŞƏRH -->
+
         <h3 id="serhBasliq">
             📝 Şərh
         </h3>
@@ -288,6 +293,8 @@
         <hr>
 
 
+        <!-- SƏS -->
+
         <h2 id="sesBasliq">
             🎙️ Səsli mesaj
         </h2>
@@ -298,6 +305,12 @@
 
         <button id="sesDayandir" class="istek dayandir" disabled>
             ⏹️ <span id="sesDayan">Səsi dayandır</span>
+        </button>
+
+        <!-- YENİ SƏS GÖNDƏR DÜYMƏSİ -->
+
+        <button id="sesGonderBtn" class="istek sesGonder" disabled>
+            📤 <span id="sesGonderText">Səsi göndər</span>
         </button>
 
         <div id="status">
@@ -331,18 +344,26 @@
             tibb: "Tibb bacısını çağır",
             yataq: "Yataqla bağlı kömək",
             hazir: "Hazırdır ✅",
+
             serh: "📝 Şərh",
             serhPlaceholder: "İstəyinizi buraya yazın...",
             serhGonder: "Şərhi göndər",
+
             ses: "🎙️ Səsli mesaj",
             sesYaz: "Səs yaz",
             sesDayan: "Səsi dayandır",
+            sesGonder: "Səsi göndər",
+
             sesHazir: "Səs yazmağa hazırdır",
+            sesYazildi: "✅ Səs yazıldı. Aşağıdan dinləyə bilərsiniz.",
+            sesYazilir: "🔴 Səs yazılır...",
+
+            sesGonderilir: "⏳ Səs göndərilir...",
+            sesGonderildi: "✅ Səs göndərildi.",
+
             gonderilir: "⏳ Göndərilir...",
             serverXeta: "❌ Serverə qoşulmaq olmadı.",
             mikrofon: "❌ Mikrofon üçün icazə verilmədi.",
-            sesYazildi: "✅ Səs yazıldı. Aşağıdan dinləyə bilərsiniz.",
-            sesYazilir: "🔴 Səs yazılır...",
             serhBos: "Əvvəl şərh yazın."
         },
 
@@ -353,18 +374,26 @@
             tibb: "Позвать медсестру",
             yataq: "Помощь с кроватью",
             hazir: "Готово ✅",
+
             serh: "📝 Комментарий",
             serhPlaceholder: "Напишите вашу просьбу...",
             serhGonder: "Отправить комментарий",
+
             ses: "🎙️ Голосовое сообщение",
             sesYaz: "Записать голос",
             sesDayan: "Остановить запись",
+            sesGonder: "Отправить голос",
+
             sesHazir: "Готов к записи",
+            sesYazildi: "✅ Голос записан. Вы можете прослушать его ниже.",
+            sesYazilir: "🔴 Идёт запись...",
+
+            sesGonderilir: "⏳ Отправляется...",
+            sesGonderildi: "✅ Голос отправлен.",
+
             gonderilir: "⏳ Отправляется...",
             serverXeta: "❌ Не удалось подключиться к серверу.",
             mikrofon: "❌ Нет доступа к микрофону.",
-            sesYazildi: "✅ Голос записан. Вы можете прослушать его ниже.",
-            sesYazilir: "🔴 Идёт запись...",
             serhBos: "Сначала напишите комментарий."
         },
 
@@ -375,23 +404,35 @@
             tibb: "Call the nurse",
             yataq: "I need help with the bed",
             hazir: "Ready ✅",
+
             serh: "📝 Comment",
             serhPlaceholder: "Write your request here...",
             serhGonder: "Send comment",
+
             ses: "🎙️ Voice message",
             sesYaz: "Record voice",
             sesDayan: "Stop recording",
+            sesGonder: "Send voice",
+
             sesHazir: "Ready to record",
+            sesYazildi: "✅ Voice recorded. You can listen below.",
+            sesYazilir: "🔴 Recording...",
+
+            sesGonderilir: "⏳ Sending voice...",
+            sesGonderildi: "✅ Voice sent.",
+
             gonderilir: "⏳ Sending...",
             serverXeta: "❌ Could not connect to the server.",
             mikrofon: "❌ Microphone permission was denied.",
-            sesYazildi: "✅ Voice recorded. You can listen below.",
-            sesYazilir: "🔴 Recording...",
             serhBos: "Please write a comment first."
         }
 
     };
 
+
+    // ==================================
+    // DİL SEÇ
+    // ==================================
 
     function dilSec(dil) {
 
@@ -431,6 +472,9 @@
 
         document.getElementById("sesDayan").textContent =
             t.sesDayan;
+
+        document.getElementById("sesGonderText").textContent =
+            t.sesGonder;
 
         document.getElementById("status").textContent =
             t.sesHazir;
@@ -562,11 +606,19 @@
 
     let audioChunks = [];
 
+    let audioBlob = null;
+
+    let audioStream = null;
+
+
     const sesBaslat =
         document.getElementById("sesBaslat");
 
     const sesDayandir =
         document.getElementById("sesDayandir");
+
+    const sesGonderBtn =
+        document.getElementById("sesGonderBtn");
 
     const status =
         document.getElementById("status");
@@ -574,6 +626,10 @@
     const audio =
         document.getElementById("audio");
 
+
+    // ==================================
+    // SƏS YAZ
+    // ==================================
 
     sesBaslat.addEventListener(
         "click",
@@ -583,7 +639,7 @@
 
             try {
 
-                const stream =
+                audioStream =
                     await navigator.mediaDevices
                         .getUserMedia({
                             audio: true
@@ -591,8 +647,12 @@
 
                 audioChunks = [];
 
+                audioBlob = null;
+
+                sesGonderBtn.disabled = true;
+
                 recorder =
-                    new MediaRecorder(stream);
+                    new MediaRecorder(audioStream);
 
 
                 recorder.ondataavailable =
@@ -603,20 +663,19 @@
                             audioChunks.push(
                                 event.data
                             );
-
                         }
-
                     };
 
 
                 recorder.onstop =
                     function () {
 
-                        const audioBlob =
+                        audioBlob =
                             new Blob(
                                 audioChunks,
                                 {
-                                    type: "audio/webm"
+                                    type: recorder.mimeType ||
+                                        "audio/webm"
                                 }
                             );
 
@@ -629,17 +688,21 @@
                             audioUrl;
 
 
-                        stream
-                            .getTracks()
-                            .forEach(
-                                track =>
-                                    track.stop()
-                            );
+                        if (audioStream) {
 
+                            audioStream
+                                .getTracks()
+                                .forEach(
+                                    track =>
+                                        track.stop()
+                                );
+                        }
+
+
+                        sesGonderBtn.disabled = false;
 
                         status.textContent =
                             t.sesYazildi;
-
                     };
 
 
@@ -669,6 +732,10 @@
     );
 
 
+    // ==================================
+    // SƏSİ DAYANDIR
+    // ==================================
+
     sesDayandir.addEventListener(
         "click",
         function () {
@@ -685,7 +752,105 @@
 
                 sesDayandir.disabled =
                     true;
+            }
 
+        }
+    );
+
+
+    // ==================================
+    // SƏSİ GÖNDƏR
+    // ==================================
+
+    sesGonderBtn.addEventListener(
+        "click",
+        async function () {
+
+            const t = metinler[secilenDil];
+
+            if (!audioBlob) {
+                return;
+            }
+
+            sesGonderBtn.disabled = true;
+
+            status.textContent =
+                t.sesGonderilir;
+
+            try {
+
+                const formData =
+                    new FormData();
+
+                formData.append(
+                    "palata",
+                    PALATA
+                );
+
+                formData.append(
+                    "dil",
+                    secilenDil
+                );
+
+                formData.append(
+                    "ses",
+                    audioBlob,
+                    "palata-" + PALATA + "-" +
+                    Date.now() + ".webm"
+                );
+
+
+                const response =
+                    await fetch(
+                        BACKEND_URL + "/api/ses",
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Server xətası: " +
+                        response.status
+                    );
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                if (data.success) {
+
+                    status.textContent =
+                        t.sesGonderildi;
+
+                    audioBlob = null;
+
+                } else {
+
+                    throw new Error(
+                        "Səs göndərilmədi."
+                    );
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Səs göndərmə xətası:",
+                    error
+                );
+
+                status.textContent =
+                    t.serverXeta;
+
+                sesGonderBtn.disabled =
+                    false;
             }
 
         }
