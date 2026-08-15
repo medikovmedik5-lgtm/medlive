@@ -39,7 +39,14 @@
         h1 {
             color: #244d3d;
             font-size: 32px;
-            margin: 10px 0;
+            margin: 10px 0 4px;
+        }
+
+        .hospitalName {
+            color: #7b8781;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
         }
 
         h2 {
@@ -52,8 +59,6 @@
             font-size: 14px;
             margin-bottom: 25px;
         }
-
-        /* DİL SEÇİMİ */
 
         #dilSechimi {
             max-width: 430px;
@@ -83,8 +88,6 @@
             background: #edf6f1;
             transform: translateY(-2px);
         }
-
-        /* ƏSAS PALATA */
 
         #palata {
             display: none;
@@ -194,6 +197,11 @@
 
         <h1>MedElin</h1>
 
+        <!-- XƏSTƏXANA ADI -->
+        <div class="hospitalName">
+            Medistyle Hospital
+        </div>
+
         <div class="subtitle">
             Palata 407
         </div>
@@ -226,6 +234,10 @@
         <h1 id="basliq">
             Palata 407
         </h1>
+
+        <div class="hospitalName">
+            Medistyle Hospital
+        </div>
 
         <div class="subtitle" id="altBasliq">
             Sizə nə lazımdır?
@@ -300,10 +312,6 @@
 
 
 <script>
-
-    // ==================================
-    // DİL SİSTEMİ
-    // ==================================
 
     let secilenDil = "az";
 
@@ -385,21 +393,14 @@
         const t = metinler[dil];
 
         document.getElementById("dilSechimi").style.display = "none";
-
         document.getElementById("palata").style.display = "block";
 
         document.getElementById("altBasliq").textContent = t.alt;
-
         document.getElementById("su").textContent = t.su;
-
         document.getElementById("yemek").textContent = t.yemek;
-
         document.getElementById("tibb").textContent = t.tibb;
-
         document.getElementById("yataq").textContent = t.yataq;
-
         document.getElementById("cagirisStatus").textContent = t.hazir;
-
         document.getElementById("serhBasliq").textContent = t.serh;
 
         document.getElementById("serh").placeholder =
@@ -445,8 +446,7 @@
 
         const t = metinler[secilenDil];
 
-        status.textContent =
-            t.gonderilir;
+        status.textContent = t.gonderilir;
 
         try {
 
@@ -473,8 +473,7 @@
                 );
             }
 
-            const data =
-                await response.json();
+            const data = await response.json();
 
             if (data.success) {
 
@@ -544,7 +543,6 @@
     // ==================================
 
     let recorder = null;
-
     let audioChunks = [];
 
     const sesBaslat =
@@ -579,20 +577,14 @@
                 recorder =
                     new MediaRecorder(stream);
 
-
                 recorder.ondataavailable =
                     function (event) {
 
                         if (event.data.size > 0) {
-
-                            audioChunks.push(
-                                event.data
-                            );
-
+                            audioChunks.push(event.data);
                         }
 
                     };
-
 
                 recorder.onstop =
                     function () {
@@ -606,38 +598,27 @@
                             );
 
                         const audioUrl =
-                            URL.createObjectURL(
-                                audioBlob
-                            );
+                            URL.createObjectURL(audioBlob);
 
-                        audio.src =
-                            audioUrl;
-
+                        audio.src = audioUrl;
 
                         stream
                             .getTracks()
                             .forEach(
-                                track =>
-                                    track.stop()
+                                track => track.stop()
                             );
-
 
                         status.textContent =
                             t.sesYazildi;
-
                     };
-
 
                 recorder.start();
 
                 status.textContent =
                     t.sesYazilir;
 
-                sesBaslat.disabled =
-                    true;
-
-                sesDayandir.disabled =
-                    false;
+                sesBaslat.disabled = true;
+                sesDayandir.disabled = false;
 
             }
 
@@ -647,9 +628,7 @@
 
                 status.textContent =
                     t.mikrofon;
-
             }
-
         }
     );
 
@@ -665,12 +644,8 @@
 
                 recorder.stop();
 
-                sesBaslat.disabled =
-                    false;
-
-                sesDayandir.disabled =
-                    true;
-
+                sesBaslat.disabled = false;
+                sesDayandir.disabled = true;
             }
 
         }
