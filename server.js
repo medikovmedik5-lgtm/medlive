@@ -49,7 +49,8 @@ app.post("/api/cagir", (req, res) => {
         palata: palata,
         istek: istek,
         dil: dil || "az",
-        vaxt: new Date().toISOString()
+        vaxt: new Date().toISOString(),
+        qebulEdildi: false
     };
 
     cagirislar.push(cagiris);
@@ -72,6 +73,72 @@ app.post("/api/cagir", (req, res) => {
 app.get("/api/cagirislar", (req, res) => {
 
     res.json(cagirislar);
+
+});
+
+// ==================================
+// ÇAĞIRIŞI QƏBUL ET
+// ==================================
+
+app.patch("/api/cagir/:id/qebul", (req, res) => {
+
+    const id = Number(req.params.id);
+
+    const cagiris = cagirislar.find(
+        item => item.id === id
+    );
+
+    if (!cagiris) {
+        return res.status(404).json({
+            success: false,
+            message: "Çağırış tapılmadı"
+        });
+    }
+
+    cagiris.qebulEdildi = true;
+
+    console.log("✅ Çağırış qəbul edildi");
+    console.log("ID:", id);
+    console.log("Palata:", cagiris.palata);
+
+    res.json({
+        success: true,
+        message: "Çağırış qəbul edildi",
+        cagiris: cagiris
+    });
+
+});
+
+// ==================================
+// ÇAĞIRIŞI SİL
+// ==================================
+
+app.delete("/api/cagir/:id", (req, res) => {
+
+    const id = Number(req.params.id);
+
+    const evvelkiSay = cagirislar.length;
+
+    cagirislar = cagirislar.filter(
+        item => item.id !== id
+    );
+
+    if (cagirislar.length === evvelkiSay) {
+
+        return res.status(404).json({
+            success: false,
+            message: "Çağırış tapılmadı"
+        });
+
+    }
+
+    console.log("🗑️ Çağırış silindi");
+    console.log("ID:", id);
+
+    res.json({
+        success: true,
+        message: "Çağırış silindi"
+    });
 
 });
 
