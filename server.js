@@ -1,13 +1,21 @@
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
+const path = require("path");
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 
+// ==================================
+// ƏSAS AYARLAR
+// ==================================
+
 app.use(cors());
 app.use(express.json());
+
+// HTML fayllarını göstər
+app.use(express.static(__dirname));
 
 // ==================================
 // MULTER - SƏS FAYLLARI
@@ -30,27 +38,52 @@ let cagirislar = [];
 let sesler = [];
 
 // ==================================
-// XƏSTƏ ÇAĞIRIŞI
+// TİBB BACISI PANELİ
+// ==================================
+
+app.get("/", (req, res) => {
+
+    res.sendFile(
+        path.join(__dirname, "medistyle-tibb.html")
+    );
+
+});
+
+// ==================================
+// XƏSTƏ ÇAĞIRIŞI GÖNDƏR
 // ==================================
 
 app.post("/api/cagir", (req, res) => {
 
-    const { palata, istek, dil } = req.body;
+    const {
+        palata,
+        istek,
+        dil
+    } = req.body;
 
     if (!palata || !istek) {
+
         return res.status(400).json({
             success: false,
             message: "Palata və istək məlumatı çatışmır"
         });
+
     }
 
     const cagiris = {
+
         id: Date.now(),
+
         palata: palata,
+
         istek: istek,
+
         dil: dil || "az",
+
         vaxt: new Date().toISOString(),
+
         status: "yeni"
+
     };
 
     cagirislar.push(cagiris);
@@ -60,10 +93,15 @@ app.post("/api/cagir", (req, res) => {
     console.log("İstək:", istek);
 
     res.json({
+
         success: true,
+
         message: "Çağırış qəbul edildi",
+
         cagiris: cagiris
+
     });
+
 });
 
 // ==================================
@@ -89,20 +127,77 @@ app.put("/api/cagir/:id/qebul", (req, res) => {
     );
 
     if (!cagiris) {
+
         return res.status(404).json({
+
             success: false,
+
             message: "Çağırış tapılmadı"
+
         });
+
     }
 
     cagiris.status = "qebul edildi";
 
-    console.log("✅ Çağırış qəbul edildi:", id);
+    console.log(
+        "✅ Çağırış qəbul edildi:",
+        id
+    );
 
     res.json({
+
         success: true,
+
         message: "Çağırış qəbul edildi",
+
         cagiris: cagiris
+
+    });
+
+});
+
+// ==================================
+// ALTERNATİV QƏBUL ÜNVANI
+// ==================================
+// HTML bunu istifadə etsə də işləyəcək
+// ==================================
+
+app.put("/api/cagirislar/:id/accept", (req, res) => {
+
+    const id = Number(req.params.id);
+
+    const cagiris = cagirislar.find(
+        item => item.id === id
+    );
+
+    if (!cagiris) {
+
+        return res.status(404).json({
+
+            success: false,
+
+            message: "Çağırış tapılmadı"
+
+        });
+
+    }
+
+    cagiris.status = "qebul edildi";
+
+    console.log(
+        "✅ Çağırış qəbul edildi:",
+        id
+    );
+
+    res.json({
+
+        success: true,
+
+        message: "Çağırış qəbul edildi",
+
+        cagiris: cagiris
+
     });
 
 });
@@ -120,23 +215,79 @@ app.delete("/api/cagir/:id", (req, res) => {
     );
 
     if (index === -1) {
+
         return res.status(404).json({
+
             success: false,
+
             message: "Çağırış tapılmadı"
+
         });
+
     }
 
     const silinen =
         cagirislar.splice(index, 1)[0];
 
     console.log(
-        "🗑️ Çağırış silindi:",
+        "🗑️ Çağırış serverdən silindi:",
         silinen.id
     );
 
     res.json({
+
         success: true,
-        message: "Çağırış silindi"
+
+        message: "Çağırış silindi",
+
+        id: id
+
+    });
+
+});
+
+// ==================================
+// ALTERNATİV SİLMƏ ÜNVANI
+// ==================================
+// HTML bunu istifadə etsə də işləyəcək
+// ==================================
+
+app.delete("/api/cagirislar/:id", (req, res) => {
+
+    const id = Number(req.params.id);
+
+    const index = cagirislar.findIndex(
+        item => item.id === id
+    );
+
+    if (index === -1) {
+
+        return res.status(404).json({
+
+            success: false,
+
+            message: "Çağırış tapılmadı"
+
+        });
+
+    }
+
+    const silinen =
+        cagirislar.splice(index, 1)[0];
+
+    console.log(
+        "🗑️ Çağırış serverdən silindi:",
+        silinen.id
+    );
+
+    res.json({
+
+        success: true,
+
+        message: "Çağırış silindi",
+
+        id: id
+
     });
 
 });
@@ -152,13 +303,20 @@ app.post(
 
         try {
 
-            const { palata, dil } = req.body;
+            const {
+                palata,
+                dil
+            } = req.body;
 
             if (!palata) {
 
                 return res.status(400).json({
+
                     success: false,
-                    message: "Palata məlumatı yoxdur"
+
+                    message:
+                        "Palata məlumatı yoxdur"
+
                 });
 
             }
@@ -166,8 +324,12 @@ app.post(
             if (!req.file) {
 
                 return res.status(400).json({
+
                     success: false,
-                    message: "Səs faylı göndərilməyib"
+
+                    message:
+                        "Səs faylı göndərilməyib"
+
                 });
 
             }
@@ -180,14 +342,19 @@ app.post(
 
                 dil: dil || "az",
 
-                filename: req.file.originalname,
+                filename:
+                    req.file.originalname,
 
-                mimetype: req.file.mimetype,
+                mimetype:
+                    req.file.mimetype,
 
-                size: req.file.size,
+                size:
+                    req.file.size,
 
                 audio:
-                    req.file.buffer.toString("base64"),
+                    req.file.buffer.toString(
+                        "base64"
+                    ),
 
                 vaxt:
                     new Date().toISOString()
@@ -196,10 +363,24 @@ app.post(
 
             sesler.push(ses);
 
-            console.log("🎙️ Yeni səs mesajı");
-            console.log("Palata:", palata);
-            console.log("Dil:", dil);
-            console.log("Ölçü:", req.file.size);
+            console.log(
+                "🎙️ Yeni səs mesajı"
+            );
+
+            console.log(
+                "Palata:",
+                palata
+            );
+
+            console.log(
+                "Dil:",
+                dil
+            );
+
+            console.log(
+                "Ölçü:",
+                req.file.size
+            );
 
             res.json({
 
@@ -212,17 +393,23 @@ app.post(
 
                     id: ses.id,
 
-                    palata: ses.palata,
+                    palata:
+                        ses.palata,
 
-                    dil: ses.dil,
+                    dil:
+                        ses.dil,
 
-                    filename: ses.filename,
+                    filename:
+                        ses.filename,
 
-                    mimetype: ses.mimetype,
+                    mimetype:
+                        ses.mimetype,
 
-                    size: ses.size,
+                    size:
+                        ses.size,
 
-                    vaxt: ses.vaxt
+                    vaxt:
+                        ses.vaxt
 
                 }
 
@@ -255,25 +442,35 @@ app.post(
 
 app.get("/api/sesler", (req, res) => {
 
-    const cavab = sesler.map(ses => ({
+    const cavab = sesler.map(
+        ses => ({
 
-        id: ses.id,
+            id:
+                ses.id,
 
-        palata: ses.palata,
+            palata:
+                ses.palata,
 
-        dil: ses.dil,
+            dil:
+                ses.dil,
 
-        filename: ses.filename,
+            filename:
+                ses.filename,
 
-        mimetype: ses.mimetype,
+            mimetype:
+                ses.mimetype,
 
-        size: ses.size,
+            size:
+                ses.size,
 
-        vaxt: ses.vaxt,
+            vaxt:
+                ses.vaxt,
 
-        audio: ses.audio
+            audio:
+                ses.audio
 
-    }));
+        })
+    );
 
     res.json(cavab);
 
@@ -283,11 +480,22 @@ app.get("/api/sesler", (req, res) => {
 // SERVER TEST
 // ==================================
 
-app.get("/", (req, res) => {
+app.get("/api/test", (req, res) => {
 
-    res.send(
-        "MedLive backend işləyir ✅"
-    );
+    res.json({
+
+        success: true,
+
+        message:
+            "MedLive backend işləyir ✅",
+
+        cagirisSayi:
+            cagirislar.length,
+
+        sesSayi:
+            sesler.length
+
+    });
 
 });
 
