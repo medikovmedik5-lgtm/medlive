@@ -50,7 +50,7 @@ app.post("/api/cagir", (req, res) => {
         istek: istek,
         dil: dil || "az",
         vaxt: new Date().toISOString(),
-        qebulEdildi: false
+        status: "yeni"
     };
 
     cagirislar.push(cagiris);
@@ -80,7 +80,7 @@ app.get("/api/cagirislar", (req, res) => {
 // ÇAĞIRIŞI QƏBUL ET
 // ==================================
 
-app.patch("/api/cagir/:id/qebul", (req, res) => {
+app.put("/api/cagir/:id/qebul", (req, res) => {
 
     const id = Number(req.params.id);
 
@@ -95,11 +95,9 @@ app.patch("/api/cagir/:id/qebul", (req, res) => {
         });
     }
 
-    cagiris.qebulEdildi = true;
+    cagiris.status = "qebul edildi";
 
-    console.log("✅ Çağırış qəbul edildi");
-    console.log("ID:", id);
-    console.log("Palata:", cagiris.palata);
+    console.log("✅ Çağırış qəbul edildi:", id);
 
     res.json({
         success: true,
@@ -117,23 +115,24 @@ app.delete("/api/cagir/:id", (req, res) => {
 
     const id = Number(req.params.id);
 
-    const evvelkiSay = cagirislar.length;
-
-    cagirislar = cagirislar.filter(
-        item => item.id !== id
+    const index = cagirislar.findIndex(
+        item => item.id === id
     );
 
-    if (cagirislar.length === evvelkiSay) {
-
+    if (index === -1) {
         return res.status(404).json({
             success: false,
             message: "Çağırış tapılmadı"
         });
-
     }
 
-    console.log("🗑️ Çağırış silindi");
-    console.log("ID:", id);
+    const silinen =
+        cagirislar.splice(index, 1)[0];
+
+    console.log(
+        "🗑️ Çağırış silindi:",
+        silinen.id
+    );
 
     res.json({
         success: true,
@@ -187,9 +186,11 @@ app.post(
 
                 size: req.file.size,
 
-                audio: req.file.buffer.toString("base64"),
+                audio:
+                    req.file.buffer.toString("base64"),
 
-                vaxt: new Date().toISOString()
+                vaxt:
+                    new Date().toISOString()
 
             };
 
@@ -204,7 +205,8 @@ app.post(
 
                 success: true,
 
-                message: "Səs uğurla qəbul edildi",
+                message:
+                    "Səs uğurla qəbul edildi",
 
                 ses: {
 
@@ -228,13 +230,17 @@ app.post(
 
         } catch (error) {
 
-            console.error("Səs xətası:", error);
+            console.error(
+                "Səs xətası:",
+                error
+            );
 
             res.status(500).json({
 
                 success: false,
 
-                message: "Səsi qəbul etmək mümkün olmadı"
+                message:
+                    "Səsi qəbul etmək mümkün olmadı"
 
             });
 
@@ -279,7 +285,9 @@ app.get("/api/sesler", (req, res) => {
 
 app.get("/", (req, res) => {
 
-    res.send("MedLive backend işləyir ✅");
+    res.send(
+        "MedLive backend işləyir ✅"
+    );
 
 });
 
@@ -287,10 +295,14 @@ app.get("/", (req, res) => {
 // SERVERİ BAŞLAT
 // ==================================
 
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(
+    PORT,
+    "0.0.0.0",
+    () => {
 
-    console.log(
-        `MedLive server ${PORT} portunda işləyir ✅`
-    );
+        console.log(
+            `MedLive server ${PORT} portunda işləyir ✅`
+        );
 
-});
+    }
+);
