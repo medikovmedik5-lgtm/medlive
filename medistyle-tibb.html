@@ -1,340 +1,958 @@
-const express = require("express");
-const cors = require("cors");
-const multer = require("multer");
-const path = require("path");
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-const app = express();
+<title>Medistyle Hospital - Tibb Bacısı</title>
 
-const PORT = process.env.PORT || 3000;
+<style>
+* {
+    box-sizing: border-box;
+}
 
-app.use(cors());
-app.use(express.json());
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #eef8f4, #f8fbfa);
+    color: #20332b;
+    padding: 20px;
+}
 
-// ==================================
-// HTML FAYLLARINI AÇ
-// ==================================
+.container {
+    max-width: 900px;
+    margin: auto;
+}
 
-app.use(express.static(__dirname));
+.card {
+    background: white;
+    border-radius: 25px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(30,70,55,.10);
+}
 
-// ==================================
-// MULTER - SƏS FAYLLARI
-// ==================================
+.login {
+    max-width: 430px;
+    margin: 50px auto;
+    text-align: center;
+}
 
-const storage = multer.memoryStorage();
+.logo {
+    width: 75px;
+    height: 75px;
+    margin: auto;
+    border-radius: 22px;
+    background: #edf7f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+}
 
-const upload = multer({
-    storage: storage,
-    limits: {
-        fileSize: 10 * 1024 * 1024
+h1 {
+    color: #244d3d;
+}
+
+h2 {
+    color: #244d3d;
+}
+
+input {
+    width: 100%;
+    padding: 15px;
+    margin: 8px 0;
+    border: 1px solid #dce9e2;
+    border-radius: 13px;
+    font-size: 16px;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 13px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.loginBtn {
+    background: #244d3d;
+    color: white;
+}
+
+.logout {
+    background: #fff1ef;
+    color: #a33d32;
+}
+
+.status {
+    padding: 13px;
+    border-radius: 13px;
+    background: #edf7f2;
+    color: #2d654e;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.request {
+    border: 1px solid #dce9e2;
+    border-radius: 18px;
+    padding: 18px;
+    margin: 12px 0;
+    background: #fbfdfc;
+}
+
+.request.new {
+    border-left: 5px solid #e09b35;
+}
+
+.request.accepted {
+    border-left: 5px solid #2d654e;
+    opacity: .85;
+}
+
+.room {
+    font-size: 20px;
+    font-weight: bold;
+    color: #244d3d;
+}
+
+.time {
+    color: #89958f;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.actions button {
+    flex: 1;
+}
+
+.accept {
+    background: #244d3d;
+    color: white;
+}
+
+.delete {
+    background: #fff1ef;
+    color: #a33d32;
+}
+
+.voice {
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 16px;
+    background: #f5f9ff;
+    border: 1px solid #dce8f5;
+}
+
+.voice audio {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.empty {
+    text-align: center;
+    color: #89958f;
+    padding: 25px;
+}
+
+.hidden {
+    display: none;
+}
+
+@media(max-width:600px) {
+    .actions {
+        flex-direction: column;
     }
-});
+}
+</style>
+</head>
 
-// ==================================
-// YADDAŞ
-// ==================================
+<body>
 
-let cagirislar = [];
-let sesler = [];
+<!-- ================= LOGIN ================= -->
 
-// ==================================
-// ƏSAS SƏHİFƏ
-// ==================================
+<div id="loginPage" class="card login">
 
-app.get("/", (req, res) => {
-    res.send("MedLive backend işləyir ✅");
-});
+    <div class="logo">🩺</div>
 
-// Tibb bacısı paneli
-app.get("/medistyle-tibb.html", (req, res) => {
-    res.sendFile(
-        path.join(__dirname, "medistyle-tibb.html")
-    );
-});
+    <h1>Medistyle</h1>
 
-// ==================================
-// XƏSTƏ ÇAĞIRIŞI
-// ==================================
+    <p>Medistyle Hospital</p>
 
-app.post("/api/cagir", (req, res) => {
+    <h2>🔐 Tibb bacısı girişi</h2>
 
-    const { palata, istek, dil } = req.body;
+    <input
+        id="username"
+        type="text"
+        placeholder="İstifadəçi adı"
+    >
 
-    if (!palata || !istek) {
-        return res.status(400).json({
-            success: false,
-            message: "Palata və istək məlumatı çatışmır"
-        });
+    <input
+        id="password"
+        type="password"
+        placeholder="Şifrə"
+    >
+
+    <button
+        class="loginBtn"
+        onclick="login()"
+    >
+        Daxil ol
+    </button>
+
+    <div id="loginStatus"></div>
+
+</div>
+
+
+<!-- ================= PANEL ================= -->
+
+<div id="panel" class="container hidden">
+
+    <div class="card">
+
+        <div class="logo">🩺</div>
+
+        <h1>Medistyle Hospital</h1>
+
+        <p>
+            Tibb bacısı paneli
+        </p>
+
+        <div id="userInfo" class="status"></div>
+
+        <button
+            class="logout"
+            onclick="logout()"
+        >
+            🚪 Çıxış
+        </button>
+
+    </div>
+
+
+    <!-- ÇAĞIRIŞLAR -->
+
+    <div class="card">
+
+        <h2>🔔 Xəstə çağırışları</h2>
+
+        <div id="cagirislar">
+            <div class="empty">
+                Çağırışlar yüklənir...
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- SƏSLƏR -->
+
+    <div class="card">
+
+        <h2>🎙️ Səsli mesajlar</h2>
+
+        <div id="sesler">
+            <div class="empty">
+                Səslər yüklənir...
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const BACKEND_URL =
+    "https://medlive.onrender.com";
+
+let aktivUser = null;
+
+
+// ==========================================
+// LOGIN
+// ==========================================
+
+async function login() {
+
+    const username =
+        document.getElementById("username").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    const status =
+        document.getElementById("loginStatus");
+
+    if (!username || !password) {
+
+        status.textContent =
+            "❌ İstifadəçi adı və şifrəni yazın.";
+
+        return;
     }
 
-    const cagiris = {
-        id: Date.now(),
-        palata: palata,
-        istek: istek,
-        dil: dil || "az",
-        vaxt: new Date().toISOString(),
-        status: "yeni"
-    };
+    status.textContent =
+        "⏳ Giriş edilir...";
 
-    cagirislar.push(cagiris);
+    try {
 
-    console.log("🔔 Yeni çağırış");
-    console.log("Palata:", palata);
-    console.log("İstək:", istek);
+        const response =
+            await fetch(
+                BACKEND_URL + "/api/login",
+                {
+                    method: "POST",
 
-    res.json({
-        success: true,
-        message: "Çağırış qəbul edildi",
-        cagiris: cagiris
-    });
-});
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
 
-// ==================================
-// BÜTÜN ÇAĞIRIŞLAR
-// ==================================
-
-app.get("/api/cagirislar", (req, res) => {
-
-    res.json(cagirislar);
-
-});
-
-// ==================================
-// ÇAĞIRIŞI QƏBUL ET
-// ==================================
-
-app.put("/api/cagir/:id/qebul", (req, res) => {
-
-    const id = Number(req.params.id);
-
-    const cagiris = cagirislar.find(
-        item => item.id === id
-    );
-
-    if (!cagiris) {
-        return res.status(404).json({
-            success: false,
-            message: "Çağırış tapılmadı"
-        });
-    }
-
-    cagiris.status = "qebul edildi";
-
-    console.log("✅ Çağırış qəbul edildi:", id);
-
-    res.json({
-        success: true,
-        message: "Çağırış qəbul edildi",
-        cagiris: cagiris
-    });
-});
-
-// HTML-də istifadə etdiyimiz /accept variantı
-app.put("/api/cagirislar/:id/accept", (req, res) => {
-
-    const id = Number(req.params.id);
-
-    const cagiris = cagirislar.find(
-        item => item.id === id
-    );
-
-    if (!cagiris) {
-        return res.status(404).json({
-            success: false,
-            message: "Çağırış tapılmadı"
-        });
-    }
-
-    cagiris.status = "qebul edildi";
-
-    console.log("✅ Çağırış qəbul edildi:", id);
-
-    res.json({
-        success: true,
-        message: "Çağırış qəbul edildi",
-        cagiris: cagiris
-    });
-});
-
-// ==================================
-// ÇAĞIRIŞI SİL
-// ==================================
-
-app.delete("/api/cagir/:id", (req, res) => {
-
-    const id = Number(req.params.id);
-
-    const index = cagirislar.findIndex(
-        item => item.id === id
-    );
-
-    if (index === -1) {
-        return res.status(404).json({
-            success: false,
-            message: "Çağırış tapılmadı"
-        });
-    }
-
-    cagirislar.splice(index, 1);
-
-    console.log("🗑️ Çağırış silindi:", id);
-
-    res.json({
-        success: true,
-        message: "Çağırış silindi"
-    });
-});
-
-// HTML-də istifadə etdiyimiz variant
-app.delete("/api/cagirislar/:id", (req, res) => {
-
-    const id = Number(req.params.id);
-
-    const index = cagirislar.findIndex(
-        item => item.id === id
-    );
-
-    if (index === -1) {
-        return res.status(404).json({
-            success: false,
-            message: "Çağırış tapılmadı"
-        });
-    }
-
-    cagirislar.splice(index, 1);
-
-    console.log("🗑️ Çağırış silindi:", id);
-
-    res.json({
-        success: true,
-        message: "Çağırış silindi"
-    });
-});
-
-// ==================================
-// SƏS GÖNDƏR
-// ==================================
-
-app.post(
-    "/api/ses-gonder",
-    upload.single("ses"),
-    (req, res) => {
-
-        try {
-
-            const { palata, dil } = req.body;
-
-            if (!palata) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Palata məlumatı yoxdur"
-                });
-            }
-
-            if (!req.file) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Səs faylı göndərilməyib"
-                });
-            }
-
-            const ses = {
-
-                id: Date.now(),
-
-                palata: palata,
-
-                dil: dil || "az",
-
-                filename: req.file.originalname,
-
-                mimetype: req.file.mimetype,
-
-                size: req.file.size,
-
-                audio: req.file.buffer.toString("base64"),
-
-                vaxt: new Date().toISOString()
-            };
-
-            sesler.push(ses);
-
-            console.log("🎙️ Yeni səs mesajı");
-            console.log("Palata:", palata);
-
-            res.json({
-
-                success: true,
-
-                message: "Səs uğurla qəbul edildi",
-
-                ses: {
-                    id: ses.id,
-                    palata: ses.palata,
-                    dil: ses.dil,
-                    filename: ses.filename,
-                    mimetype: ses.mimetype,
-                    size: ses.size,
-                    vaxt: ses.vaxt
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
                 }
+            );
 
-            });
+        const data =
+            await response.json();
 
-        } catch (error) {
+        if (!response.ok || !data.success) {
 
-            console.error("Səs xətası:", error);
+            status.textContent =
+                "❌ " +
+                (data.message ||
+                "Login məlumatları yanlışdır.");
 
-            res.status(500).json({
-
-                success: false,
-
-                message: "Səsi qəbul etmək mümkün olmadı"
-
-            });
+            return;
         }
+
+        aktivUser = data.user;
+
+        sessionStorage.setItem(
+            "medliveUser",
+            JSON.stringify(aktivUser)
+        );
+
+        document
+            .getElementById("loginPage")
+            .classList.add("hidden");
+
+        document
+            .getElementById("panel")
+            .classList.remove("hidden");
+
+        document
+            .getElementById("userInfo")
+            .textContent =
+            "🟢 Xoş gəldiniz, " +
+            aktivUser.ad +
+            "!";
+
+        cagirislarGetir();
+        sesleriGetir();
+
     }
-);
 
-// ==================================
-// TİBB BACISI - SƏSLƏR
-// ==================================
+    catch (error) {
 
-app.get("/api/sesler", (req, res) => {
+        console.error(error);
 
-    const cavab = sesler.map(ses => ({
+        status.textContent =
+            "❌ Serverə qoşulmaq olmadı.";
 
-        id: ses.id,
+    }
+}
 
-        palata: ses.palata,
 
-        dil: ses.dil,
+// ==========================================
+// ÇIXIŞ
+// ==========================================
 
-        filename: ses.filename,
+function logout() {
 
-        mimetype: ses.mimetype,
+    sessionStorage.removeItem(
+        "medliveUser"
+    );
 
-        size: ses.size,
+    location.reload();
+}
 
-        vaxt: ses.vaxt,
 
-        audio: ses.audio
+// ==========================================
+// SESSION YOXLA
+// ==========================================
 
-    }));
+function sessionYoxla() {
 
-    res.json(cavab);
-});
+    const saved =
+        sessionStorage.getItem(
+            "medliveUser"
+        );
 
-// ==================================
-// SERVERİ BAŞLAT
-// ==================================
+    if (!saved) return;
 
-app.listen(
-    PORT,
-    "0.0.0.0",
-    () => {
+    try {
 
-        console.log(
-            `MedLive server ${PORT} portunda işləyir ✅`
+        aktivUser =
+            JSON.parse(saved);
+
+        document
+            .getElementById("loginPage")
+            .classList.add("hidden");
+
+        document
+            .getElementById("panel")
+            .classList.remove("hidden");
+
+        document
+            .getElementById("userInfo")
+            .textContent =
+            "🟢 Xoş gəldiniz, " +
+            aktivUser.ad +
+            "!";
+
+        cagirislarGetir();
+        sesleriGetir();
+
+    }
+
+    catch {
+
+        sessionStorage.removeItem(
+            "medliveUser"
         );
 
     }
+}
+
+
+// ==========================================
+// ÇAĞIRIŞLARI GƏTİR
+// ==========================================
+
+async function cagirislarGetir() {
+
+    const box =
+        document.getElementById(
+            "cagirislar"
+        );
+
+    try {
+
+        const response =
+            await fetch(
+                BACKEND_URL +
+                "/api/cagirislar"
+            );
+
+        const data =
+            await response.json();
+
+        if (!data.success) {
+
+            throw new Error(
+                "Çağırışlar alınmadı"
+            );
+
+        }
+
+        const list =
+            data.cagirislar || [];
+
+        if (list.length === 0) {
+
+            box.innerHTML =
+                '<div class="empty">' +
+                '🔔 Yeni çağırış yoxdur.' +
+                '</div>';
+
+            return;
+        }
+
+        box.innerHTML = "";
+
+        list
+            .sort(
+                (a,b) =>
+                b.id - a.id
+            )
+            .forEach(
+                cagiris =>
+                cagirisGoster(
+                    cagiris
+                )
+            );
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        box.innerHTML =
+            '<div class="empty">' +
+            '❌ Çağırışları yükləmək olmadı.' +
+            '</div>';
+
+    }
+}
+
+
+// ==========================================
+// ÇAĞIRIŞ GÖSTƏR
+// ==========================================
+
+function cagirisGoster(cagiris) {
+
+    const box =
+        document.getElementById(
+            "cagirislar"
+        );
+
+    const div =
+        document.createElement("div");
+
+    div.className =
+        "request " +
+        (cagiris.status === "accepted"
+            ? "accepted"
+            : "new");
+
+    const tarix =
+        new Date(
+            cagiris.vaxt
+        ).toLocaleString(
+            "az-AZ"
+        );
+
+    let qebul =
+        "";
+
+    if (cagiris.status === "accepted") {
+
+        qebul =
+            "<p>✅ Qəbul edildi" +
+            (cagiris.qebulEden
+                ? " — " +
+                  cagiris.qebulEden
+                : "") +
+            "</p>";
+
+    }
+
+    div.innerHTML = `
+
+        <div class="room">
+            🛏️ Palata ${cagiris.palata}
+        </div>
+
+        <div style="margin-top:10px;font-size:18px;">
+            ${escapeHTML(cagiris.istek)}
+        </div>
+
+        <div class="time">
+            🕒 ${tarix}
+        </div>
+
+        ${qebul}
+
+        <div class="actions">
+
+            ${
+                cagiris.status === "new"
+                ?
+                `
+                <button
+                    class="accept"
+                    onclick="qebulEt(${cagiris.id})"
+                >
+                    ✅ Qəbul et
+                </button>
+                `
+                :
+                ""
+            }
+
+            <button
+                class="delete"
+                onclick="cagirisSil(${cagiris.id})"
+            >
+                🗑️ Sil
+            </button>
+
+        </div>
+    `;
+
+    box.appendChild(div);
+}
+
+
+// ==========================================
+// QƏBUL ET
+// ==========================================
+
+async function qebulEt(id) {
+
+    try {
+
+        const response =
+            await fetch(
+                BACKEND_URL +
+                "/api/cagir/" +
+                id +
+                "/qebul",
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        qebulEden:
+                            aktivUser.ad
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok ||
+            !data.success) {
+
+            alert(
+                data.message ||
+                "Qəbul etmək olmadı."
+            );
+
+            return;
+        }
+
+        // Server təsdiqləyəndən sonra
+        // siyahını yenidən gətiririk.
+
+        await cagirislarGetir();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ Serverə qoşulmaq olmadı."
+        );
+
+    }
+}
+
+
+// ==========================================
+// SİL
+// ==========================================
+
+async function cagirisSil(id) {
+
+    const tesdiq =
+        confirm(
+            "Bu çağırışı həqiqətən silmək istəyirsiniz?"
+        );
+
+    if (!tesdiq) return;
+
+    try {
+
+        const response =
+            await fetch(
+                BACKEND_URL +
+                "/api/cagir/" +
+                id,
+                {
+                    method: "DELETE"
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok ||
+            !data.success) {
+
+            alert(
+                data.message ||
+                "Silinmədi."
+            );
+
+            return;
+        }
+
+        // Serverdən silindikdən sonra
+        // siyahını yeniləyirik.
+
+        await cagirislarGetir();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ Serverə qoşulmaq olmadı."
+        );
+
+    }
+}
+
+
+// ==========================================
+// SƏSLƏRİ GƏTİR
+// ==========================================
+
+async function sesleriGetir() {
+
+    const box =
+        document.getElementById(
+            "sesler"
+        );
+
+    try {
+
+        const response =
+            await fetch(
+                BACKEND_URL +
+                "/api/sesler"
+            );
+
+        const data =
+            await response.json();
+
+        if (!data.success) {
+
+            throw new Error(
+                "Səslər alınmadı"
+            );
+
+        }
+
+        const list =
+            data.sesler || [];
+
+        if (list.length === 0) {
+
+            box.innerHTML =
+                '<div class="empty">' +
+                '🎙️ Yeni səsli mesaj yoxdur.' +
+                '</div>';
+
+            return;
+        }
+
+        box.innerHTML = "";
+
+        list
+            .sort(
+                (a,b) =>
+                b.id - a.id
+            )
+            .forEach(
+                ses =>
+                sesGoster(ses)
+            );
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        box.innerHTML =
+            '<div class="empty">' +
+            '❌ Səsləri yükləmək olmadı.' +
+            '</div>';
+
+    }
+}
+
+
+// ==========================================
+// SƏS GÖSTƏR
+// ==========================================
+
+function sesGoster(ses) {
+
+    const box =
+        document.getElementById(
+            "sesler"
+        );
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.className =
+        "voice";
+
+    const tarix =
+        new Date(
+            ses.vaxt
+        ).toLocaleString(
+            "az-AZ"
+        );
+
+    const audioUrl =
+        "data:" +
+        ses.mimetype +
+        ";base64," +
+        ses.audio;
+
+    div.innerHTML = `
+
+        <strong>
+            🎙️ Palata ${ses.palata}
+        </strong>
+
+        <div class="time">
+            🕒 ${tarix}
+        </div>
+
+        <audio
+            controls
+            src="${audioUrl}"
+        ></audio>
+
+        <button
+            class="delete"
+            onclick="sesSil(${ses.id})"
+        >
+            🗑️ Səsi sil
+        </button>
+
+    `;
+
+    box.appendChild(div);
+}
+
+
+// ==========================================
+// SƏSİ SİL
+// ==========================================
+
+async function sesSil(id) {
+
+    const tesdiq =
+        confirm(
+            "Bu səsli mesajı silmək istəyirsiniz?"
+        );
+
+    if (!tesdiq) return;
+
+    try {
+
+        const response =
+            await fetch(
+                BACKEND_URL +
+                "/api/ses/" +
+                id,
+                {
+                    method: "DELETE"
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok ||
+            !data.success) {
+
+            alert(
+                data.message ||
+                "Səs silinmədi."
+            );
+
+            return;
+        }
+
+        await sesleriGetir();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ Serverə qoşulmaq olmadı."
+        );
+
+    }
+}
+
+
+// ==========================================
+// TƏHLÜKƏSİZ MƏTN
+// ==========================================
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        text;
+
+    return div.innerHTML;
+}
+
+
+// ==========================================
+// AVTOMATİK YENİLƏMƏ
+// ==========================================
+
+// Hər 5 saniyədən bir serverdən
+// ən son məlumatları götürürük.
+
+setInterval(
+    function() {
+
+        if (aktivUser) {
+
+            cagirislarGetir();
+            sesleriGetir();
+
+        }
+
+    },
+    5000
 );
+
+
+// ==========================================
+// BAŞLA
+// ==========================================
+
+sessionYoxla();
+
+</script>
+
+</body>
+</html>
