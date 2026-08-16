@@ -1,800 +1,800 @@
 <!DOCTYPE html>
 <html lang="az">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedElin - Palata 406</title>
 
-    <title>MedElin - Palata 406</title>
+<style>
+*{box-sizing:border-box}
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    text-align:center;
+    background:#f4f8f6;
+    color:#1d2b26;
+    padding:25px 15px;
+}
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background: #f4f8f6;
-            color: #1d2b26;
-            padding: 25px 15px;
-        }
+.box{
+    max-width:430px;
+    margin:20px auto;
+    background:white;
+    padding:28px 22px;
+    border-radius:28px;
+    box-shadow:0 15px 45px rgba(30,70,55,.12);
+}
 
-        .logo {
-            width: 82px;
-            height: 82px;
-            margin: 0 auto 12px;
-            border-radius: 25px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 45px;
-            box-shadow: 0 10px 30px rgba(30,70,55,.12);
-            border: 1px solid #e2ebe6;
-        }
+.logo{
+    width:82px;
+    height:82px;
+    margin:0 auto 12px;
+    border-radius:25px;
+    background:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:45px;
+    box-shadow:0 10px 30px rgba(30,70,55,.12);
+}
 
-        h1 {
-            color: #244d3d;
-            font-size: 32px;
-            margin: 10px 0 3px;
-        }
+h1{
+    color:#244d3d;
+    font-size:32px;
+    margin:10px 0 3px;
+}
 
-        h2 {
-            font-size: 22px;
-            margin: 25px 0 18px;
-        }
+h2{
+    font-size:22px;
+    margin:25px 0 18px;
+}
 
-        .hospital {
-            color: #6c7d75;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
+.hospital{
+    color:#6c7d75;
+    font-size:14px;
+    font-weight:bold;
+}
 
-        .subtitle {
-            color: #748078;
-            font-size: 14px;
-            margin-bottom: 25px;
-        }
+.subtitle{
+    color:#748078;
+    font-size:14px;
+    margin:8px 0 25px;
+}
 
-        #dilSechimi,
-        #palata {
-            max-width: 430px;
-            margin: 20px auto;
-            background: white;
-            padding: 30px 22px;
-            border-radius: 28px;
-            box-shadow: 0 15px 45px rgba(30,70,55,.12);
-        }
+button{
+    width:100%;
+    padding:17px;
+    margin:10px 0;
+    border:1px solid #dce7e1;
+    border-radius:16px;
+    background:white;
+    color:#244d3d;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
 
-        #palata {
-            display: none;
-        }
+button:hover{
+    background:#edf6f1;
+}
 
-        .dilBtn,
-        .istek {
-            display: block;
-            width: 100%;
-            padding: 17px;
-            margin: 12px 0;
-            border: 1px solid #dce7e1;
-            border-radius: 16px;
-            background: white;
-            color: #244d3d;
-            font-size: 17px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+button:disabled{
+    opacity:.55;
+}
 
-        .dilBtn:hover,
-        .istek:hover {
-            background: #edf6f1;
-        }
+.ses{
+    background:#fff4f2;
+    color:#a33d32;
+}
 
-        .istek:disabled {
-            opacity: .6;
-            cursor: not-allowed;
-        }
+.dayandir{
+    background:#edf6f1;
+    color:#2d654e;
+}
 
-        .ses {
-            background: #fff4f2;
-            border-color: #f2d1cc;
-            color: #a33d32;
-        }
+.sesGonder{
+    background:#eaf3ff;
+    color:#285b8f;
+}
 
-        .dayandir {
-            background: #edf6f1;
-            border-color: #cfe2d8;
-            color: #2d654e;
-        }
+.status{
+    margin:15px 0;
+    padding:14px;
+    border-radius:14px;
+    background:#edf6f1;
+    color:#2d654e;
+    font-weight:bold;
+}
 
-        .sesGonder {
-            background: #eaf3ff;
-            border-color: #c8dcf5;
-            color: #285b8f;
-        }
+textarea{
+    width:100%;
+    height:105px;
+    padding:13px;
+    border-radius:14px;
+    border:1px solid #dce7e1;
+    font-size:16px;
+    resize:vertical;
+}
 
-        textarea {
-            width: 100%;
-            height: 105px;
-            margin-top: 10px;
-            padding: 13px;
-            border-radius: 14px;
-            border: 1px solid #dce7e1;
-            font-size: 16px;
-            resize: vertical;
-        }
+audio{
+    width:100%;
+    margin-top:10px;
+}
 
-        #status {
-            font-weight: bold;
-            margin: 15px;
-            color: #65736c;
-        }
+hr{
+    border:none;
+    border-top:1px solid #e5ebe7;
+    margin:30px 0;
+}
 
-        #cagirisStatus {
-            margin: 20px auto;
-            padding: 15px;
-            border-radius: 14px;
-            background: #edf6f1;
-            color: #2d654e;
-            font-weight: bold;
-        }
-
-        audio {
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        hr {
-            border: none;
-            border-top: 1px solid #e5ebe7;
-            margin: 30px 0;
-        }
-
-        .footer {
-            margin-top: 25px;
-            color: #9aa59f;
-            font-size: 12px;
-        }
-    </style>
+.footer{
+    margin-top:25px;
+    color:#9aa59f;
+    font-size:12px;
+}
+</style>
 </head>
 
 <body>
 
-    <div id="dilSechimi">
+<!-- DİL SEÇİMİ -->
 
-        <div class="logo">🩺</div>
+<div class="box" id="dilSechimi">
 
-        <h1>MedElin</h1>
+    <div class="logo">🩺</div>
 
-        <div class="hospital">
-            Medistyle Hospital
-        </div>
+    <h1>MedElin</h1>
 
-        <div class="subtitle">
-            Palata 406
-        </div>
+    <div class="hospital">
+        Medistyle Hospital
+    </div>
 
-        <h2>🌍 Dil seçin</h2>
+    <div class="subtitle">
+        Palata 406
+    </div>
 
-        <button class="dilBtn" onclick="dilSec('az')">
-            🇦🇿 Azərbaycan
-        </button>
+    <h2>🌍 Dil seçin</h2>
 
-        <button class="dilBtn" onclick="dilSec('ru')">
-            🇷🇺 Русский
-        </button>
+    <button onclick="dilSec('az')">
+        🇦🇿 Azərbaycan
+    </button>
 
-        <button class="dilBtn" onclick="dilSec('en')">
-            🇬🇧 English
-        </button>
+    <button onclick="dilSec('ru')">
+        🇷🇺 Русский
+    </button>
 
+    <button onclick="dilSec('en')">
+        🇬🇧 English
+    </button>
+
+</div>
+
+
+<!-- PALATA -->
+
+<div class="box" id="palata" style="display:none">
+
+    <div class="logo">🩺</div>
+
+    <h1>Palata 406</h1>
+
+    <div class="hospital">
+        Medistyle Hospital
+    </div>
+
+    <div class="subtitle" id="altBasliq">
+        Sizə nə lazımdır?
     </div>
 
 
-    <div id="palata">
+    <!-- ÇAĞIRIŞLAR -->
 
-        <div class="logo">🩺</div>
+    <button onclick="cagirisGonder('Su istəyirəm')">
+        💧 <span id="su">Su istəyirəm</span>
+    </button>
 
-        <h1>Palata 406</h1>
+    <button onclick="cagirisGonder('Yemək istəyirəm')">
+        🍽️ <span id="yemek">Yemək istəyirəm</span>
+    </button>
 
-        <div class="hospital">
-            Medistyle Hospital
-        </div>
+    <button onclick="cagirisGonder('Tibb bacısını çağır')">
+        🧑‍⚕️ <span id="tibb">Tibb bacısını çağır</span>
+    </button>
 
-        <div class="subtitle" id="altBasliq">
-            Sizə nə lazımdır?
-        </div>
+    <button onclick="cagirisGonder('Yataqla bağlı kömək istəyirəm')">
+        🛏️ <span id="yataq">Yataqla bağlı kömək</span>
+    </button>
 
-
-        <button class="istek" onclick="cagirisGonder('Su istəyirəm')">
-            💧 <span id="su">Su istəyirəm</span>
-        </button>
-
-        <button class="istek" onclick="cagirisGonder('Yemək istəyirəm')">
-            🍽️ <span id="yemek">Yemək istəyirəm</span>
-        </button>
-
-        <button class="istek" onclick="cagirisGonder('Tibb bacısını çağır')">
-            🧑‍⚕️ <span id="tibb">Tibb bacısını çağır</span>
-        </button>
-
-        <button class="istek" onclick="cagirisGonder('Yataqla bağlı kömək istəyirəm')">
-            🛏️ <span id="yataq">Yataqla bağlı kömək</span>
-        </button>
-
-        <div id="cagirisStatus">
-            Hazırdır ✅
-        </div>
-
-
-        <h3 id="serhBasliq">
-            📝 Şərh
-        </h3>
-
-        <textarea id="serh"
-            placeholder="İstəyinizi buraya yazın..."></textarea>
-
-        <button class="istek" onclick="serhGonder()">
-            📤 <span id="serhGonder">Şərhi göndər</span>
-        </button>
-
-
-        <hr>
-
-
-        <h2 id="sesBasliq">
-            🎙️ Səsli mesaj
-        </h2>
-
-        <button id="sesBaslat" class="istek ses">
-            🎙️ <span id="sesYaz">Səs yaz</span>
-        </button>
-
-        <button id="sesDayandir" class="istek dayandir" disabled>
-            ⏹️ <span id="sesDayan">Səsi dayandır</span>
-        </button>
-
-        <button id="sesGonderBtn" class="istek sesGonder" disabled>
-            📤 <span id="sesGonderText">Səsi göndər</span>
-        </button>
-
-        <div id="status">
-            Səs yazmağa hazırdır
-        </div>
-
-        <audio id="audio" controls></audio>
-
-        <div class="footer">
-            MedElin • Palata sistemi
-        </div>
-
+    <div class="status" id="cagirisStatus">
+        Hazırdır ✅
     </div>
+
+
+    <!-- ŞƏRH -->
+
+    <h3 id="serhBasliq">
+        📝 Şərh
+    </h3>
+
+    <textarea
+        id="serh"
+        placeholder="İstəyinizi buraya yazın..."
+    ></textarea>
+
+    <button onclick="serhGonder()">
+        📤 <span id="serhGonder">Şərhi göndər</span>
+    </button>
+
+
+    <hr>
+
+
+    <!-- SƏS -->
+
+    <h2 id="sesBasliq">
+        🎙️ Səsli mesaj
+    </h2>
+
+    <button
+        id="sesBaslat"
+        class="ses"
+        onclick="sesYaz">
+        🎙️ <span id="sesYazText">Səs yaz</span>
+    </button>
+
+    <button
+        id="sesDayandir"
+        class="dayandir"
+        disabled
+        onclick="sesDayandirFunc()">
+        ⏹️ <span id="sesDayanText">Səsi dayandır</span>
+    </button>
+
+    <button
+        id="sesGonderBtn"
+        class="sesGonder"
+        disabled
+        onclick="sesGonder()">
+        📤 <span id="sesGonderText">Səsi göndər</span>
+    </button>
+
+    <div class="status" id="sesStatus">
+        Səs yazmağa hazırdır
+    </div>
+
+    <audio id="audio" controls></audio>
+
+
+    <div class="footer">
+        MedElin • Palata 406
+    </div>
+
+</div>
 
 
 <script>
 
-    // ==========================================
-    // SERVER
-    // ==========================================
+/* =========================================
+   SERVER
+========================================= */
 
-    const BACKEND_URL =
-        const BACKEND_URL =
-    "https://medlive.onrender.com";
-
-    const PALATA = "406";
+const BACKEND_URL = "https://medlive.onrender.com";
+const PALATA = "406";
 
 
-    // ==========================================
-    // DİLLƏR
-    // ==========================================
+/* =========================================
+   DİLLƏR
+========================================= */
 
-    let secilenDil = "az";
+let secilenDil = "az";
 
-    const metinler = {
+const metinler = {
 
-        az: {
-            alt: "Sizə nə lazımdır?",
-            su: "Su istəyirəm",
-            yemek: "Yemək istəyirəm",
-            tibb: "Tibb bacısını çağır",
-            yataq: "Yataqla bağlı kömək",
-            hazir: "Hazırdır ✅",
+az:{
+    alt:"Sizə nə lazımdır?",
+    su:"Su istəyirəm",
+    yemek:"Yemək istəyirəm",
+    tibb:"Tibb bacısını çağır",
+    yataq:"Yataqla bağlı kömək",
+    hazir:"Hazırdır ✅",
 
-            serh: "📝 Şərh",
-            placeholder: "İstəyinizi buraya yazın...",
-            serhGonder: "Şərhi göndər",
+    serh:"📝 Şərh",
+    placeholder:"İstəyinizi buraya yazın...",
+    serhGonder:"Şərhi göndər",
 
-            ses: "🎙️ Səsli mesaj",
-            sesYaz: "Səs yaz",
-            sesDayan: "Səsi dayandır",
-            sesGonder: "Səsi göndər",
+    ses:"🎙️ Səsli mesaj",
+    sesYaz:"Səs yaz",
+    sesDayan:"Səsi dayandır",
+    sesGonder:"Səsi göndər",
 
-            sesHazir: "Səs yazmağa hazırdır",
-            sesYazildi: "✅ Səs yazıldı. Aşağıdan dinləyə bilərsiniz.",
-            sesYazilir: "🔴 Səs yazılır...",
-            sesGonderilir: "⏳ Səs göndərilir...",
-            sesGonderildi: "✅ Səs göndərildi.",
+    sesHazir:"Səs yazmağa hazırdır",
+    sesYazildi:"✅ Səs yazıldı. Aşağıdan dinləyə bilərsiniz.",
+    sesYazilir:"🔴 Səs yazılır...",
+    sesGonderilir:"⏳ Səs göndərilir...",
+    sesGonderildi:"✅ Səs göndərildi.",
 
-            gonderilir: "⏳ Göndərilir...",
-            serverXeta: "❌ Serverə qoşulmaq olmadı.",
-            mikrofon: "❌ Mikrofon üçün icazə verilmədi.",
-            serhBos: "Əvvəl şərh yazın."
-        },
+    gonderilir:"⏳ Göndərilir...",
+    gonderildi:"🔔 Göndərildi: Palata 406",
+    serverXeta:"❌ Serverə qoşulmaq olmadı.",
+    mikrofon:"❌ Mikrofon üçün icazə verilmədi.",
+    serhBos:"Əvvəl şərh yazın."
+},
 
-        ru: {
-            alt: "Что вам нужно?",
-            su: "Я хочу воды",
-            yemek: "Я хочу есть",
-            tibb: "Позвать медсестру",
-            yataq: "Помощь с кроватью",
-            hazir: "Готово ✅",
+ru:{
+    alt:"Что вам нужно?",
+    su:"Я хочу воды",
+    yemek:"Я хочу есть",
+    tibb:"Позвать медсестру",
+    yataq:"Помощь с кроватью",
+    hazir:"Готово ✅",
 
-            serh: "📝 Комментарий",
-            placeholder: "Напишите вашу просьбу...",
-            serhGonder: "Отправить комментарий",
+    serh:"📝 Комментарий",
+    placeholder:"Напишите вашу просьбу...",
+    serhGonder:"Отправить комментарий",
 
-            ses: "🎙️ Голосовое сообщение",
-            sesYaz: "Записать голос",
-            sesDayan: "Остановить запись",
-            sesGonder: "Отправить голос",
+    ses:"🎙️ Голосовое сообщение",
+    sesYaz:"Записать голос",
+    sesDayan:"Остановить запись",
+    sesGonder:"Отправить голос",
 
-            sesHazir: "Готов к записи",
-            sesYazildi: "✅ Голос записан.",
-            sesYazilir: "🔴 Идёт запись...",
-            sesGonderilir: "⏳ Отправляется...",
-            sesGonderildi: "✅ Голос отправлен.",
+    sesHazir:"Готов к записи",
+    sesYazildi:"✅ Голос записан.",
+    sesYazilir:"🔴 Идёт запись...",
+    sesGonderilir:"⏳ Отправляется...",
+    sesGonderildi:"✅ Голос отправлен.",
 
-            gonderilir: "⏳ Отправляется...",
-            serverXeta: "❌ Не удалось подключиться к серверу.",
-            mikrofon: "❌ Нет доступа к микрофону.",
-            serhBos: "Сначала напишите комментарий."
-        },
+    gonderilir:"⏳ Отправляется...",
+    gonderildi:"🔔 Отправлено: Палата 406",
+    serverXeta:"❌ Не удалось подключиться к серверу.",
+    mikrofon:"❌ Нет доступа к микрофону.",
+    serhBos:"Сначала напишите комментарий."
+},
 
-        en: {
-            alt: "What do you need?",
-            su: "I want water",
-            yemek: "I want food",
-            tibb: "Call the nurse",
-            yataq: "I need help with the bed",
-            hazir: "Ready ✅",
+en:{
+    alt:"What do you need?",
+    su:"I want water",
+    yemek:"I want food",
+    tibb:"Call the nurse",
+    yataq:"I need help with the bed",
+    hazir:"Ready ✅",
 
-            serh: "📝 Comment",
-            placeholder: "Write your request here...",
-            serhGonder: "Send comment",
+    serh:"📝 Comment",
+    placeholder:"Write your request here...",
+    serhGonder:"Send comment",
 
-            ses: "🎙️ Voice message",
-            sesYaz: "Record voice",
-            sesDayan: "Stop recording",
-            sesGonder: "Send voice",
+    ses:"🎙️ Voice message",
+    sesYaz:"Record voice",
+    sesDayan:"Stop recording",
+    sesGonder:"Send voice",
 
-            sesHazir: "Ready to record",
-            sesYazildi: "✅ Voice recorded.",
-            sesYazilir: "🔴 Recording...",
-            sesGonderilir: "⏳ Sending voice...",
-            sesGonderildi: "✅ Voice sent.",
+    sesHazir:"Ready to record",
+    sesYazildi:"✅ Voice recorded.",
+    sesYazilir:"🔴 Recording...",
+    sesGonderilir:"⏳ Sending voice...",
+    sesGonderildi:"✅ Voice sent.",
 
-            gonderilir: "⏳ Sending...",
-            serverXeta: "❌ Could not connect to the server.",
-            mikrofon: "❌ Microphone permission was denied.",
-            serhBos: "Please write a comment first."
+    gonderilir:"⏳ Sending...",
+    gonderildi:"🔔 Sent: Room 406",
+    serverXeta:"❌ Could not connect to the server.",
+    mikrofon:"❌ Microphone permission was denied.",
+    serhBos:"Please write a comment first."
+}
+
+};
+
+
+/* =========================================
+   DİL SEÇ
+========================================= */
+
+function dilSec(dil){
+
+    secilenDil = dil;
+
+    const t = metinler[dil];
+
+    document.getElementById("dilSechimi").style.display = "none";
+    document.getElementById("palata").style.display = "block";
+
+    document.getElementById("altBasliq").textContent = t.alt;
+
+    document.getElementById("su").textContent = t.su;
+    document.getElementById("yemek").textContent = t.yemek;
+    document.getElementById("tibb").textContent = t.tibb;
+    document.getElementById("yataq").textContent = t.yataq;
+
+    document.getElementById("cagirisStatus").textContent = t.hazir;
+
+    document.getElementById("serhBasliq").textContent = t.serh;
+
+    document.getElementById("serh").placeholder =
+        t.placeholder;
+
+    document.getElementById("serhGonder").textContent =
+        t.serhGonder;
+
+    document.getElementById("sesBasliq").textContent =
+        t.ses;
+
+    document.getElementById("sesYazText").textContent =
+        t.sesYaz;
+
+    document.getElementById("sesDayanText").textContent =
+        t.sesDayan;
+
+    document.getElementById("sesGonderText").textContent =
+        t.sesGonder;
+
+    document.getElementById("sesStatus").textContent =
+        t.sesHazir;
+}
+
+
+/* =========================================
+   ÇAĞIRIŞ GÖNDƏR
+========================================= */
+
+async function cagirisGonder(istek){
+
+    const status =
+        document.getElementById("cagirisStatus");
+
+    const t = metinler[secilenDil];
+
+    status.textContent = t.gonderilir;
+
+    try{
+
+        const response = await fetch(
+            BACKEND_URL + "/api/cagir",
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":"application/json"
+                },
+
+                body:JSON.stringify({
+                    palata:PALATA,
+                    istek:istek,
+                    dil:secilenDil
+                })
+            }
+        );
+
+        if(!response.ok){
+            throw new Error("HTTP " + response.status);
         }
-    };
+
+        const data = await response.json();
+
+        if(data.success){
+
+            status.textContent = t.gonderildi;
+
+        }else{
+
+            status.textContent =
+                "❌ Göndərmək mümkün olmadı.";
+
+        }
+
+    }catch(error){
+
+        console.error("Çağırış xətası:",error);
+
+        status.textContent = t.serverXeta;
+    }
+}
 
 
-    // ==========================================
-    // DİL SEÇ
-    // ==========================================
+/* =========================================
+   ŞƏRH
+========================================= */
 
-    function dilSec(dil) {
+async function serhGonder(){
 
-        secilenDil = dil;
+    const input =
+        document.getElementById("serh");
 
-        const t = metinler[dil];
+    const serh =
+        input.value.trim();
 
-        document.getElementById("dilSechimi").style.display =
-            "none";
+    const t = metinler[secilenDil];
 
-        document.getElementById("palata").style.display =
-            "block";
+    if(!serh){
 
-        document.getElementById("altBasliq").textContent =
-            t.alt;
+        alert(t.serhBos);
 
-        document.getElementById("su").textContent =
-            t.su;
-
-        document.getElementById("yemek").textContent =
-            t.yemek;
-
-        document.getElementById("tibb").textContent =
-            t.tibb;
-
-        document.getElementById("yataq").textContent =
-            t.yataq;
-
-        document.getElementById("cagirisStatus").textContent =
-            t.hazir;
-
-        document.getElementById("serhBasliq").textContent =
-            t.serh;
-
-        document.getElementById("serh").placeholder =
-            t.placeholder;
-
-        document.getElementById("serhGonder").textContent =
-            t.serhGonder;
-
-        document.getElementById("sesBasliq").textContent =
-            t.ses;
-
-        document.getElementById("sesYaz").textContent =
-            t.sesYaz;
-
-        document.getElementById("sesDayan").textContent =
-            t.sesDayan;
-
-        document.getElementById("sesGonderText").textContent =
-            t.sesGonder;
-
-        document.getElementById("status").textContent =
-            t.sesHazir;
+        return;
     }
 
+    await cagirisGonder(
+        "📝 " + serh
+    );
 
-    // ==========================================
-    // ÇAĞIRIŞ
-    // ==========================================
+    input.value = "";
+}
 
-    async function cagirisGonder(istek) {
 
-        const status =
-            document.getElementById("cagirisStatus");
+/* =========================================
+   SƏS DƏYİŞƏNLƏR
+========================================= */
 
-        const t = metinler[secilenDil];
+let recorder = null;
+let audioChunks = [];
+let audioBlob = null;
+let audioStream = null;
 
-        status.textContent =
-            t.gonderilir;
 
-        try {
+/* =========================================
+   SƏS YAZ
+========================================= */
 
-            const response = await fetch(
-                BACKEND_URL + "/api/cagir",
+async function sesYaz(){
+
+    const t = metinler[secilenDil];
+
+    if(
+        !navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia
+    ){
+
+        document.getElementById("sesStatus").textContent =
+            "❌ Bu brauzerdə mikrofon dəstəklənmir.";
+
+        return;
+    }
+
+    try{
+
+        audioStream =
+            await navigator.mediaDevices.getUserMedia({
+                audio:true
+            });
+
+        audioChunks = [];
+        audioBlob = null;
+
+        document.getElementById("sesGonderBtn").disabled = true;
+
+        let mimeType = "";
+
+        if(
+            MediaRecorder.isTypeSupported(
+                "audio/webm;codecs=opus"
+            )
+        ){
+
+            mimeType = "audio/webm;codecs=opus";
+
+        }else if(
+            MediaRecorder.isTypeSupported(
+                "audio/webm"
+            )
+        ){
+
+            mimeType = "audio/webm";
+        }
+
+        recorder =
+            mimeType
+            ? new MediaRecorder(
+                audioStream,
+                {mimeType:mimeType}
+            )
+            : new MediaRecorder(audioStream);
+
+
+        recorder.ondataavailable = function(event){
+
+            if(event.data.size > 0){
+
+                audioChunks.push(event.data);
+            }
+        };
+
+
+        recorder.onstop = function(){
+
+            const realType =
+                recorder.mimeType ||
+                "audio/webm";
+
+            audioBlob =
+                new Blob(
+                    audioChunks,
+                    {type:realType}
+                );
+
+            document.getElementById("audio").src =
+                URL.createObjectURL(audioBlob);
+
+            if(audioStream){
+
+                audioStream
+                    .getTracks()
+                    .forEach(track => track.stop());
+
+                audioStream = null;
+            }
+
+            document.getElementById(
+                "sesGonderBtn"
+            ).disabled = false;
+
+            document.getElementById(
+                "sesStatus"
+            ).textContent = t.sesYazildi;
+        };
+
+
+        recorder.start();
+
+        document.getElementById(
+            "sesStatus"
+        ).textContent = t.sesYazilir;
+
+        document.getElementById(
+            "sesBaslat"
+        ).disabled = true;
+
+        document.getElementById(
+            "sesDayandir"
+        ).disabled = false;
+
+    }catch(error){
+
+        console.error("Mikrofon xətası:",error);
+
+        document.getElementById(
+            "sesStatus"
+        ).textContent = t.mikrofon;
+
+        document.getElementById(
+            "sesBaslat"
+        ).disabled = false;
+
+        document.getElementById(
+            "sesDayandir"
+        ).disabled = true;
+    }
+}
+
+
+/* =========================================
+   SƏSİ DAYANDIR
+========================================= */
+
+function sesDayandirFunc(){
+
+    if(
+        recorder &&
+        recorder.state !== "inactive"
+    ){
+
+        recorder.stop();
+
+        document.getElementById(
+            "sesBaslat"
+        ).disabled = false;
+
+        document.getElementById(
+            "sesDayandir"
+        ).disabled = true;
+    }
+}
+
+
+/* =========================================
+   SƏSİ GÖNDƏR
+========================================= */
+
+async function sesGonder(){
+
+    const t = metinler[secilenDil];
+
+    if(!audioBlob){
+
+        document.getElementById(
+            "sesStatus"
+        ).textContent =
+            "❌ Əvvəl səs yazın.";
+
+        return;
+    }
+
+    const btn =
+        document.getElementById("sesGonderBtn");
+
+    btn.disabled = true;
+
+    document.getElementById(
+        "sesStatus"
+    ).textContent =
+        t.sesGonderilir;
+
+    try{
+
+        const formData = new FormData();
+
+        formData.append(
+            "ses",
+            audioBlob,
+            "palata-406-" +
+            Date.now() +
+            ".webm"
+        );
+
+        formData.append(
+            "palata",
+            PALATA
+        );
+
+        formData.append(
+            "dil",
+            secilenDil
+        );
+
+
+        const response =
+            await fetch(
+                BACKEND_URL + "/api/ses-gonder",
                 {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        palata: PALATA,
-                        istek: istek,
-                        dil: secilenDil
-                    })
+                    method:"POST",
+                    body:formData
                 }
             );
 
-            if (!response.ok) {
-                throw new Error(
-                    "Server xətası: " + response.status
-                );
-            }
 
-            const data =
-                await response.json();
+        if(!response.ok){
 
-            if (data.success) {
-
-                status.textContent =
-                    "🔔 " +
-                    (secilenDil === "az"
-                        ? "Göndərildi"
-                        : secilenDil === "ru"
-                            ? "Отправлено"
-                            : "Sent"
-                    ) +
-                    ": Palata " + PALATA;
-
-            } else {
-
-                status.textContent =
-                    "❌ Göndərmək mümkün olmadı.";
-
-            }
-
-        } catch (error) {
-
-            console.error(error);
-
-            status.textContent =
-                t.serverXeta;
-        }
-    }
-
-
-    // ==========================================
-    // ŞƏRH
-    // ==========================================
-
-    async function serhGonder() {
-
-        const serh =
-            document.getElementById("serh")
-                .value
-                .trim();
-
-        const t = metinler[secilenDil];
-
-        if (!serh) {
-
-            alert(t.serhBos);
-
-            return;
+            throw new Error(
+                "HTTP " + response.status
+            );
         }
 
-        await cagirisGonder(
-            "📝 Şərh: " + serh
+
+        const data =
+            await response.json();
+
+
+        if(data.success){
+
+            document.getElementById(
+                "sesStatus"
+            ).textContent =
+                t.sesGonderildi;
+
+            audioBlob = null;
+
+            btn.disabled = true;
+
+        }else{
+
+            throw new Error(
+                data.message ||
+                "Səs göndərilmədi."
+            );
+        }
+
+    }catch(error){
+
+        console.error(
+            "Səs göndərmə xətası:",
+            error
         );
 
-        document.getElementById("serh").value =
-            "";
+        document.getElementById(
+            "sesStatus"
+        ).textContent =
+            t.serverXeta;
+
+        btn.disabled = false;
     }
-
-
-    // ==========================================
-    // SƏS SİSTEMİ
-    // ==========================================
-
-    let recorder = null;
-    let audioChunks = [];
-    let audioBlob = null;
-    let audioStream = null;
-
-    const sesBaslat =
-        document.getElementById("sesBaslat");
-
-    const sesDayandir =
-        document.getElementById("sesDayandir");
-
-    const sesGonderBtn =
-        document.getElementById("sesGonderBtn");
-
-    const status =
-        document.getElementById("status");
-
-    const audio =
-        document.getElementById("audio");
-
-
-    // ==========================================
-    // SƏS YAZ
-    // ==========================================
-
-    sesBaslat.addEventListener(
-        "click",
-        async function () {
-
-            const t = metinler[secilenDil];
-
-            try {
-
-                audioStream =
-                    await navigator.mediaDevices
-                        .getUserMedia({
-                            audio: true
-                        });
-
-                audioChunks = [];
-                audioBlob = null;
-
-                sesGonderBtn.disabled =
-                    true;
-
-                recorder =
-                    new MediaRecorder(audioStream);
-
-
-                recorder.ondataavailable =
-                    function (event) {
-
-                        if (event.data.size > 0) {
-
-                            audioChunks.push(
-                                event.data
-                            );
-                        }
-                    };
-
-
-                recorder.onstop =
-                    function () {
-
-                        audioBlob =
-                            new Blob(
-                                audioChunks,
-                                {
-                                    type:
-                                        recorder.mimeType ||
-                                        "audio/webm"
-                                }
-                            );
-
-                        audio.src =
-                            URL.createObjectURL(
-                                audioBlob
-                            );
-
-
-                        if (audioStream) {
-
-                            audioStream
-                                .getTracks()
-                                .forEach(
-                                    track =>
-                                        track.stop()
-                                );
-                        }
-
-                        sesGonderBtn.disabled =
-                            false;
-
-                        status.textContent =
-                            t.sesYazildi;
-                    };
-
-
-                recorder.start();
-
-                status.textContent =
-                    t.sesYazilir;
-
-                sesBaslat.disabled =
-                    true;
-
-                sesDayandir.disabled =
-                    false;
-
-            } catch (error) {
-
-                console.error(error);
-
-                status.textContent =
-                    t.mikrofon;
-            }
-        }
-    );
-
-
-    // ==========================================
-    // SƏSİ DAYANDIR
-    // ==========================================
-
-    sesDayandir.addEventListener(
-        "click",
-        function () {
-
-            if (
-                recorder &&
-                recorder.state !== "inactive"
-            ) {
-
-                recorder.stop();
-
-                sesBaslat.disabled =
-                    false;
-
-                sesDayandir.disabled =
-                    true;
-            }
-        }
-    );
-
-
-    // ==========================================
-    // SƏSİ SERVERƏ GÖNDƏR
-    // ==========================================
-
-    sesGonderBtn.addEventListener(
-        "click",
-        async function () {
-
-            const t = metinler[secilenDil];
-
-            if (!audioBlob) {
-                return;
-            }
-
-            sesGonderBtn.disabled =
-                true;
-
-            status.textContent =
-                t.sesGonderilir;
-
-            try {
-
-                const formData =
-                    new FormData();
-
-                formData.append(
-                    "palata",
-                    PALATA
-                );
-
-                formData.append(
-                    "dil",
-                    secilenDil
-                );
-
-                formData.append(
-                    "ses",
-                    audioBlob,
-                    "palata-" +
-                    PALATA +
-                    "-" +
-                    Date.now() +
-                    ".webm"
-                );
-
-
-                const response =
-                    await fetch(
-                        BACKEND_URL +
-                        "/api/ses-gonder",
-                        {
-                            method: "POST",
-                            body: formData
-                        }
-                    );
-
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        "Server xətası: " +
-                        response.status
-                    );
-                }
-
-
-                const data =
-                    await response.json();
-
-
-                if (data.success) {
-
-                    status.textContent =
-                        t.sesGonderildi;
-
-                    audioBlob =
-                        null;
-
-                } else {
-
-                    throw new Error(
-                        "Səs göndərilmədi."
-                    );
-                }
-
-            } catch (error) {
-
-                console.error(
-                    "Səs göndərmə xətası:",
-                    error
-                );
-
-                status.textContent =
-                    t.serverXeta;
-
-                sesGonderBtn.disabled =
-                    false;
-            }
-
-        }
-    );
+}
 
 </script>
 
