@@ -371,7 +371,10 @@ async function cagirislarGetir() {
 
             const div = document.createElement("div");
 
-            div.className = "item new";
+            div.className =
+                cagiris.status === "qebul edildi"
+                ? "item"
+                : "item new";
 
             const id = cagiris.id;
 
@@ -386,17 +389,24 @@ async function cagirislarGetir() {
                 </div>
 
                 <div class="time">
-                    🕐 ${cagiris.vaxt
+                    🕐 ${
+                        cagiris.vaxt
                         ? new Date(cagiris.vaxt).toLocaleString("az-AZ")
-                        : ""}
+                        : ""
+                    }
                 </div>
 
                 <div class="buttons">
 
                     <button
                         class="accept"
-                        onclick="qebulEt('${id}', this)">
-                        ✅ Qəbul et
+                        onclick="qebulEt('${id}', this)"
+                        ${cagiris.status === "qebul edildi" ? "disabled" : ""}>
+                        ${
+                            cagiris.status === "qebul edildi"
+                            ? "✅ Qəbul edildi"
+                            : "✅ Qəbul et"
+                        }
                     </button>
 
                     <button
@@ -433,7 +443,7 @@ async function sil(id, button) {
     try {
 
         const response = await fetch(
-            BACKEND_URL + "/api/cagirislar/" + id,
+            BACKEND_URL + "/api/cagir/" + id,
             {
                 method: "DELETE"
             }
@@ -442,8 +452,6 @@ async function sil(id, button) {
         if (!response.ok) {
             throw new Error();
         }
-
-        button.closest(".item").remove();
 
         await cagirislarGetir();
 
@@ -457,18 +465,12 @@ async function sil(id, button) {
 
 async function qebulEt(id, button) {
 
-    if (!id) {
-
-        button.textContent = "✅ Qəbul edildi";
-        button.disabled = true;
-
-        return;
-    }
+    if (!id) return;
 
     try {
 
         const response = await fetch(
-            BACKEND_URL + "/api/cagirislar/" + id + "/accept",
+            BACKEND_URL + "/api/cagir/" + id + "/qebul",
             {
                 method: "PUT",
                 headers: {
@@ -485,6 +487,8 @@ async function qebulEt(id, button) {
         button.disabled = true;
 
         button.closest(".item").classList.remove("new");
+
+        await cagirislarGetir();
 
     } catch (error) {
 
