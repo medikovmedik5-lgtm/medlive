@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Medistyle Hospital - Tibb Bacısı</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #eef8f4, #f8fbfa);
+    color: #20332b;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+}
+
+.card {
+    background: white;
+    border-radius: 25px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(30,70,55,.10);
+}
+
+.login {
+    max-width: 430px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.logo {
+    width: 75px;
+    height: 75px;
+    margin: auto;
+    border-radius: 22px;
+    background: #edf7f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+}
+
+h1 {
+    color: #244d3d;
+}
+
+h2 {
+    color: #244d3d;
+}
+
+input {
+    width: 100%;
+    padding: 15px;
+    margin: 8px 0;
+    border: 1px solid #dce9e2;
+    border-radius: 13px;
+    font-size: 16px;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 13px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.loginBtn {
+    background: #244d3d;
+    color: white;
+}
+
+.logout {
+    background: #fff1ef;
+    color: #a33d32;
+}
+
+.status {
+    padding: 13px;
+    border-radius: 13px;
+    background: #edf7f2;
+    color: #2d654e;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.request {
+    border: 1px solid #dce9e2;
+    border-radius: 18px;
+    padding: 18px;
+    margin: 12px 0;
+    background: #fbfdfc;
+}
+
+.request.new {
+    border-left: 5px solid #e09b35;
+}
+
+.request.accepted {
+    border-left: 5px solid #2d654e;
+    opacity: .85;
+}
+
+.room {
+    font-size: 20px;
+    font-weight: bold;
+    color: #244d3d;
+}
+
+.time {
+    color: #89958f;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.actions button {
+    flex: 1;
+}
+
+.accept {
+    background: #244d3d;
+    color: white;
+}
+
+.delete {
+    background: #fff1ef;
+    color: #a33d32;
+}
+
+.voice {
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 16px;
+    background: #f5f9ff;
+    border: 1px solid #dce8f5;
+}
+
+.voice audio {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.empty {
+    text-align: center;
+    color: #89958f;
+    padding: 25px;
+}
+
+.hidden {
+    display: none;
+}
+
+@media(max-width:600px) {
+    .actions {
+        flex-direction: column;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= LOGIN ================= -->
+
+<div id="loginPage" class="card login">
+
+    <div class="logo">🩺</div>
+
+    <h1>Medistyle</h1>
+
+    <p>Medistyle Hospital</p>
+
+    <h2>🔐 Tibb bacısı girişi</h2>
+
+    <input
+        id="username"
+        type="text"
+        placeholder="İstifadəçi adı"
+    >
+
+    <input
+        id="password"
+        type="password"
+        placeholder="Şifrə"
+    >
+
+    <button
+        class="loginBtn"
+        onclick="login()"
+    >
+        Daxil ol
+    </button>
+
+    <div id="loginStatus"></div>
+
+</div>
+
+
+<!-- ================= PANEL ================= -->
+
+<div id="panel" class="container hidden">
+
+    <div class="card">
+
+        <div class="logo">🩺</div>
+
+        <h1>Medistyle Hospital</h1>
+
+        <p>
+            Tibb bacısı paneli
+        </p>
+
+        <div id="userInfo" class="status"></div>
+
+        <button
+            class="logout"
+            onclick="logout()"
+        >
+            🚪 Çıxış
+        </button>
+
+    </div>
+
+
+    <!-- ÇAĞIRIŞLAR -->
+
+    <div class="card">
+
+        <h2>🔔 Xəstə çağırışları</h2>
+
+        <div id="cagirislar">
+            <div class="empty">
+                Çağırışlar yüklənir...
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- SƏSLƏR -->
+
+    <div class="card">
+
+        <h2>🎙️ Səsli mesajlar</h2>
+
+        <div id="sesler">
+            <div class="empty">
+                Səslər yüklənir...
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const BACKEND_URL =
+    "https://medlive.onrender.com";
+
+let aktivUser = null;
+
+
+// ==========================================
+// LOGIN
+// ==========================================
+
+async function login() {
+
+    const username =
+        document.getElementById("username").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    const status =
+        document.getElementById("loginStatus");
+
+    if (!username || !password) {
+
+        status.textContent =
+            "❌ İstifadəçi adı və şifrəni yazın.";
+
+        return;
+    }
+
+    status.textContent =
+        "⏳ Giriş edilir...";
+
+    try {
+
+        const response =
+            await fetch(
+                BACKEND_URL + "/api/login",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok || !data.success) {
+
+            status.textContent =
+                "❌ " +
+                (data.message ||
+                "Login məlumatları yanlışdır.");
+
+            return;
+        }
+
+        aktivUser = data.user;
+
+        sessionStorage.setItem(
+            "medliveUser",
+            JSON.stringify(aktivUser)
+        );
+
+        document
+            .getElementById("loginPage")
+            .classList.add("hidden");
+
+        document
+            .getElementById("panel")
+            .classList.remove("hidden");
+
+        document
+            .getElementById("userInfo")
+            .textContent =
+            "🟢 Xoş gəldiniz, " +
+            aktivUser.ad +
+            "!";
+
+        cagirislarGetir();
+        sesleriGetir();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        status.textContent =
+            "❌ Serverə qoşulmaq olmadı.";
+
+    }
+}
+
+
+// ==========================================
+// ÇIXIŞ
+// ==========================================
+
+function logout() {
+
+    sessionStorage.removeItem(
+        "medliveUser"
+    );
+
+    location.reload();
+}
+
+
+// ==========================================
+// SESSION YOXLA
+// ==========================================
+
+function sessionYoxla() {
+
+    const saved =
+        sessionStorage.getItem(
+            "medliveUser"
+        );
+
+    if (!saved) return;
+
+    try {
+
+        aktivUser =
+            JSON.parse(saved);
+
+        document
+            .getElementById("loginPage")
+            .classList.add("hidden");
+
+        document
+            .getElementById("panel")
+            .classList.remove("hidden");
+
+        document
+            .getElementById("userInfo")
+            .textContent =
+            "🟢 Xoş gəldiniz, " +
+            aktivUser.ad +
+            "!";
+
+        cagirislarGetir();
+        sesleriGetir();
+
+    }
+
+    catch {
+
+        sessionStorage.removeItem(
+            "medliveUser"
+        );
+
+    }
+}
+
+
+// ==========================================
+// ÇAĞIRIŞLARI GƏTİR
+// ==========================================
+
+async function cagirislarGetir() {
+
+    const box =
+        document.getElementById(
+            "cagirislar"
+        );
+
+    try {
+
+        const response =
+            await fetch(
+                BACKEND_URL +
+                "/api/cagirislar"
+            );
+
+        const data =
+            await response.json();
+
+        if (!data.success) {
+
+            throw new Error(
+                "Çağırışlar alınmadı"
+            );
+
+        }
+
+        const list =
+            data.cagirislar || [];
+
+        if (list.length === 0) {
+
+            box.innerHTML =
+                '<div class="empty">' +
+                '🔔 Yeni çağırış yoxdur.' +
+                '</div>';
+
+            return;
+        }
+
+        box.innerHTML = "";
+
+        list
+            .sort(
+                (a,b) =>
+                b.id - a.id
+            )
+            .forEach(
+                cagiris =>
+                cagirisGoster(
+                    cagiris
+                )
+            );
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        box.innerHTML =
+            '<div class="empty">' +
+            '❌ Çağırışları yükləmək olmadı.' +
+            '</div>';
+
+    }
+}
+
+
+// ==========================================
+// ÇAĞIRIŞ GÖSTƏR
+// ==========================================
+
+function cagirisGoster(cagiris) {
+
+    const box =
+        document.getElementById(
+            "cagirislar"
+        );
+
+    const div =
+        document.createElement("div");
+
+    div.className =
+        "request " +
+        (cagiris.status === "accepted"
+            ? "accepted"
+            : "new");
+
+    const tarix =
+        new Date(
+            cagiris.vaxt
+        ).toLocaleString(
+            "az-AZ"
+        );
+
+    let qebul =
+        "";
+
+    if (cagiris.status === "accepted") {
+
+        qebul =
+            "<p>✅ Qəbul edildi" +
+            (cagiris.qebulEden
+                ? " — " +
+                  cagiris.qebulEden
+                : "") +
+            "</p>";
+
+    }
+
+    div.innerHTML = `
+
+        <div class="room">
+            🛏️ Palata ${cagiris.palata}
+        </div>
+
+        <div style="margin-top:10px;font-size:18px;">
+            ${escapeHTML(cagiris.istek)}
+        </div>
+
+        <div class="time">
+            🕒 ${tarix}
+        </div>
+
+        ${qebul}
+
+        <div class="actions">
+
+            ${
+                cagiris.status === "new"
+                ?
+                `
+                <button
+                    class="accept"
+                    onclick="qebulEt(${cagiris.id})"
+                >
+                    ✅ Qəbul et
+                </button>
+                `
+                :
+                ""
+            }
+
+            <button
+                class="delete"
+                onclick="cagirisSil(${cagiris.id})"
+            >
+                🗑️ Sil
+            </button>
+
+        </div>
+    `;
+
+    box.appendChild(div);
+}
+
+
+// ==========================================
+// QƏBUL ET
+// ==========================================
+
+async function qebulEt(id) {
+
+    try {
+
+        const response =
+            await fetch(
+                BACKEND_URL +
+                "/api/cagir/" +
+                id +
+                "/qebul",
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        qebulEden:
+                            aktivUser.ad
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok ||
+            !data.success) {
+
+            alert(
+                data.message ||
+                "Qəbul etmək olmadı."
+            );
+
+            return;
+        }
+
+        // Server təsdiqləyəndən sonra
+        // siyahını yenidən gətiririk.
+
+        await cagirislarGetir();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ Serverə qoşulmaq olmadı."
+        );
+
+    }
+}
+
+
+// ==========================================
+// SİL
+// ==========================================
+
+async function cagirisSil(id) {
+
+    const tesdiq =
+        confirm(
+            "Bu çağırışı həqiqətən silmək istəyirsiniz?"
+        );
+
+    if (!tesdiq) return;
+
+    try {
+
+        const response =
+            await fetch(
+                BACKEND_URL +
+                "/api/cagir/" +
+                id,
+                {
+                    method: "DELETE"
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok ||
+            !data.success) {
+
+            alert(
+                data.message ||
+                "Silinmədi."
+            );
+
+            return;
+        }
+
+        // Serverdən silindikdən sonra
+        // siyahını yeniləyirik.
+
+        await cagirislarGetir();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ Serverə qoşulmaq olmadı."
+        );
+
+    }
+}
+
+
+// ==========================================
+// SƏSLƏRİ GƏTİR
+// ==========================================
+
+async function sesleriGetir() {
+
+    const box =
+        document.getElementById(
+            "sesler"
+        );
+
+    try {
+
+        const response =
+            await fetch(
+                BACKEND_URL +
+                "/api/sesler"
+            );
+
+        const data =
+            await response.json();
+
+        if (!data.success) {
+
+            throw new Error(
+                "Səslər alınmadı"
+            );
+
+        }
+
+        const list =
+            data.sesler || [];
+
+        if (list.length === 0) {
+
+            box.innerHTML =
+                '<div class="empty">' +
+                '🎙️ Yeni səsli mesaj yoxdur.' +
+                '</div>';
+
+            return;
+        }
+
+        box.innerHTML = "";
+
+        list
+            .sort(
+                (a,b) =>
+                b.id - a.id
+            )
+            .forEach(
+                ses =>
+                sesGoster(ses)
+            );
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        box.innerHTML =
+            '<div class="empty">' +
+            '❌ Səsləri yükləmək olmadı.' +
+            '</div>';
+
+    }
+}
+
+
+// ==========================================
+// SƏS GÖSTƏR
+// ==========================================
+
+function sesGoster(ses) {
+
+    const box =
+        document.getElementById(
+            "sesler"
+        );
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.className =
+        "voice";
+
+    const tarix =
+        new Date(
+            ses.vaxt
+        ).toLocaleString(
+            "az-AZ"
+        );
+
+    const audioUrl =
+        "data:" +
+        ses.mimetype +
+        ";base64," +
+        ses.audio;
+
+    div.innerHTML = `
+
+        <strong>
+            🎙️ Palata ${ses.palata}
+        </strong>
+
+        <div class="time">
+            🕒 ${tarix}
+        </div>
+
+        <audio
+            controls
+            src="${audioUrl}"
+        ></audio>
+
+        <button
+            class="delete"
+            onclick="sesSil(${ses.id})"
+        >
+            🗑️ Səsi sil
+        </button>
+
+    `;
+
+    box.appendChild(div);
+}
+
+
+// ==========================================
+// SƏSİ SİL
+// ==========================================
+
+async function sesSil(id) {
+
+    const tesdiq =
+        confirm(
+            "Bu səsli mesajı silmək istəyirsiniz?"
+        );
+
+    if (!tesdiq) return;
+
+    try {
+
+        const response =
+            await fetch(
+                BACKEND_URL +
+                "/api/ses/" +
+                id,
+                {
+                    method: "DELETE"
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok ||
+            !data.success) {
+
+            alert(
+                data.message ||
+                "Səs silinmədi."
+            );
+
+            return;
+        }
+
+        await sesleriGetir();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ Serverə qoşulmaq olmadı."
+        );
+
+    }
+}
+
+
+// ==========================================
+// TƏHLÜKƏSİZ MƏTN
+// ==========================================
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        text;
+
+    return div.innerHTML;
+}
+
+
+// ==========================================
+// AVTOMATİK YENİLƏMƏ
+// ==========================================
+
+// Hər 5 saniyədən bir serverdən
+// ən son məlumatları götürürük.
+
+setInterval(
+    function() {
+
+        if (aktivUser) {
+
+            cagirislarGetir();
+            sesleriGetir();
+
+        }
+
+    },
+    5000
+);
+
+
+// ==========================================
+// BAŞLA
+// ==========================================
+
+sessionYoxla();
+
+</script>
+
+</body>
+</html>
