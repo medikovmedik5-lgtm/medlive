@@ -1,25 +1,21 @@
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
-const path = require("path");
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-// ==================================
-// ƏSAS AYARLAR
-// ==================================
+// ==========================================
+// MIDDLEWARE
+// ==========================================
 
 app.use(cors());
 app.use(express.json());
 
-// HTML fayllarını göstər
-app.use(express.static(__dirname));
-
-// ==================================
-// MULTER - SƏS FAYLLARI
-// ==================================
+// ==========================================
+// SƏS FAYLLARI
+// ==========================================
 
 const storage = multer.memoryStorage();
 
@@ -30,28 +26,73 @@ const upload = multer({
     }
 });
 
-// ==================================
+// ==========================================
 // YADDAŞ
-// ==================================
+// ==========================================
 
 let cagirislar = [];
 let sesler = [];
 
-// ==================================
-// TİBB BACISI PANELİ
-// ==================================
+// ==========================================
+// TİBB BACILARI
+// ==========================================
 
-app.get("/", (req, res) => {
+const istifadeciler = [
+    {
+        id: 1,
+        ad: "Hüseyn",
+        username: "huseyn",
+        password: "huseyn123"
+    },
+    {
+        id: 2,
+        ad: "Xalid",
+        username: "xalid",
+        password: "xalid123"
+    }
+];
 
-    res.sendFile(
-        path.join(__dirname, "medistyle-tibb.html")
+// ==========================================
+// LOGIN
+// ==========================================
+
+app.post("/api/login", (req, res) => {
+
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({
+            success: false,
+            message: "İstifadəçi adı və şifrə daxil edin."
+        });
+    }
+
+    const user = istifadeciler.find(
+        x =>
+            x.username === username &&
+            x.password === password
     );
 
+    if (!user) {
+        return res.status(401).json({
+            success: false,
+            message: "İstifadəçi adı və ya şifrə yanlışdır."
+        });
+    }
+
+    res.json({
+        success: true,
+        user: {
+            id: user.id,
+            ad: user.ad,
+            username: user.username
+        }
+    });
 });
 
-// ==================================
-// XƏSTƏ ÇAĞIRIŞI GÖNDƏR
-// ==================================
+// ==========================================
+// XƏSTƏ ÇAĞIRIŞ GÖNDƏRİR
+// ==========================================
 
 app.post("/api/cagir", (req, res) => {
 
@@ -62,83 +103,97 @@ app.post("/api/cagir", (req, res) => {
     } = req.body;
 
     if (!palata || !istek) {
-
         return res.status(400).json({
             success: false,
-            message: "Palata və istək məlumatı çatışmır"
+            message: "Palata və istək məlumatı çatışmır."
         });
-
     }
 
     const cagiris = {
-
         id: Date.now(),
 
-        palata: palata,
+        palata: String(palata),
 
         istek: istek,
 
         dil: dil || "az",
 
-        vaxt: new Date().toISOString(),
+        status: "new",
 
-        status: "yeni"
+        qebulEden: null,
 
+        vaxt: new Date().toISOString()
     };
 
     cagirislar.push(cagiris);
 
-    console.log("🔔 Yeni çağırış");
-    console.log("Palata:", palata);
-    console.log("İstək:", istek);
+    console.log("🔔 YENİ ÇAĞIRIŞ");
+    console.log("Palata:", cagiris.palata);
+    console.log("İstək:", cagiris.istek);
 
     res.json({
-
         success: true,
-
-        message: "Çağırış qəbul edildi",
-
         cagiris: cagiris
-
     });
-
 });
 
-// ==================================
-// BÜTÜN ÇAĞIRIŞLAR
-// ==================================
+// ==========================================
+// ÇAĞIRIŞLARI GÖTÜR
+// ==========================================
 
 app.get("/api/cagirislar", (req, res) => {
 
-    res.json(cagirislar);
+    const palata = req.query.palata;
 
+    let netice = cagirislar;
+
+    if (palata) {
+
+        netice = cagirislar.filter(
+            x => x.palata === String(palata)
+        );
+
+    }
+
+    res.json({
+        success: true,
+        cagirislar: netice
+    });
 });
 
-// ==================================
+// ==========================================
 // ÇAĞIRIŞI QƏBUL ET
-// ==================================
+// ==========================================
 
 app.put("/api/cagir/:id/qebul", (req, res) => {
 
     const id = Number(req.params.id);
 
-    const cagiris = cagirislar.find(
-        item => item.id === id
-    );
+    const {
+        qebulEden
+    } = req.body;
+
+    const cagiris =
+        cagirislar.find(
+            x => x.id === id
+        );
 
     if (!cagiris) {
 
         return res.status(404).json({
-
             success: false,
-
-            message: "Çağırış tapılmadı"
-
+            message: "Çağırış tapılmadı."
         });
 
     }
 
-    cagiris.status = "qebul edildi";
+    cagiris.status = "accepted";
+
+    cagiris.qebulEden =
+        qebulEden || "Tibb bacısı";
+
+    cagiris.qebulVaxt =
+        new Date().toISOString();
 
     console.log(
         "✅ Çağırış qəbul edildi:",
@@ -146,82 +201,30 @@ app.put("/api/cagir/:id/qebul", (req, res) => {
     );
 
     res.json({
-
         success: true,
-
-        message: "Çağırış qəbul edildi",
-
+        message: "Çağırış qəbul edildi.",
         cagiris: cagiris
-
     });
-
 });
 
-// ==================================
-// ALTERNATİV QƏBUL ÜNVANI
-// ==================================
-// HTML bunu istifadə etsə də işləyəcək
-// ==================================
-
-app.put("/api/cagirislar/:id/accept", (req, res) => {
-
-    const id = Number(req.params.id);
-
-    const cagiris = cagirislar.find(
-        item => item.id === id
-    );
-
-    if (!cagiris) {
-
-        return res.status(404).json({
-
-            success: false,
-
-            message: "Çağırış tapılmadı"
-
-        });
-
-    }
-
-    cagiris.status = "qebul edildi";
-
-    console.log(
-        "✅ Çağırış qəbul edildi:",
-        id
-    );
-
-    res.json({
-
-        success: true,
-
-        message: "Çağırış qəbul edildi",
-
-        cagiris: cagiris
-
-    });
-
-});
-
-// ==================================
+// ==========================================
 // ÇAĞIRIŞI SİL
-// ==================================
+// ==========================================
 
 app.delete("/api/cagir/:id", (req, res) => {
 
     const id = Number(req.params.id);
 
-    const index = cagirislar.findIndex(
-        item => item.id === id
-    );
+    const index =
+        cagirislar.findIndex(
+            x => x.id === id
+        );
 
     if (index === -1) {
 
         return res.status(404).json({
-
             success: false,
-
-            message: "Çağırış tapılmadı"
-
+            message: "Çağırış tapılmadı."
         });
 
     }
@@ -230,71 +233,19 @@ app.delete("/api/cagir/:id", (req, res) => {
         cagirislar.splice(index, 1)[0];
 
     console.log(
-        "🗑️ Çağırış serverdən silindi:",
+        "🗑️ Çağırış silindi:",
         silinen.id
     );
 
     res.json({
-
         success: true,
-
-        message: "Çağırış silindi",
-
-        id: id
-
+        message: "Çağırış serverdən silindi."
     });
-
 });
 
-// ==================================
-// ALTERNATİV SİLMƏ ÜNVANI
-// ==================================
-// HTML bunu istifadə etsə də işləyəcək
-// ==================================
-
-app.delete("/api/cagirislar/:id", (req, res) => {
-
-    const id = Number(req.params.id);
-
-    const index = cagirislar.findIndex(
-        item => item.id === id
-    );
-
-    if (index === -1) {
-
-        return res.status(404).json({
-
-            success: false,
-
-            message: "Çağırış tapılmadı"
-
-        });
-
-    }
-
-    const silinen =
-        cagirislar.splice(index, 1)[0];
-
-    console.log(
-        "🗑️ Çağırış serverdən silindi:",
-        silinen.id
-    );
-
-    res.json({
-
-        success: true,
-
-        message: "Çağırış silindi",
-
-        id: id
-
-    });
-
-});
-
-// ==================================
+// ==========================================
 // SƏS GÖNDƏR
-// ==================================
+// ==========================================
 
 app.post(
     "/api/ses-gonder",
@@ -311,12 +262,8 @@ app.post(
             if (!palata) {
 
                 return res.status(400).json({
-
                     success: false,
-
-                    message:
-                        "Palata məlumatı yoxdur"
-
+                    message: "Palata məlumatı yoxdur."
                 });
 
             }
@@ -324,12 +271,8 @@ app.post(
             if (!req.file) {
 
                 return res.status(400).json({
-
                     success: false,
-
-                    message:
-                        "Səs faylı göndərilməyib"
-
+                    message: "Səs faylı göndərilməyib."
                 });
 
             }
@@ -338,7 +281,7 @@ app.post(
 
                 id: Date.now(),
 
-                palata: palata,
+                palata: String(palata),
 
                 dil: dil || "az",
 
@@ -352,9 +295,7 @@ app.post(
                     req.file.size,
 
                 audio:
-                    req.file.buffer.toString(
-                        "base64"
-                    ),
+                    req.file.buffer.toString("base64"),
 
                 vaxt:
                     new Date().toISOString()
@@ -363,23 +304,11 @@ app.post(
 
             sesler.push(ses);
 
-            console.log(
-                "🎙️ Yeni səs mesajı"
-            );
+            console.log("🎙️ YENİ SƏS");
 
             console.log(
                 "Palata:",
-                palata
-            );
-
-            console.log(
-                "Dil:",
-                dil
-            );
-
-            console.log(
-                "Ölçü:",
-                req.file.size
+                ses.palata
             );
 
             res.json({
@@ -387,7 +316,7 @@ app.post(
                 success: true,
 
                 message:
-                    "Səs uğurla qəbul edildi",
+                    "Səs uğurla qəbul edildi.",
 
                 ses: {
 
@@ -427,7 +356,7 @@ app.post(
                 success: false,
 
                 message:
-                    "Səsi qəbul etmək mümkün olmadı"
+                    "Səsi qəbul etmək mümkün olmadı."
 
             });
 
@@ -436,72 +365,80 @@ app.post(
     }
 );
 
-// ==================================
-// TİBB BACISI - SƏSLƏR
-// ==================================
+// ==========================================
+// SƏSLƏRİ GÖTÜR
+// ==========================================
 
 app.get("/api/sesler", (req, res) => {
 
-    const cavab = sesler.map(
-        ses => ({
+    const palata = req.query.palata;
 
-            id:
-                ses.id,
+    let netice = sesler;
 
-            palata:
-                ses.palata,
+    if (palata) {
 
-            dil:
-                ses.dil,
+        netice = sesler.filter(
+            x => x.palata === String(palata)
+        );
 
-            filename:
-                ses.filename,
-
-            mimetype:
-                ses.mimetype,
-
-            size:
-                ses.size,
-
-            vaxt:
-                ses.vaxt,
-
-            audio:
-                ses.audio
-
-        })
-    );
-
-    res.json(cavab);
-
-});
-
-// ==================================
-// SERVER TEST
-// ==================================
-
-app.get("/api/test", (req, res) => {
+    }
 
     res.json({
-
         success: true,
-
-        message:
-            "MedLive backend işləyir ✅",
-
-        cagirisSayi:
-            cagirislar.length,
-
-        sesSayi:
-            sesler.length
-
+        sesler: netice
     });
+});
+
+// ==========================================
+// SƏSİ SİL
+// ==========================================
+
+app.delete("/api/ses/:id", (req, res) => {
+
+    const id = Number(req.params.id);
+
+    const index =
+        sesler.findIndex(
+            x => x.id === id
+        );
+
+    if (index === -1) {
+
+        return res.status(404).json({
+            success: false,
+            message: "Səs tapılmadı."
+        });
+
+    }
+
+    sesler.splice(index, 1);
+
+    console.log(
+        "🗑️ Səs silindi:",
+        id
+    );
+
+    res.json({
+        success: true,
+        message: "Səs serverdən silindi."
+    });
+});
+
+// ==========================================
+// SERVER TEST
+// ==========================================
+
+app.get("/", (req, res) => {
+
+    res.send(
+        "Medistyle Hospital backend işləyir ✅"
+    );
 
 });
 
-// ==================================
-// SERVERİ BAŞLAT
-// ==================================
+// ==========================================
+// SERVER
+// ==========================================
 
 app.listen(
     PORT,
@@ -509,7 +446,7 @@ app.listen(
     () => {
 
         console.log(
-            `MedLive server ${PORT} portunda işləyir ✅`
+            `Medistyle server ${PORT} portunda işləyir ✅`
         );
 
     }
