@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Medistyle Hospital - Tibb Bacısı</title>
+<title>MedLive - Tibb İşçisi Paneli</title>
 
 <style>
 * {
@@ -51,21 +51,20 @@ body {
     font-size: 40px;
 }
 
-h1 {
-    color: #244d3d;
-}
-
+h1,
 h2 {
     color: #244d3d;
 }
 
-input {
+input,
+select {
     width: 100%;
     padding: 15px;
     margin: 8px 0;
     border: 1px solid #dce9e2;
     border-radius: 13px;
     font-size: 16px;
+    background: white;
 }
 
 button {
@@ -96,6 +95,26 @@ button {
     color: #2d654e;
     font-weight: bold;
     margin-top: 15px;
+}
+
+.roomSelect {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 18px;
+    background: #f7fbf9;
+    border: 1px solid #dce9e2;
+}
+
+.roomSelect label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #244d3d;
+}
+
+.changeRoom {
+    background: #244d3d;
+    color: white;
 }
 
 .request {
@@ -170,9 +189,25 @@ button {
     display: none;
 }
 
+.selectedRoom {
+    font-size: 18px;
+    font-weight: bold;
+    color: #244d3d;
+    margin-top: 10px;
+}
+
 @media(max-width:600px) {
+
     .actions {
         flex-direction: column;
+    }
+
+    body {
+        padding: 10px;
+    }
+
+    .card {
+        padding: 18px;
     }
 }
 </style>
@@ -186,22 +221,24 @@ button {
 
     <div class="logo">🩺</div>
 
-    <h1>Medistyle</h1>
+    <h1>MedLive</h1>
 
-    <p>Medistyle Hospital</p>
+    <p>Tibb işçisi paneli</p>
 
-    <h2>🔐 Tibb bacısı girişi</h2>
+    <h2>🔐 Giriş</h2>
 
     <input
         id="username"
         type="text"
         placeholder="İstifadəçi adı"
+        autocomplete="username"
     >
 
     <input
         id="password"
         type="password"
         placeholder="Şifrə"
+        autocomplete="current-password"
     >
 
     <button
@@ -220,17 +257,63 @@ button {
 
 <div id="panel" class="container hidden">
 
+    <!-- İSTİFADƏÇİ -->
+
     <div class="card">
 
         <div class="logo">🩺</div>
 
-        <h1>Medistyle Hospital</h1>
+        <h1>MedLive</h1>
 
         <p>
-            Tibb bacısı paneli
+            Tibb işçisi paneli
         </p>
 
         <div id="userInfo" class="status"></div>
+
+
+        <!-- PALATA SEÇİMİ -->
+
+        <div class="roomSelect">
+
+            <label for="palataSec">
+                🏥 Bu gün hansı palataya baxırsınız?
+            </label>
+
+            <select id="palataSec">
+
+                <option value="">
+                    Palata seçin
+                </option>
+
+                <option value="406">
+                    Palata 406
+                </option>
+
+                <option value="407">
+                    Palata 407
+                </option>
+
+                <option value="408">
+                    Palata 408
+                </option>
+
+            </select>
+
+            <button
+                class="changeRoom"
+                onclick="palataSeciminiYaddaSaxla()"
+            >
+                ✅ Palatanı seç
+            </button>
+
+            <div
+                id="selectedRoom"
+                class="selectedRoom"
+            ></div>
+
+        </div>
+
 
         <button
             class="logout"
@@ -242,31 +325,39 @@ button {
     </div>
 
 
-    <!-- ÇAĞIRIŞLAR -->
+    <!-- ================= ÇAĞIRIŞLAR ================= -->
 
     <div class="card">
 
-        <h2>🔔 Xəstə çağırışları</h2>
+        <h2>
+            🔔 Xəstə çağırışları
+        </h2>
 
         <div id="cagirislar">
+
             <div class="empty">
-                Çağırışlar yüklənir...
+                Əvvəlcə palata seçin.
             </div>
+
         </div>
 
     </div>
 
 
-    <!-- SƏSLƏR -->
+    <!-- ================= SƏSLƏR ================= -->
 
     <div class="card">
 
-        <h2>🎙️ Səsli mesajlar</h2>
+        <h2>
+            🎙️ Səsli mesajlar
+        </h2>
 
         <div id="sesler">
+
             <div class="empty">
-                Səslər yüklənir...
+                Əvvəlcə palata seçin.
             </div>
+
         </div>
 
     </div>
@@ -281,6 +372,8 @@ const BACKEND_URL =
 
 let aktivUser = null;
 
+let aktivPalata = null;
+
 
 // ==========================================
 // LOGIN
@@ -289,13 +382,20 @@ let aktivUser = null;
 async function login() {
 
     const username =
-        document.getElementById("username").value.trim();
+        document
+        .getElementById("username")
+        .value
+        .trim();
 
     const password =
-        document.getElementById("password").value;
+        document
+        .getElementById("password")
+        .value;
 
     const status =
-        document.getElementById("loginStatus");
+        document
+        .getElementById("loginStatus");
+
 
     if (!username || !password) {
 
@@ -305,8 +405,10 @@ async function login() {
         return;
     }
 
+
     status.textContent =
         "⏳ Giriş edilir...";
+
 
     try {
 
@@ -317,53 +419,56 @@ async function login() {
                     method: "POST",
 
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type":
+                            "application/json"
                     },
 
                     body: JSON.stringify({
-                        username: username,
-                        password: password
+
+                        username:
+                            username,
+
+                        password:
+                            password
+
                     })
                 }
             );
 
+
         const data =
             await response.json();
 
-        if (!response.ok || !data.success) {
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
 
             status.textContent =
                 "❌ " +
-                (data.message ||
-                "Login məlumatları yanlışdır.");
+                (
+                    data.message ||
+                    "Login məlumatları yanlışdır."
+                );
 
             return;
         }
 
-        aktivUser = data.user;
+
+        aktivUser =
+            data.user;
+
 
         sessionStorage.setItem(
             "medliveUser",
-            JSON.stringify(aktivUser)
+            JSON.stringify(
+                aktivUser
+            )
         );
 
-        document
-            .getElementById("loginPage")
-            .classList.add("hidden");
 
-        document
-            .getElementById("panel")
-            .classList.remove("hidden");
-
-        document
-            .getElementById("userInfo")
-            .textContent =
-            "🟢 Xoş gəldiniz, " +
-            aktivUser.ad +
-            "!";
-
-        cagirislarGetir();
-        sesleriGetir();
+        paneliGoster();
 
     }
 
@@ -379,6 +484,122 @@ async function login() {
 
 
 // ==========================================
+// PANELİ GÖSTƏR
+// ==========================================
+
+function paneliGoster() {
+
+    document
+        .getElementById("loginPage")
+        .classList
+        .add("hidden");
+
+
+    document
+        .getElementById("panel")
+        .classList
+        .remove("hidden");
+
+
+    document
+        .getElementById("userInfo")
+        .textContent =
+        "🟢 Xoş gəldiniz, " +
+        (aktivUser.ad || aktivUser.username) +
+        "!";
+
+
+    const yaddaQalanPalata =
+        sessionStorage.getItem(
+            "medlivePalata"
+        );
+
+
+    if (yaddaQalanPalata) {
+
+        aktivPalata =
+            yaddaQalanPalata;
+
+
+        document
+            .getElementById("palataSec")
+            .value =
+            aktivPalata;
+
+
+        palataEkrandaGoster();
+
+
+        cagirislarGetir();
+
+        sesleriGetir();
+
+    }
+
+}
+
+
+// ==========================================
+// PALATA SEÇ
+// ==========================================
+
+function palataSeciminiYaddaSaxla() {
+
+    const select =
+        document
+        .getElementById("palataSec");
+
+
+    const palata =
+        select.value;
+
+
+    if (!palata) {
+
+        alert(
+            "❗ Əvvəlcə palata seçin."
+        );
+
+        return;
+    }
+
+
+    aktivPalata =
+        palata;
+
+
+    sessionStorage.setItem(
+        "medlivePalata",
+        aktivPalata
+    );
+
+
+    palataEkrandaGoster();
+
+
+    cagirislarGetir();
+
+    sesleriGetir();
+
+}
+
+
+// ==========================================
+// SEÇİLƏN PALATANI GÖSTƏR
+// ==========================================
+
+function palataEkrandaGoster() {
+
+    document
+        .getElementById("selectedRoom")
+        .textContent =
+        "🟢 Hazırda baxdığınız palata: " +
+        aktivPalata;
+
+}
+
+
+// ==========================================
 // ÇIXIŞ
 // ==========================================
 
@@ -388,7 +609,12 @@ function logout() {
         "medliveUser"
     );
 
+    sessionStorage.removeItem(
+        "medlivePalata"
+    );
+
     location.reload();
+
 }
 
 
@@ -403,30 +629,19 @@ function sessionYoxla() {
             "medliveUser"
         );
 
-    if (!saved) return;
+
+    if (!saved) {
+        return;
+    }
+
 
     try {
 
         aktivUser =
             JSON.parse(saved);
 
-        document
-            .getElementById("loginPage")
-            .classList.add("hidden");
 
-        document
-            .getElementById("panel")
-            .classList.remove("hidden");
-
-        document
-            .getElementById("userInfo")
-            .textContent =
-            "🟢 Xoş gəldiniz, " +
-            aktivUser.ad +
-            "!";
-
-        cagirislarGetir();
-        sesleriGetir();
+        paneliGoster();
 
     }
 
@@ -437,6 +652,7 @@ function sessionYoxla() {
         );
 
     }
+
 }
 
 
@@ -447,9 +663,32 @@ function sessionYoxla() {
 async function cagirislarGetir() {
 
     const box =
-        document.getElementById(
+        document
+        .getElementById(
             "cagirislar"
         );
+
+
+    if (!aktivPalata) {
+
+        box.innerHTML =
+            `
+            <div class="empty">
+                🏥 Əvvəlcə palata seçin.
+            </div>
+            `;
+
+        return;
+    }
+
+
+    box.innerHTML =
+        `
+        <div class="empty">
+            ⏳ Palata ${aktivPalata} çağırışları yüklənir...
+        </div>
+        `;
+
 
     try {
 
@@ -459,42 +698,84 @@ async function cagirislarGetir() {
                 "/api/cagirislar"
             );
 
+
         const data =
             await response.json();
 
-        if (!data.success) {
 
-            throw new Error(
-                "Çağırışlar alınmadı"
-            );
+        /*
+         * Server hazırda massiv qaytardığı üçün
+         * burada hər iki formatı qəbul edirik.
+         */
+
+        let list = [];
+
+
+        if (
+            Array.isArray(data)
+        ) {
+
+            list = data;
 
         }
 
-        const list =
-            data.cagirislar || [];
+        else if (
+            data &&
+            Array.isArray(
+                data.cagirislar
+            )
+        ) {
+
+            list =
+                data.cagirislar;
+
+        }
+
+
+        /*
+         * YALNIZ SEÇİLMİŞ PALATA
+         */
+
+        list =
+            list.filter(
+                cagiris =>
+                    String(
+                        cagiris.palata
+                    ) ===
+                    String(
+                        aktivPalata
+                    )
+            );
+
 
         if (list.length === 0) {
 
             box.innerHTML =
-                '<div class="empty">' +
-                '🔔 Yeni çağırış yoxdur.' +
-                '</div>';
+                `
+                <div class="empty">
+                    🔔 Palata ${aktivPalata} üçün
+                    yeni çağırış yoxdur.
+                </div>
+                `;
 
             return;
         }
 
+
         box.innerHTML = "";
+
 
         list
             .sort(
-                (a,b) =>
-                b.id - a.id
+                (a, b) =>
+                    Number(b.id) -
+                    Number(a.id)
             )
             .forEach(
                 cagiris =>
-                cagirisGoster(
-                    cagiris
-                )
+                    cagirisGoster(
+                        cagiris
+                    )
             );
 
     }
@@ -503,12 +784,16 @@ async function cagirislarGetir() {
 
         console.error(error);
 
+
         box.innerHTML =
-            '<div class="empty">' +
-            '❌ Çağırışları yükləmək olmadı.' +
-            '</div>';
+            `
+            <div class="empty">
+                ❌ Çağırışları yükləmək olmadı.
+            </div>
+            `;
 
     }
+
 }
 
 
@@ -516,21 +801,37 @@ async function cagirislarGetir() {
 // ÇAĞIRIŞ GÖSTƏR
 // ==========================================
 
-function cagirisGoster(cagiris) {
+function cagirisGoster(
+    cagiris
+) {
 
     const box =
-        document.getElementById(
+        document
+        .getElementById(
             "cagirislar"
         );
 
+
     const div =
-        document.createElement("div");
+        document
+        .createElement(
+            "div"
+        );
+
+
+    const status =
+        cagiris.status;
+
 
     div.className =
         "request " +
-        (cagiris.status === "accepted"
-            ? "accepted"
-            : "new");
+        (
+            status === "accepted" ||
+            status === "qebul edildi"
+                ? "accepted"
+                : "new"
+        );
+
 
     const tarix =
         new Date(
@@ -539,29 +840,51 @@ function cagirisGoster(cagiris) {
             "az-AZ"
         );
 
+
     let qebul =
         "";
 
-    if (cagiris.status === "accepted") {
+
+    if (
+        status === "accepted" ||
+        status === "qebul edildi"
+    ) {
 
         qebul =
-            "<p>✅ Qəbul edildi" +
-            (cagiris.qebulEden
-                ? " — " +
-                  cagiris.qebulEden
-                : "") +
-            "</p>";
+            `
+            <p>
+                ✅ Qəbul edildi
+                ${
+                    cagiris.qebulEden
+                    ? " — " +
+                      escapeHTML(
+                          cagiris.qebulEden
+                      )
+                    : ""
+                }
+            </p>
+            `;
 
     }
+
 
     div.innerHTML = `
 
         <div class="room">
-            🛏️ Palata ${cagiris.palata}
+            🛏️ Palata ${escapeHTML(
+                String(cagiris.palata)
+            )}
         </div>
 
-        <div style="margin-top:10px;font-size:18px;">
-            ${escapeHTML(cagiris.istek)}
+        <div
+            style="
+                margin-top:10px;
+                font-size:18px;
+            "
+        >
+            ${escapeHTML(
+                cagiris.istek || ""
+            )}
         </div>
 
         <div class="time">
@@ -573,12 +896,19 @@ function cagirisGoster(cagiris) {
         <div class="actions">
 
             ${
-                cagiris.status === "new"
+                (
+                    status !== "accepted" &&
+                    status !== "qebul edildi"
+                )
                 ?
                 `
                 <button
                     class="accept"
-                    onclick="qebulEt(${cagiris.id})"
+                    onclick="
+                        qebulEt(
+                            ${Number(cagiris.id)}
+                        )
+                    "
                 >
                     ✅ Qəbul et
                 </button>
@@ -589,15 +919,24 @@ function cagirisGoster(cagiris) {
 
             <button
                 class="delete"
-                onclick="cagirisSil(${cagiris.id})"
+                onclick="
+                    cagirisSil(
+                        ${Number(cagiris.id)}
+                    )
+                "
             >
                 🗑️ Sil
             </button>
 
         </div>
+
     `;
 
-    box.appendChild(div);
+
+    box.appendChild(
+        div
+    );
+
 }
 
 
@@ -624,17 +963,24 @@ async function qebulEt(id) {
                     },
 
                     body: JSON.stringify({
+
                         qebulEden:
-                            aktivUser.ad
+                            aktivUser.ad ||
+                            aktivUser.username
+
                     })
                 }
             );
 
+
         const data =
             await response.json();
 
-        if (!response.ok ||
-            !data.success) {
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
 
             alert(
                 data.message ||
@@ -644,8 +990,6 @@ async function qebulEt(id) {
             return;
         }
 
-        // Server təsdiqləyəndən sonra
-        // siyahını yenidən gətiririk.
 
         await cagirislarGetir();
 
@@ -660,11 +1004,12 @@ async function qebulEt(id) {
         );
 
     }
+
 }
 
 
 // ==========================================
-// SİL
+// ÇAĞIRIŞI SİL
 // ==========================================
 
 async function cagirisSil(id) {
@@ -674,7 +1019,11 @@ async function cagirisSil(id) {
             "Bu çağırışı həqiqətən silmək istəyirsiniz?"
         );
 
-    if (!tesdiq) return;
+
+    if (!tesdiq) {
+        return;
+    }
+
 
     try {
 
@@ -684,15 +1033,20 @@ async function cagirisSil(id) {
                 "/api/cagir/" +
                 id,
                 {
-                    method: "DELETE"
+                    method:
+                        "DELETE"
                 }
             );
+
 
         const data =
             await response.json();
 
-        if (!response.ok ||
-            !data.success) {
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
 
             alert(
                 data.message ||
@@ -702,8 +1056,6 @@ async function cagirisSil(id) {
             return;
         }
 
-        // Serverdən silindikdən sonra
-        // siyahını yeniləyirik.
 
         await cagirislarGetir();
 
@@ -718,6 +1070,7 @@ async function cagirisSil(id) {
         );
 
     }
+
 }
 
 
@@ -728,9 +1081,32 @@ async function cagirisSil(id) {
 async function sesleriGetir() {
 
     const box =
-        document.getElementById(
+        document
+        .getElementById(
             "sesler"
         );
+
+
+    if (!aktivPalata) {
+
+        box.innerHTML =
+            `
+            <div class="empty">
+                🎙️ Əvvəlcə palata seçin.
+            </div>
+            `;
+
+        return;
+    }
+
+
+    box.innerHTML =
+        `
+        <div class="empty">
+            ⏳ Palata ${aktivPalata} səsləri yüklənir...
+        </div>
+        `;
+
 
     try {
 
@@ -740,40 +1116,79 @@ async function sesleriGetir() {
                 "/api/sesler"
             );
 
+
         const data =
             await response.json();
 
-        if (!data.success) {
 
-            throw new Error(
-                "Səslər alınmadı"
-            );
+        let list = [];
+
+
+        if (
+            Array.isArray(data)
+        ) {
+
+            list = data;
 
         }
 
-        const list =
-            data.sesler || [];
+        else if (
+            data &&
+            Array.isArray(
+                data.sesler
+            )
+        ) {
+
+            list =
+                data.sesler;
+
+        }
+
+
+        /*
+         * YALNIZ SEÇİLMİŞ PALATA
+         */
+
+        list =
+            list.filter(
+                ses =>
+                    String(
+                        ses.palata
+                    ) ===
+                    String(
+                        aktivPalata
+                    )
+            );
+
 
         if (list.length === 0) {
 
             box.innerHTML =
-                '<div class="empty">' +
-                '🎙️ Yeni səsli mesaj yoxdur.' +
-                '</div>';
+                `
+                <div class="empty">
+                    🎙️ Palata ${aktivPalata}
+                    üçün yeni səs yoxdur.
+                </div>
+                `;
 
             return;
         }
 
+
         box.innerHTML = "";
+
 
         list
             .sort(
-                (a,b) =>
-                b.id - a.id
+                (a, b) =>
+                    Number(b.id) -
+                    Number(a.id)
             )
             .forEach(
                 ses =>
-                sesGoster(ses)
+                    sesGoster(
+                        ses
+                    )
             );
 
     }
@@ -782,12 +1197,16 @@ async function sesleriGetir() {
 
         console.error(error);
 
+
         box.innerHTML =
-            '<div class="empty">' +
-            '❌ Səsləri yükləmək olmadı.' +
-            '</div>';
+            `
+            <div class="empty">
+                ❌ Səsləri yükləmək olmadı.
+            </div>
+            `;
 
     }
+
 }
 
 
@@ -798,17 +1217,22 @@ async function sesleriGetir() {
 function sesGoster(ses) {
 
     const box =
-        document.getElementById(
+        document
+        .getElementById(
             "sesler"
         );
 
+
     const div =
-        document.createElement(
+        document
+        .createElement(
             "div"
         );
 
+
     div.className =
         "voice";
+
 
     const tarix =
         new Date(
@@ -817,16 +1241,20 @@ function sesGoster(ses) {
             "az-AZ"
         );
 
+
     const audioUrl =
         "data:" +
         ses.mimetype +
         ";base64," +
         ses.audio;
 
+
     div.innerHTML = `
 
         <strong>
-            🎙️ Palata ${ses.palata}
+            🎙️ Palata ${escapeHTML(
+                String(ses.palata)
+            )}
         </strong>
 
         <div class="time">
@@ -840,14 +1268,22 @@ function sesGoster(ses) {
 
         <button
             class="delete"
-            onclick="sesSil(${ses.id})"
+            onclick="
+                sesSil(
+                    ${Number(ses.id)}
+                )
+            "
         >
             🗑️ Səsi sil
         </button>
 
     `;
 
-    box.appendChild(div);
+
+    box.appendChild(
+        div
+    );
+
 }
 
 
@@ -862,7 +1298,11 @@ async function sesSil(id) {
             "Bu səsli mesajı silmək istəyirsiniz?"
         );
 
-    if (!tesdiq) return;
+
+    if (!tesdiq) {
+        return;
+    }
+
 
     try {
 
@@ -872,15 +1312,20 @@ async function sesSil(id) {
                 "/api/ses/" +
                 id,
                 {
-                    method: "DELETE"
+                    method:
+                        "DELETE"
                 }
             );
+
 
         const data =
             await response.json();
 
-        if (!response.ok ||
-            !data.success) {
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
 
             alert(
                 data.message ||
@@ -889,6 +1334,7 @@ async function sesSil(id) {
 
             return;
         }
+
 
         await sesleriGetir();
 
@@ -903,6 +1349,7 @@ async function sesSil(id) {
         );
 
     }
+
 }
 
 
@@ -913,41 +1360,23 @@ async function sesSil(id) {
 function escapeHTML(text) {
 
     const div =
-        document.createElement(
+        document
+        .createElement(
             "div"
         );
+
 
     div.textContent =
         text;
 
+
     return div.innerHTML;
+
 }
 
 
 // ==========================================
-// AVTOMATİK YENİLƏMƏ
-// ==========================================
-
-// Hər 5 saniyədən bir serverdən
-// ən son məlumatları götürürük.
-
-setInterval(
-    function() {
-
-        if (aktivUser) {
-
-            cagirislarGetir();
-            sesleriGetir();
-
-        }
-
-    },
-    5000
-);
-
-
-// ==========================================
-// BAŞLA
+// BAŞLAT
 // ==========================================
 
 sessionYoxla();

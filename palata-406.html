@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
 
 <title>MedElin - Palata 406</title>
 
@@ -132,6 +133,134 @@ hr{
     margin:30px 0;
 }
 
+=======
+<title>MedElin - Palata 406</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    text-align:center;
+    background:#f4f8f6;
+    color:#1d2b26;
+    padding:25px 15px;
+}
+
+.box{
+    max-width:430px;
+    margin:20px auto;
+    background:white;
+    padding:28px 22px;
+    border-radius:28px;
+    box-shadow:0 15px 45px rgba(30,70,55,.12);
+}
+
+.logo{
+    width:82px;
+    height:82px;
+    margin:0 auto 12px;
+    border-radius:25px;
+    background:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:45px;
+    box-shadow:0 10px 30px rgba(30,70,55,.12);
+}
+
+h1{
+    color:#244d3d;
+    font-size:32px;
+    margin:10px 0 3px;
+}
+
+h2{
+    font-size:22px;
+    margin:25px 0 18px;
+}
+
+.hospital{
+    color:#6c7d75;
+    font-size:14px;
+    font-weight:bold;
+}
+
+.subtitle{
+    color:#748078;
+    font-size:14px;
+    margin:8px 0 25px;
+}
+
+button{
+    width:100%;
+    padding:17px;
+    margin:10px 0;
+    border:1px solid #dce7e1;
+    border-radius:16px;
+    background:white;
+    color:#244d3d;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#edf6f1;
+}
+
+button:disabled{
+    opacity:.55;
+}
+
+.ses{
+    background:#fff4f2;
+    color:#a33d32;
+}
+
+.dayandir{
+    background:#edf6f1;
+    color:#2d654e;
+}
+
+.sesGonder{
+    background:#eaf3ff;
+    color:#285b8f;
+}
+
+.status{
+    margin:15px 0;
+    padding:14px;
+    border-radius:14px;
+    background:#edf6f1;
+    color:#2d654e;
+    font-weight:bold;
+}
+
+textarea{
+    width:100%;
+    height:105px;
+    padding:13px;
+    border-radius:14px;
+    border:1px solid #dce7e1;
+    font-size:16px;
+    resize:vertical;
+}
+
+audio{
+    width:100%;
+    margin-top:10px;
+}
+
+hr{
+    border:none;
+    border-top:1px solid #e5ebe7;
+    margin:30px 0;
+}
+
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
 .footer{
     margin-top:25px;
     color:#9aa59f;
@@ -142,7 +271,11 @@ hr{
 
 <body>
 
+<<<<<<< HEAD
 <!-- ==================== DİL SEÇİMİ ==================== -->
+=======
+<!-- DİL SEÇİMİ -->
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
 
 <div class="box" id="dilSechimi">
 
@@ -160,6 +293,7 @@ hr{
 
     <h2>🌍 Dil seçin</h2>
 
+<<<<<<< HEAD
     <button type="button" onclick="dilSec('az')">
         🇦🇿 Azərbaycan
     </button>
@@ -169,13 +303,28 @@ hr{
     </button>
 
     <button type="button" onclick="dilSec('en')">
+=======
+    <button onclick="dilSec('az')">
+        🇦🇿 Azərbaycan
+    </button>
+
+    <button onclick="dilSec('ru')">
+        🇷🇺 Русский
+    </button>
+
+    <button onclick="dilSec('en')">
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
         🇬🇧 English
     </button>
 
 </div>
 
 
+<<<<<<< HEAD
 <!-- ==================== PALATA ==================== -->
+=======
+<!-- PALATA -->
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
 
 <div class="box" id="palata" style="display:none">
 
@@ -194,6 +343,7 @@ hr{
 
     <!-- ÇAĞIRIŞLAR -->
 
+<<<<<<< HEAD
     <button type="button" onclick="cagirisGonder('Su istəyirəm')">
         💧 <span id="su">Su istəyirəm</span>
     </button>
@@ -207,6 +357,21 @@ hr{
     </button>
 
     <button type="button" onclick="cagirisGonder('Yataqla bağlı kömək istəyirəm')">
+=======
+    <button onclick="cagirisGonder('Su istəyirəm')">
+        💧 <span id="su">Su istəyirəm</span>
+    </button>
+
+    <button onclick="cagirisGonder('Yemək istəyirəm')">
+        🍽️ <span id="yemek">Yemək istəyirəm</span>
+    </button>
+
+    <button onclick="cagirisGonder('Tibb bacısını çağır')">
+        🧑‍⚕️ <span id="tibb">Tibb bacısını çağır</span>
+    </button>
+
+    <button onclick="cagirisGonder('Yataqla bağlı kömək istəyirəm')">
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
         🛏️ <span id="yataq">Yataqla bağlı kömək</span>
     </button>
 
@@ -226,7 +391,11 @@ hr{
         placeholder="İstəyinizi buraya yazın..."
     ></textarea>
 
+<<<<<<< HEAD
     <button type="button" onclick="serhGonder()">
+=======
+    <button onclick="serhGonder()">
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
         📤 <span id="serhGonder">Şərhi göndər</span>
     </button>
 
@@ -241,15 +410,24 @@ hr{
     </h2>
 
     <button
+<<<<<<< HEAD
         type="button"
         id="sesBaslat"
         class="ses"
         onclick="sesYaz()">
+=======
+        id="sesBaslat"
+        class="ses"
+        onclick="sesYaz">
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
         🎙️ <span id="sesYazText">Səs yaz</span>
     </button>
 
     <button
+<<<<<<< HEAD
         type="button"
+=======
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
         id="sesDayandir"
         class="dayandir"
         disabled
@@ -258,7 +436,10 @@ hr{
     </button>
 
     <button
+<<<<<<< HEAD
         type="button"
+=======
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
         id="sesGonderBtn"
         class="sesGonder"
         disabled
@@ -282,22 +463,35 @@ hr{
 
 <script>
 
+<<<<<<< HEAD
 /* =====================================================
    SERVER
 ===================================================== */
+=======
+/* =========================================
+   SERVER
+========================================= */
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
 
 const BACKEND_URL = "https://medlive.onrender.com";
 const PALATA = "406";
 
 
+<<<<<<< HEAD
 /* =====================================================
    DİLLƏR
 ===================================================== */
+=======
+/* =========================================
+   DİLLƏR
+========================================= */
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
 
 let secilenDil = "az";
 
 const metinler = {
 
+<<<<<<< HEAD
     az:{
         alt:"Sizə nə lazımdır?",
         su:"Su istəyirəm",
@@ -525,6 +719,249 @@ let audioStream = null;
    SƏS YAZ
 ===================================================== */
 
+=======
+az:{
+    alt:"Sizə nə lazımdır?",
+    su:"Su istəyirəm",
+    yemek:"Yemək istəyirəm",
+    tibb:"Tibb bacısını çağır",
+    yataq:"Yataqla bağlı kömək",
+    hazir:"Hazırdır ✅",
+
+    serh:"📝 Şərh",
+    placeholder:"İstəyinizi buraya yazın...",
+    serhGonder:"Şərhi göndər",
+
+    ses:"🎙️ Səsli mesaj",
+    sesYaz:"Səs yaz",
+    sesDayan:"Səsi dayandır",
+    sesGonder:"Səsi göndər",
+
+    sesHazir:"Səs yazmağa hazırdır",
+    sesYazildi:"✅ Səs yazıldı. Aşağıdan dinləyə bilərsiniz.",
+    sesYazilir:"🔴 Səs yazılır...",
+    sesGonderilir:"⏳ Səs göndərilir...",
+    sesGonderildi:"✅ Səs göndərildi.",
+
+    gonderilir:"⏳ Göndərilir...",
+    gonderildi:"🔔 Göndərildi: Palata 406",
+    serverXeta:"❌ Serverə qoşulmaq olmadı.",
+    mikrofon:"❌ Mikrofon üçün icazə verilmədi.",
+    serhBos:"Əvvəl şərh yazın."
+},
+
+ru:{
+    alt:"Что вам нужно?",
+    su:"Я хочу воды",
+    yemek:"Я хочу есть",
+    tibb:"Позвать медсестру",
+    yataq:"Помощь с кроватью",
+    hazir:"Готово ✅",
+
+    serh:"📝 Комментарий",
+    placeholder:"Напишите вашу просьбу...",
+    serhGonder:"Отправить комментарий",
+
+    ses:"🎙️ Голосовое сообщение",
+    sesYaz:"Записать голос",
+    sesDayan:"Остановить запись",
+    sesGonder:"Отправить голос",
+
+    sesHazir:"Готов к записи",
+    sesYazildi:"✅ Голос записан.",
+    sesYazilir:"🔴 Идёт запись...",
+    sesGonderilir:"⏳ Отправляется...",
+    sesGonderildi:"✅ Голос отправлен.",
+
+    gonderilir:"⏳ Отправляется...",
+    gonderildi:"🔔 Отправлено: Палата 406",
+    serverXeta:"❌ Не удалось подключиться к серверу.",
+    mikrofon:"❌ Нет доступа к микрофону.",
+    serhBos:"Сначала напишите комментарий."
+},
+
+en:{
+    alt:"What do you need?",
+    su:"I want water",
+    yemek:"I want food",
+    tibb:"Call the nurse",
+    yataq:"I need help with the bed",
+    hazir:"Ready ✅",
+
+    serh:"📝 Comment",
+    placeholder:"Write your request here...",
+    serhGonder:"Send comment",
+
+    ses:"🎙️ Voice message",
+    sesYaz:"Record voice",
+    sesDayan:"Stop recording",
+    sesGonder:"Send voice",
+
+    sesHazir:"Ready to record",
+    sesYazildi:"✅ Voice recorded.",
+    sesYazilir:"🔴 Recording...",
+    sesGonderilir:"⏳ Sending voice...",
+    sesGonderildi:"✅ Voice sent.",
+
+    gonderilir:"⏳ Sending...",
+    gonderildi:"🔔 Sent: Room 406",
+    serverXeta:"❌ Could not connect to the server.",
+    mikrofon:"❌ Microphone permission was denied.",
+    serhBos:"Please write a comment first."
+}
+
+};
+
+
+/* =========================================
+   DİL SEÇ
+========================================= */
+
+function dilSec(dil){
+
+    secilenDil = dil;
+
+    const t = metinler[dil];
+
+    document.getElementById("dilSechimi").style.display = "none";
+    document.getElementById("palata").style.display = "block";
+
+    document.getElementById("altBasliq").textContent = t.alt;
+
+    document.getElementById("su").textContent = t.su;
+    document.getElementById("yemek").textContent = t.yemek;
+    document.getElementById("tibb").textContent = t.tibb;
+    document.getElementById("yataq").textContent = t.yataq;
+
+    document.getElementById("cagirisStatus").textContent = t.hazir;
+
+    document.getElementById("serhBasliq").textContent = t.serh;
+
+    document.getElementById("serh").placeholder =
+        t.placeholder;
+
+    document.getElementById("serhGonder").textContent =
+        t.serhGonder;
+
+    document.getElementById("sesBasliq").textContent =
+        t.ses;
+
+    document.getElementById("sesYazText").textContent =
+        t.sesYaz;
+
+    document.getElementById("sesDayanText").textContent =
+        t.sesDayan;
+
+    document.getElementById("sesGonderText").textContent =
+        t.sesGonder;
+
+    document.getElementById("sesStatus").textContent =
+        t.sesHazir;
+}
+
+
+/* =========================================
+   ÇAĞIRIŞ GÖNDƏR
+========================================= */
+
+async function cagirisGonder(istek){
+
+    const status =
+        document.getElementById("cagirisStatus");
+
+    const t = metinler[secilenDil];
+
+    status.textContent = t.gonderilir;
+
+    try{
+
+        const response = await fetch(
+            BACKEND_URL + "/api/cagir",
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":"application/json"
+                },
+
+                body:JSON.stringify({
+                    palata:PALATA,
+                    istek:istek,
+                    dil:secilenDil
+                })
+            }
+        );
+
+        if(!response.ok){
+            throw new Error("HTTP " + response.status);
+        }
+
+        const data = await response.json();
+
+        if(data.success){
+
+            status.textContent = t.gonderildi;
+
+        }else{
+
+            status.textContent =
+                "❌ Göndərmək mümkün olmadı.";
+
+        }
+
+    }catch(error){
+
+        console.error("Çağırış xətası:",error);
+
+        status.textContent = t.serverXeta;
+    }
+}
+
+
+/* =========================================
+   ŞƏRH
+========================================= */
+
+async function serhGonder(){
+
+    const input =
+        document.getElementById("serh");
+
+    const serh =
+        input.value.trim();
+
+    const t = metinler[secilenDil];
+
+    if(!serh){
+
+        alert(t.serhBos);
+
+        return;
+    }
+
+    await cagirisGonder(
+        "📝 " + serh
+    );
+
+    input.value = "";
+}
+
+
+/* =========================================
+   SƏS DƏYİŞƏNLƏR
+========================================= */
+
+let recorder = null;
+let audioChunks = [];
+let audioBlob = null;
+let audioStream = null;
+
+
+/* =========================================
+   SƏS YAZ
+========================================= */
+
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
 async function sesYaz(){
 
     const t = metinler[secilenDil];
@@ -555,6 +992,7 @@ async function sesYaz(){
         let mimeType = "";
 
         if(
+<<<<<<< HEAD
             typeof MediaRecorder !== "undefined" &&
             MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
         ){
@@ -573,6 +1011,26 @@ async function sesYaz(){
         }
 
         recorder = mimeType
+=======
+            MediaRecorder.isTypeSupported(
+                "audio/webm;codecs=opus"
+            )
+        ){
+
+            mimeType = "audio/webm;codecs=opus";
+
+        }else if(
+            MediaRecorder.isTypeSupported(
+                "audio/webm"
+            )
+        ){
+
+            mimeType = "audio/webm";
+        }
+
+        recorder =
+            mimeType
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
             ? new MediaRecorder(
                 audioStream,
                 {mimeType:mimeType}
@@ -582,7 +1040,12 @@ async function sesYaz(){
 
         recorder.ondataavailable = function(event){
 
+<<<<<<< HEAD
             if(event.data && event.data.size > 0){
+=======
+            if(event.data.size > 0){
+
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
                 audioChunks.push(event.data);
             }
         };
@@ -591,7 +1054,12 @@ async function sesYaz(){
         recorder.onstop = function(){
 
             const realType =
+<<<<<<< HEAD
                 recorder.mimeType || "audio/webm";
+=======
+                recorder.mimeType ||
+                "audio/webm";
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
 
             audioBlob =
                 new Blob(
@@ -611,26 +1079,51 @@ async function sesYaz(){
                 audioStream = null;
             }
 
+<<<<<<< HEAD
             document.getElementById("sesGonderBtn").disabled = false;
 
             document.getElementById("sesStatus").textContent =
                 t.sesYazildi;
+=======
+            document.getElementById(
+                "sesGonderBtn"
+            ).disabled = false;
+
+            document.getElementById(
+                "sesStatus"
+            ).textContent = t.sesYazildi;
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
         };
 
 
         recorder.start();
 
+<<<<<<< HEAD
         document.getElementById("sesStatus").textContent =
             t.sesYazilir;
 
         document.getElementById("sesBaslat").disabled = true;
 
         document.getElementById("sesDayandir").disabled = false;
+=======
+        document.getElementById(
+            "sesStatus"
+        ).textContent = t.sesYazilir;
+
+        document.getElementById(
+            "sesBaslat"
+        ).disabled = true;
+
+        document.getElementById(
+            "sesDayandir"
+        ).disabled = false;
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
 
     }catch(error){
 
         console.error("Mikrofon xətası:",error);
 
+<<<<<<< HEAD
         if(audioStream){
 
             audioStream
@@ -645,13 +1138,32 @@ async function sesYaz(){
 
         document.getElementById("sesBaslat").disabled = false;
         document.getElementById("sesDayandir").disabled = true;
+=======
+        document.getElementById(
+            "sesStatus"
+        ).textContent = t.mikrofon;
+
+        document.getElementById(
+            "sesBaslat"
+        ).disabled = false;
+
+        document.getElementById(
+            "sesDayandir"
+        ).disabled = true;
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
     }
 }
 
 
+<<<<<<< HEAD
 /* =====================================================
    SƏSİ DAYANDIR
 ===================================================== */
+=======
+/* =========================================
+   SƏSİ DAYANDIR
+========================================= */
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
 
 function sesDayandirFunc(){
 
@@ -662,15 +1174,31 @@ function sesDayandirFunc(){
 
         recorder.stop();
 
+<<<<<<< HEAD
         document.getElementById("sesBaslat").disabled = false;
         document.getElementById("sesDayandir").disabled = true;
+=======
+        document.getElementById(
+            "sesBaslat"
+        ).disabled = false;
+
+        document.getElementById(
+            "sesDayandir"
+        ).disabled = true;
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
     }
 }
 
 
+<<<<<<< HEAD
 /* =====================================================
    SƏSİ GÖNDƏR
 ===================================================== */
+=======
+/* =========================================
+   SƏSİ GÖNDƏR
+========================================= */
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
 
 async function sesGonder(){
 
@@ -678,7 +1206,13 @@ async function sesGonder(){
 
     if(!audioBlob){
 
+<<<<<<< HEAD
         document.getElementById("sesStatus").textContent =
+=======
+        document.getElementById(
+            "sesStatus"
+        ).textContent =
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
             "❌ Əvvəl səs yazın.";
 
         return;
@@ -689,7 +1223,13 @@ async function sesGonder(){
 
     btn.disabled = true;
 
+<<<<<<< HEAD
     document.getElementById("sesStatus").textContent =
+=======
+    document.getElementById(
+        "sesStatus"
+    ).textContent =
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
         t.sesGonderilir;
 
     try{
@@ -699,11 +1239,28 @@ async function sesGonder(){
         formData.append(
             "ses",
             audioBlob,
+<<<<<<< HEAD
             "palata-406-" + Date.now() + ".webm"
         );
 
         formData.append("palata", PALATA);
         formData.append("dil", secilenDil);
+=======
+            "palata-406-" +
+            Date.now() +
+            ".webm"
+        );
+
+        formData.append(
+            "palata",
+            PALATA
+        );
+
+        formData.append(
+            "dil",
+            secilenDil
+        );
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
 
 
         const response =
@@ -718,7 +1275,13 @@ async function sesGonder(){
 
         if(!response.ok){
 
+<<<<<<< HEAD
             throw new Error("HTTP " + response.status);
+=======
+            throw new Error(
+                "HTTP " + response.status
+            );
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
         }
 
 
@@ -728,7 +1291,13 @@ async function sesGonder(){
 
         if(data.success){
 
+<<<<<<< HEAD
             document.getElementById("sesStatus").textContent =
+=======
+            document.getElementById(
+                "sesStatus"
+            ).textContent =
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
                 t.sesGonderildi;
 
             audioBlob = null;
@@ -738,15 +1307,31 @@ async function sesGonder(){
         }else{
 
             throw new Error(
+<<<<<<< HEAD
                 data.message || "Səs göndərilmədi."
+=======
+                data.message ||
+                "Səs göndərilmədi."
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
             );
         }
 
     }catch(error){
 
+<<<<<<< HEAD
         console.error("Səs göndərmə xətası:",error);
 
         document.getElementById("sesStatus").textContent =
+=======
+        console.error(
+            "Səs göndərmə xətası:",
+            error
+        );
+
+        document.getElementById(
+            "sesStatus"
+        ).textContent =
+>>>>>>> 95d6e3e0fb6659b1616fa03ed06be8a1a0840bb5
             t.serverXeta;
 
         btn.disabled = false;
