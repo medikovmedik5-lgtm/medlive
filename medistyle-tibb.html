@@ -197,7 +197,6 @@ button {
 }
 
 @media(max-width:600px) {
-
     .actions {
         flex-direction: column;
     }
@@ -214,8 +213,6 @@ button {
 </head>
 
 <body>
-
-<!-- ================= LOGIN ================= -->
 
 <div id="loginPage" class="card login">
 
@@ -253,11 +250,7 @@ button {
 </div>
 
 
-<!-- ================= PANEL ================= -->
-
 <div id="panel" class="container hidden">
-
-    <!-- İSTİFADƏÇİ -->
 
     <div class="card">
 
@@ -265,14 +258,9 @@ button {
 
         <h1>MedLive</h1>
 
-        <p>
-            Tibb işçisi paneli
-        </p>
+        <p>Tibb işçisi paneli</p>
 
         <div id="userInfo" class="status"></div>
-
-
-        <!-- PALATA SEÇİMİ -->
 
         <div class="roomSelect">
 
@@ -314,7 +302,6 @@ button {
 
         </div>
 
-
         <button
             class="logout"
             onclick="logout()"
@@ -325,13 +312,9 @@ button {
     </div>
 
 
-    <!-- ================= ÇAĞIRIŞLAR ================= -->
-
     <div class="card">
 
-        <h2>
-            🔔 Xəstə çağırışları
-        </h2>
+        <h2>🔔 Xəstə çağırışları</h2>
 
         <div id="cagirislar">
 
@@ -344,13 +327,9 @@ button {
     </div>
 
 
-    <!-- ================= SƏSLƏR ================= -->
-
     <div class="card">
 
-        <h2>
-            🎙️ Səsli mesajlar
-        </h2>
+        <h2>🎙️ Səsli mesajlar</h2>
 
         <div id="sesler">
 
@@ -371,8 +350,11 @@ const BACKEND_URL =
     "https://medlive.onrender.com";
 
 let aktivUser = null;
-
 let aktivPalata = null;
+
+let sonCagirisId = null;
+let ringtoneInterval = null;
+let audioContext = null;
 
 
 // ==========================================
@@ -468,6 +450,16 @@ async function login() {
         );
 
 
+        // Telefon/brauzerdə səs konteksti
+        // login klikindən sonra aktivləşir.
+
+        audioContext =
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
+
         paneliGoster();
 
     }
@@ -529,7 +521,6 @@ function paneliGoster() {
 
         palataEkrandaGoster();
 
-
         cagirislarGetir();
 
         sesleriGetir();
@@ -574,8 +565,13 @@ function palataSeciminiYaddaSaxla() {
     );
 
 
-    palataEkrandaGoster();
+    // Yeni palataya keçəndə
+    // son ID-ni sıfırlayırıq.
 
+    sonCagirisId = null;
+
+
+    palataEkrandaGoster();
 
     cagirislarGetir();
 
@@ -604,6 +600,8 @@ function palataEkrandaGoster() {
 // ==========================================
 
 function logout() {
+
+    ringtoneDayandir();
 
     sessionStorage.removeItem(
         "medliveUser"
@@ -640,6 +638,11 @@ function sessionYoxla() {
         aktivUser =
             JSON.parse(saved);
 
+        audioContext =
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
 
         paneliGoster();
 
@@ -654,6 +657,299 @@ function sessionYoxla() {
     }
 
 }
+
+
+// ==========================================
+// UZUN ZƏNG SƏSİ
+// ==========================================
+
+function zengSesi() {
+
+    if (!audioContext) {
+
+        audioContext =
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
+    }
+
+
+    if (
+        audioContext.state ===
+        "suspended"
+    ) {
+
+        audioContext.resume();
+
+    }
+
+
+    // Artıq zəng çalırsa yenisini
+    // başlatma.
+
+    if (ringtoneInterval) {
+        return;
+    }
+
+
+    let say = 0;
+
+
+    function beep() {
+
+        if (say >= 12) {
+
+            clearInterval(
+                ringtoneInterval
+            );
+
+            ringtoneInterval = null;
+
+            return;
+        }
+
+
+        const oscillator =
+            audioContext.createOscillator();
+
+        const gain =
+            audioContext.createGain();
+
+
+        oscillator.type =
+            "sine";
+
+
+        oscillator.frequency.value =
+            say % 2 === 0
+                ? 880
+                : 660;
+
+
+        gain.gain.setValueAtTime(
+            0.0001,
+            audioContext.currentTime
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.35,
+            audioContext.currentTime + 0.05
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            audioContext.currentTime + 0.9
+        );
+
+
+        oscillator.connect(gain);
+
+        gain.connect(
+            audioContext.destination
+        );
+
+
+        oscillator.start();
+
+
+        oscillator.stop(
+            audioContext.currentTime + 0.9
+        );
+
+
+        say++;
+
+    }
+
+
+    beep();
+
+
+    ringtoneInterval =
+        setInterval(
+            beep,
+            1100
+        );
+
+}
+
+
+// ==========================================
+// ZƏNGİ DAYANDIR
+// ==========================================
+
+function ringtoneDayandir() {
+
+    if (ringtoneInterval) {
+
+        clearInterval(
+            ringtoneInterval
+        );
+
+        ringtoneInterval = null;
+
+    }
+
+}
+
+
+// ==========================================
+// 407 YENİ ÇAĞIRIŞ YOXLAMASI
+// ==========================================
+
+async function 407Yoxla() {
+
+    // Yalnız 407 seçilibsə işləsin.
+
+    if (
+        String(aktivPalata) !== "407"
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                BACKEND_URL +
+                "/api/cagirislar"
+            );
+
+
+        const data =
+            await response.json();
+
+
+        let list = [];
+
+
+        // Server massiv qaytarır.
+
+        if (
+            Array.isArray(data)
+        ) {
+
+            list = data;
+
+        }
+
+        else if (
+            data &&
+            Array.isArray(
+                data.cagirislar
+            )
+        ) {
+
+            list =
+                data.cagirislar;
+
+        }
+
+
+        const yeni407 =
+            list
+            .filter(
+                cagiris =>
+                    String(
+                        cagiris.palata
+                    ) === "407" &&
+                    (
+                        cagiris.status ===
+                        "yeni" ||
+                        cagiris.status ===
+                        "new"
+                    )
+            )
+            .sort(
+                (a, b) =>
+                    Number(b.id) -
+                    Number(a.id)
+            );
+
+
+        if (
+            yeni407.length === 0
+        ) {
+
+            return;
+
+        }
+
+
+        const son =
+            yeni407[0];
+
+
+        const yeniId =
+            Number(son.id);
+
+
+        // İlk yoxlamada mövcud çağırışa
+        // zəng çalmasın.
+
+        if (
+            sonCagirisId === null
+        ) {
+
+            sonCagirisId =
+                yeniId;
+
+            return;
+
+        }
+
+
+        // Yeni çağırış gəlibsə.
+
+        if (
+            yeniId >
+            sonCagirisId
+        ) {
+
+            sonCagirisId =
+                yeniId;
+
+
+            // Səhifəni yeniləmədən siyahını dəyiş.
+
+            await cagirislarGetir();
+
+
+            // Uzun zəng.
+
+            zengSesi();
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "407 yoxlama xətası:",
+            error
+        );
+
+    }
+
+}
+
+
+// ==========================================
+// HƏR 2 SANİYƏDƏ 407-Nİ YOXLAYIR
+// ==========================================
+
+setInterval(
+    407Yoxla,
+    2000
+);
 
 
 // ==========================================
@@ -685,7 +981,8 @@ async function cagirislarGetir() {
     box.innerHTML =
         `
         <div class="empty">
-            ⏳ Palata ${aktivPalata} çağırışları yüklənir...
+            ⏳ Palata ${aktivPalata}
+            çağırışları yüklənir...
         </div>
         `;
 
@@ -702,11 +999,6 @@ async function cagirislarGetir() {
         const data =
             await response.json();
 
-
-        /*
-         * Server hazırda massiv qaytardığı üçün
-         * burada hər iki formatı qəbul edirik.
-         */
 
         let list = [];
 
@@ -732,10 +1024,6 @@ async function cagirislarGetir() {
         }
 
 
-        /*
-         * YALNIZ SEÇİLMİŞ PALATA
-         */
-
         list =
             list.filter(
                 cagiris =>
@@ -753,8 +1041,8 @@ async function cagirislarGetir() {
             box.innerHTML =
                 `
                 <div class="empty">
-                    🔔 Palata ${aktivPalata} üçün
-                    yeni çağırış yoxdur.
+                    🔔 Palata ${aktivPalata}
+                    üçün yeni çağırış yoxdur.
                 </div>
                 `;
 
@@ -801,9 +1089,7 @@ async function cagirislarGetir() {
 // ÇAĞIRIŞ GÖSTƏR
 // ==========================================
 
-function cagirisGoster(
-    cagiris
-) {
+function cagirisGoster(cagiris) {
 
     const box =
         document
@@ -841,8 +1127,7 @@ function cagirisGoster(
         );
 
 
-    let qebul =
-        "";
+    let qebul = "";
 
 
     if (
@@ -871,8 +1156,11 @@ function cagirisGoster(
     div.innerHTML = `
 
         <div class="room">
-            🛏️ Palata ${escapeHTML(
-                String(cagiris.palata)
+            🛏️ Palata
+            ${escapeHTML(
+                String(
+                    cagiris.palata
+                )
             )}
         </div>
 
@@ -906,7 +1194,9 @@ function cagirisGoster(
                     class="accept"
                     onclick="
                         qebulEt(
-                            ${Number(cagiris.id)}
+                            ${Number(
+                                cagiris.id
+                            )}
                         )
                     "
                 >
@@ -921,7 +1211,9 @@ function cagirisGoster(
                 class="delete"
                 onclick="
                     cagirisSil(
-                        ${Number(cagiris.id)}
+                        ${Number(
+                            cagiris.id
+                        )}
                     )
                 "
             >
@@ -933,9 +1225,7 @@ function cagirisGoster(
     `;
 
 
-    box.appendChild(
-        div
-    );
+    box.appendChild(div);
 
 }
 
@@ -990,6 +1280,8 @@ async function qebulEt(id) {
             return;
         }
 
+
+        ringtoneDayandir();
 
         await cagirislarGetir();
 
@@ -1057,6 +1349,8 @@ async function cagirisSil(id) {
         }
 
 
+        ringtoneDayandir();
+
         await cagirislarGetir();
 
     }
@@ -1100,14 +1394,6 @@ async function sesleriGetir() {
     }
 
 
-    box.innerHTML =
-        `
-        <div class="empty">
-            ⏳ Palata ${aktivPalata} səsləri yüklənir...
-        </div>
-        `;
-
-
     try {
 
         const response =
@@ -1144,10 +1430,6 @@ async function sesleriGetir() {
 
         }
 
-
-        /*
-         * YALNIZ SEÇİLMİŞ PALATA
-         */
 
         list =
             list.filter(
@@ -1186,9 +1468,7 @@ async function sesleriGetir() {
             )
             .forEach(
                 ses =>
-                    sesGoster(
-                        ses
-                    )
+                    sesGoster(ses)
             );
 
     }
@@ -1252,8 +1532,11 @@ function sesGoster(ses) {
     div.innerHTML = `
 
         <strong>
-            🎙️ Palata ${escapeHTML(
-                String(ses.palata)
+            🎙️ Palata
+            ${escapeHTML(
+                String(
+                    ses.palata
+                )
             )}
         </strong>
 
@@ -1280,9 +1563,7 @@ function sesGoster(ses) {
     `;
 
 
-    box.appendChild(
-        div
-    );
+    box.appendChild(div);
 
 }
 
