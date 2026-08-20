@@ -186,7 +186,7 @@ button {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .selectedRoom {
@@ -196,7 +196,14 @@ button {
     margin-top: 10px;
 }
 
+.error {
+    color: #a33d32;
+    margin-top: 12px;
+    font-weight: bold;
+}
+
 @media(max-width:600px) {
+
     .actions {
         flex-direction: column;
     }
@@ -213,6 +220,10 @@ button {
 </head>
 
 <body>
+
+<!-- ==========================================
+     LOGIN
+========================================== -->
 
 <div id="loginPage" class="card login">
 
@@ -239,8 +250,9 @@ button {
     >
 
     <button
+        id="loginButton"
         class="loginBtn"
-        onclick="login()"
+        type="button"
     >
         Daxil ol
     </button>
@@ -249,6 +261,10 @@ button {
 
 </div>
 
+
+<!-- ==========================================
+     PANEL
+========================================== -->
 
 <div id="panel" class="container hidden">
 
@@ -289,8 +305,9 @@ button {
             </select>
 
             <button
+                id="roomButton"
                 class="changeRoom"
-                onclick="palataSeciminiYaddaSaxla()"
+                type="button"
             >
                 ✅ Palatanı seç
             </button>
@@ -303,14 +320,17 @@ button {
         </div>
 
         <button
+            id="logoutButton"
             class="logout"
-            onclick="logout()"
+            type="button"
         >
             🚪 Çıxış
         </button>
 
     </div>
 
+
+    <!-- ÇAĞIRIŞLAR -->
 
     <div class="card">
 
@@ -326,6 +346,8 @@ button {
 
     </div>
 
+
+    <!-- SƏSLƏR -->
 
     <div class="card">
 
@@ -346,15 +368,58 @@ button {
 
 <script>
 
+"use strict";
+
+
+// ==========================================
+// BACKEND
+// ==========================================
+
 const BACKEND_URL =
     "https://medlive.onrender.com";
+
+
+// ==========================================
+// DƏYİŞƏNLƏR
+// ==========================================
 
 let aktivUser = null;
 let aktivPalata = null;
 
 let sonCagirisId = null;
+
 let ringtoneInterval = null;
+
 let audioContext = null;
+
+
+// ==========================================
+// ELEMENTLƏR
+// ==========================================
+
+const loginPage =
+    document.getElementById("loginPage");
+
+const panel =
+    document.getElementById("panel");
+
+const usernameInput =
+    document.getElementById("username");
+
+const passwordInput =
+    document.getElementById("password");
+
+const loginButton =
+    document.getElementById("loginButton");
+
+const loginStatus =
+    document.getElementById("loginStatus");
+
+const roomButton =
+    document.getElementById("roomButton");
+
+const logoutButton =
+    document.getElementById("logoutButton");
 
 
 // ==========================================
@@ -364,33 +429,21 @@ let audioContext = null;
 async function login() {
 
     const username =
-        document
-        .getElementById("username")
-        .value
-        .trim();
+        usernameInput.value.trim();
 
     const password =
-        document
-        .getElementById("password")
-        .value;
-
-    const status =
-        document
-        .getElementById("loginStatus");
-
+        passwordInput.value;
 
     if (!username || !password) {
 
-        status.textContent =
+        loginStatus.textContent =
             "❌ İstifadəçi adı və şifrəni yazın.";
 
         return;
     }
 
-
-    status.textContent =
+    loginStatus.textContent =
         "⏳ Giriş edilir...";
-
 
     try {
 
@@ -406,13 +459,8 @@ async function login() {
                     },
 
                     body: JSON.stringify({
-
-                        username:
-                            username,
-
-                        password:
-                            password
-
+                        username: username,
+                        password: password
                     })
                 }
             );
@@ -427,16 +475,18 @@ async function login() {
             !data.success
         ) {
 
-            status.textContent =
+            loginStatus.textContent =
                 "❌ " +
                 (
                     data.message ||
-                    "Login məlumatları yanlışdır."
+                    "İstifadəçi adı və ya şifrə yanlışdır."
                 );
 
             return;
         }
 
+
+        // USER YADDA SAXLA
 
         aktivUser =
             data.user;
@@ -444,20 +494,25 @@ async function login() {
 
         sessionStorage.setItem(
             "medliveUser",
-            JSON.stringify(
-                aktivUser
-            )
+            JSON.stringify(aktivUser)
         );
 
 
-        // Telefon/brauzerdə səs konteksti
-        // login klikindən sonra aktivləşir.
+        // Səs sistemini aktivləşdir
 
-        audioContext =
-            new (
-                window.AudioContext ||
-                window.webkitAudioContext
-            )();
+        try {
+
+            audioContext =
+                new (
+                    window.AudioContext ||
+                    window.webkitAudioContext
+                )();
+
+        } catch {
+
+            audioContext = null;
+
+        }
 
 
         paneliGoster();
@@ -466,12 +521,16 @@ async function login() {
 
     catch (error) {
 
-        console.error(error);
+        console.error(
+            "Login xətası:",
+            error
+        );
 
-        status.textContent =
+        loginStatus.textContent =
             "❌ Serverə qoşulmaq olmadı.";
 
     }
+
 }
 
 
@@ -481,23 +540,23 @@ async function login() {
 
 function paneliGoster() {
 
-    document
-        .getElementById("loginPage")
-        .classList
-        .add("hidden");
+    loginPage.classList.add(
+        "hidden"
+    );
+
+    panel.classList.remove(
+        "hidden"
+    );
 
 
-    document
-        .getElementById("panel")
-        .classList
-        .remove("hidden");
-
-
-    document
-        .getElementById("userInfo")
-        .textContent =
+    document.getElementById(
+        "userInfo"
+    ).textContent =
         "🟢 Xoş gəldiniz, " +
-        (aktivUser.ad || aktivUser.username) +
+        (
+            aktivUser.ad ||
+            aktivUser.username
+        ) +
         "!";
 
 
@@ -512,12 +571,10 @@ function paneliGoster() {
         aktivPalata =
             yaddaQalanPalata;
 
-
-        document
-            .getElementById("palataSec")
-            .value =
+        document.getElementById(
+            "palataSec"
+        ).value =
             aktivPalata;
-
 
         palataEkrandaGoster();
 
@@ -536,13 +593,10 @@ function paneliGoster() {
 
 function palataSeciminiYaddaSaxla() {
 
-    const select =
-        document
-        .getElementById("palataSec");
-
-
     const palata =
-        select.value;
+        document.getElementById(
+            "palataSec"
+        ).value;
 
 
     if (!palata) {
@@ -566,7 +620,7 @@ function palataSeciminiYaddaSaxla() {
 
 
     // Yeni palataya keçəndə
-    // son ID-ni sıfırlayırıq.
+    // köhnə çağırış ID-si sıfırlanır.
 
     sonCagirisId = null;
 
@@ -581,14 +635,14 @@ function palataSeciminiYaddaSaxla() {
 
 
 // ==========================================
-// SEÇİLƏN PALATANI GÖSTƏR
+// PALATA GÖSTƏR
 // ==========================================
 
 function palataEkrandaGoster() {
 
-    document
-        .getElementById("selectedRoom")
-        .textContent =
+    document.getElementById(
+        "selectedRoom"
+    ).textContent =
         "🟢 Hazırda baxdığınız palata: " +
         aktivPalata;
 
@@ -617,7 +671,7 @@ function logout() {
 
 
 // ==========================================
-// SESSION YOXLA
+// SESSION YOXLAMA
 // ==========================================
 
 function sessionYoxla() {
@@ -638,17 +692,41 @@ function sessionYoxla() {
         aktivUser =
             JSON.parse(saved);
 
-        audioContext =
-            new (
-                window.AudioContext ||
-                window.webkitAudioContext
-            )();
+
+        if (
+            !aktivUser ||
+            !aktivUser.username
+        ) {
+
+            throw new Error(
+                "Session məlumatı yanlışdır."
+            );
+
+        }
+
+
+        try {
+
+            audioContext =
+                new (
+                    window.AudioContext ||
+                    window.webkitAudioContext
+                )();
+
+        } catch {
+
+            audioContext = null;
+
+        }
+
 
         paneliGoster();
 
     }
 
-    catch {
+    catch (error) {
+
+        console.error(error);
 
         sessionStorage.removeItem(
             "medliveUser"
@@ -660,18 +738,26 @@ function sessionYoxla() {
 
 
 // ==========================================
-// UZUN ZƏNG SƏSİ
+// ZƏNG SƏSİ
 // ==========================================
 
 function zengSesi() {
 
     if (!audioContext) {
 
-        audioContext =
-            new (
-                window.AudioContext ||
-                window.webkitAudioContext
-            )();
+        try {
+
+            audioContext =
+                new (
+                    window.AudioContext ||
+                    window.webkitAudioContext
+                )();
+
+        } catch {
+
+            return;
+
+        }
 
     }
 
@@ -686,8 +772,8 @@ function zengSesi() {
     }
 
 
-    // Artıq zəng çalırsa yenisini
-    // başlatma.
+    // Artıq zəng gedirsə
+    // ikinci zəng başlatma.
 
     if (ringtoneInterval) {
         return;
@@ -711,57 +797,69 @@ function zengSesi() {
         }
 
 
-        const oscillator =
-            audioContext.createOscillator();
+        try {
 
-        const gain =
-            audioContext.createGain();
+            const oscillator =
+                audioContext.createOscillator();
 
-
-        oscillator.type =
-            "sine";
+            const gain =
+                audioContext.createGain();
 
 
-        oscillator.frequency.value =
-            say % 2 === 0
-                ? 880
-                : 660;
+            oscillator.type =
+                "sine";
 
 
-        gain.gain.setValueAtTime(
-            0.0001,
-            audioContext.currentTime
-        );
+            oscillator.frequency.value =
+                say % 2 === 0
+                    ? 880
+                    : 660;
 
 
-        gain.gain.exponentialRampToValueAtTime(
-            0.35,
-            audioContext.currentTime + 0.05
-        );
+            gain.gain.setValueAtTime(
+                0.0001,
+                audioContext.currentTime
+            );
 
 
-        gain.gain.exponentialRampToValueAtTime(
-            0.0001,
-            audioContext.currentTime + 0.9
-        );
+            gain.gain.exponentialRampToValueAtTime(
+                0.35,
+                audioContext.currentTime + 0.05
+            );
 
 
-        oscillator.connect(gain);
-
-        gain.connect(
-            audioContext.destination
-        );
-
-
-        oscillator.start();
+            gain.gain.exponentialRampToValueAtTime(
+                0.0001,
+                audioContext.currentTime + 0.9
+            );
 
 
-        oscillator.stop(
-            audioContext.currentTime + 0.9
-        );
+            oscillator.connect(gain);
+
+            gain.connect(
+                audioContext.destination
+            );
 
 
-        say++;
+            oscillator.start();
+
+            oscillator.stop(
+                audioContext.currentTime + 0.9
+            );
+
+
+            say++;
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Zəng səsi xətası:",
+                error
+            );
+
+        }
 
     }
 
@@ -798,19 +896,19 @@ function ringtoneDayandir() {
 
 
 // ==========================================
-// 407 YENİ ÇAĞIRIŞ YOXLAMASI
+// YENİ ÇAĞIRIŞ YOXLAMA
+// ==========================================
+// ƏVVƏLKİ 407Yoxla ADINI DƏYİŞDİRDİM.
+// Çünki JavaScript-də funksiya adı rəqəmlə
+// başlaya bilməz.
+//
+// İndi BÜTÜN SEÇİLƏN PALATALARDA işləyir.
 // ==========================================
 
-async function 407Yoxla() {
+async function yeniCagirisYoxla() {
 
-    // Yalnız 407 seçilibsə işləsin.
-
-    if (
-        String(aktivPalata) !== "407"
-    ) {
-
+    if (!aktivPalata) {
         return;
-
     }
 
 
@@ -819,8 +917,16 @@ async function 407Yoxla() {
         const response =
             await fetch(
                 BACKEND_URL +
-                "/api/cagirislar"
+                "/api/cagirislar?palata=" +
+                encodeURIComponent(
+                    aktivPalata
+                )
             );
+
+
+        if (!response.ok) {
+            return;
+        }
 
 
         const data =
@@ -829,8 +935,6 @@ async function 407Yoxla() {
 
         let list = [];
 
-
-        // Server massiv qaytarır.
 
         if (
             Array.isArray(data)
@@ -853,18 +957,21 @@ async function 407Yoxla() {
         }
 
 
-        const yeni407 =
+        const yeni =
             list
             .filter(
                 cagiris =>
                     String(
                         cagiris.palata
-                    ) === "407" &&
+                    ) ===
+                    String(
+                        aktivPalata
+                    ) &&
                     (
                         cagiris.status ===
-                        "yeni" ||
+                        "new" ||
                         cagiris.status ===
-                        "new"
+                        "yeni"
                     )
             )
             .sort(
@@ -875,7 +982,7 @@ async function 407Yoxla() {
 
 
         if (
-            yeni407.length === 0
+            yeni.length === 0
         ) {
 
             return;
@@ -884,7 +991,7 @@ async function 407Yoxla() {
 
 
         const son =
-            yeni407[0];
+            yeni[0];
 
 
         const yeniId =
@@ -917,12 +1024,8 @@ async function 407Yoxla() {
                 yeniId;
 
 
-            // Səhifəni yeniləmədən siyahını dəyiş.
-
             await cagirislarGetir();
 
-
-            // Uzun zəng.
 
             zengSesi();
 
@@ -933,7 +1036,7 @@ async function 407Yoxla() {
     catch (error) {
 
         console.error(
-            "407 yoxlama xətası:",
+            "Yeni çağırış yoxlama xətası:",
             error
         );
 
@@ -943,11 +1046,11 @@ async function 407Yoxla() {
 
 
 // ==========================================
-// HƏR 2 SANİYƏDƏ 407-Nİ YOXLAYIR
+// HƏR 2 SANİYƏDƏ YOXLAYIR
 // ==========================================
 
 setInterval(
-    407Yoxla,
+    yeniCagirisYoxla,
     2000
 );
 
@@ -959,8 +1062,7 @@ setInterval(
 async function cagirislarGetir() {
 
     const box =
-        document
-        .getElementById(
+        document.getElementById(
             "cagirislar"
         );
 
@@ -992,7 +1094,10 @@ async function cagirislarGetir() {
         const response =
             await fetch(
                 BACKEND_URL +
-                "/api/cagirislar"
+                "/api/cagirislar?palata=" +
+                encodeURIComponent(
+                    aktivPalata
+                )
             );
 
 
@@ -1054,24 +1159,23 @@ async function cagirislarGetir() {
 
 
         list
-            .sort(
-                (a, b) =>
-                    Number(b.id) -
-                    Number(a.id)
-            )
-            .forEach(
-                cagiris =>
-                    cagirisGoster(
-                        cagiris
-                    )
-            );
+        .sort(
+            (a, b) =>
+                Number(b.id) -
+                Number(a.id)
+        )
+        .forEach(
+            cagiris =>
+                cagirisGoster(
+                    cagiris
+                )
+        );
 
     }
 
     catch (error) {
 
         console.error(error);
-
 
         box.innerHTML =
             `
@@ -1092,15 +1196,13 @@ async function cagirislarGetir() {
 function cagirisGoster(cagiris) {
 
     const box =
-        document
-        .getElementById(
+        document.getElementById(
             "cagirislar"
         );
 
 
     const div =
-        document
-        .createElement(
+        document.createElement(
             "div"
         );
 
@@ -1192,6 +1294,7 @@ function cagirisGoster(cagiris) {
                 `
                 <button
                     class="accept"
+                    type="button"
                     onclick="
                         qebulEt(
                             ${Number(
@@ -1209,6 +1312,7 @@ function cagirisGoster(cagiris) {
 
             <button
                 class="delete"
+                type="button"
                 onclick="
                     cagirisSil(
                         ${Number(
@@ -1256,7 +1360,10 @@ async function qebulEt(id) {
 
                         qebulEden:
                             aktivUser.ad ||
-                            aktivUser.username
+                            aktivUser.username,
+
+                        palata:
+                            aktivPalata
 
                     })
                 }
@@ -1375,8 +1482,7 @@ async function cagirisSil(id) {
 async function sesleriGetir() {
 
     const box =
-        document
-        .getElementById(
+        document.getElementById(
             "sesler"
         );
 
@@ -1399,7 +1505,10 @@ async function sesleriGetir() {
         const response =
             await fetch(
                 BACKEND_URL +
-                "/api/sesler"
+                "/api/sesler?palata=" +
+                encodeURIComponent(
+                    aktivPalata
+                )
             );
 
 
@@ -1461,22 +1570,21 @@ async function sesleriGetir() {
 
 
         list
-            .sort(
-                (a, b) =>
-                    Number(b.id) -
-                    Number(a.id)
-            )
-            .forEach(
-                ses =>
-                    sesGoster(ses)
-            );
+        .sort(
+            (a, b) =>
+                Number(b.id) -
+                Number(a.id)
+        )
+        .forEach(
+            ses =>
+                sesGoster(ses)
+        );
 
     }
 
     catch (error) {
 
         console.error(error);
-
 
         box.innerHTML =
             `
@@ -1497,15 +1605,13 @@ async function sesleriGetir() {
 function sesGoster(ses) {
 
     const box =
-        document
-        .getElementById(
+        document.getElementById(
             "sesler"
         );
 
 
     const div =
-        document
-        .createElement(
+        document.createElement(
             "div"
         );
 
@@ -1551,9 +1657,12 @@ function sesGoster(ses) {
 
         <button
             class="delete"
+            type="button"
             onclick="
                 sesSil(
-                    ${Number(ses.id)}
+                    ${Number(
+                        ses.id
+                    )}
                 )
             "
         >
@@ -1641,19 +1750,72 @@ async function sesSil(id) {
 function escapeHTML(text) {
 
     const div =
-        document
-        .createElement(
+        document.createElement(
             "div"
         );
-
 
     div.textContent =
         text;
 
-
     return div.innerHTML;
 
 }
+
+
+// ==========================================
+// DÜYMƏLƏR
+// ==========================================
+
+loginButton.addEventListener(
+    "click",
+    login
+);
+
+
+roomButton.addEventListener(
+    "click",
+    palataSeciminiYaddaSaxla
+);
+
+
+logoutButton.addEventListener(
+    "click",
+    logout
+);
+
+
+// ENTER İLƏ LOGIN
+
+usernameInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            login();
+
+        }
+
+    }
+);
+
+
+passwordInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            login();
+
+        }
+
+    }
+);
 
 
 // ==========================================
