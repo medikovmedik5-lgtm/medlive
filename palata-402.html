@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width,
-               initial-scale=1.0,
-               maximum-scale=1.0,
-               user-scalable=no">
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
 
 <title>MEDELIN — PALATA 402</title>
 
@@ -81,10 +81,6 @@ header{
 }
 
 #video{
-    /*
-       Kamera görüntüsü xəstə ekranında
-       heç vaxt görünmür.
-    */
     position:fixed;
 
     width:1px;
@@ -106,7 +102,6 @@ header{
     display:none;
 
     position:fixed;
-
     inset:0;
 
     z-index:50;
@@ -140,20 +135,20 @@ header{
 
     0%{
         transform:
-            translate(-50%,-50%)
-            scale(1);
+        translate(-50%,-50%)
+        scale(1);
     }
 
     50%{
         transform:
-            translate(-50%,-50%)
-            scale(1.15);
+        translate(-50%,-50%)
+        scale(1.15);
     }
 
     100%{
         transform:
-            translate(-50%,-50%)
-            scale(1);
+        translate(-50%,-50%)
+        scale(1);
     }
 
 }
@@ -166,14 +161,13 @@ header{
     display:none;
 
     height:
-        calc(100vh - 125px);
+    calc(100vh - 125px);
 
     padding:15px 20px;
 
     gap:18px;
 
     align-items:center;
-
     justify-content:center;
 
     flex-direction:column;
@@ -181,9 +175,9 @@ header{
 
 .choice{
 
-    width:88vw;
+    width:90vw;
 
-    max-width:520px;
+    max-width:560px;
 
     height:120px;
 
@@ -198,8 +192,8 @@ header{
     font-weight:bold;
 
     transition:
-        transform .15s,
-        box-shadow .15s;
+    transform .15s,
+    box-shadow .15s;
 }
 
 .choice.active{
@@ -207,8 +201,8 @@ header{
     transform:scale(1.05);
 
     box-shadow:
-        0 0 0 8px
-        rgba(0,0,0,.20);
+    0 0 0 9px
+    rgba(0,0,0,.22);
 }
 
 .yes{
@@ -233,13 +227,13 @@ header{
 
     position:fixed;
 
-    left:10%;
+    left:8%;
 
     bottom:15px;
 
-    width:80%;
+    width:84%;
 
-    height:14px;
+    height:15px;
 
     background:#ddd;
 
@@ -259,34 +253,30 @@ header{
     background:#0b7285;
 
     transition:
-        width .08s linear;
+    width .08s linear;
 }
 
 </style>
 </head>
 
-
 <body>
 
 <header>
-    MEDELIN — PALATA 402
+MEDELIN — PALATA 402
 </header>
 
-
 <div id="status">
-    Sistem hazır deyil
+Sistem hazır deyil
 </div>
 
-
 <button id="start">
-    👁️ GÖZ İZLƏMƏNİ BAŞLAT
+👁️ GÖZ İZLƏMƏNİ BAŞLAT
 </button>
 
-
 <video
-    id="video"
-    autoplay
-    playsinline>
+id="video"
+autoplay
+playsinline>
 </video>
 
 
@@ -297,42 +287,31 @@ header{
 <div id="calibration">
 
     <div class="point"
-         style="left:10%;top:15%">
-    </div>
+    style="left:10%;top:15%"></div>
 
     <div class="point"
-         style="left:50%;top:15%">
-    </div>
+    style="left:50%;top:15%"></div>
 
     <div class="point"
-         style="left:90%;top:15%">
-    </div>
-
+    style="left:90%;top:15%"></div>
 
     <div class="point"
-         style="left:10%;top:50%">
-    </div>
+    style="left:10%;top:50%"></div>
 
     <div class="point"
-         style="left:50%;top:50%">
-    </div>
+    style="left:50%;top:50%"></div>
 
     <div class="point"
-         style="left:90%;top:50%">
-    </div>
-
+    style="left:90%;top:50%"></div>
 
     <div class="point"
-         style="left:10%;top:85%">
-    </div>
+    style="left:10%;top:85%"></div>
 
     <div class="point"
-         style="left:50%;top:85%">
-    </div>
+    style="left:50%;top:85%"></div>
 
     <div class="point"
-         style="left:90%;top:85%">
-    </div>
+    style="left:90%;top:85%"></div>
 
 </div>
 
@@ -344,26 +323,24 @@ header{
 <div id="choices">
 
     <button
-        class="choice yes"
-        data-action="YES">
+    class="choice yes"
+    data-action="YES">
 
         HƏ
 
     </button>
 
-
     <button
-        class="choice call"
-        data-action="CALL">
+    class="choice call"
+    data-action="CALL">
 
         🚨 OTAĞA GƏL
 
     </button>
 
-
     <button
-        class="choice no"
-        data-action="NO">
+    class="choice no"
+    data-action="NO">
 
         YOX
 
@@ -386,29 +363,28 @@ header{
 ===================================================== */
 
 const video =
-    document.getElementById("video");
+document.getElementById("video");
 
 const startButton =
-    document.getElementById("start");
+document.getElementById("start");
 
 const statusBox =
-    document.getElementById("status");
+document.getElementById("status");
 
 const calibration =
-    document.getElementById("calibration");
+document.getElementById("calibration");
 
 const choices =
-    document.getElementById("choices");
+document.getElementById("choices");
 
 const progress =
-    document.getElementById("progress");
+document.getElementById("progress");
 
 const bar =
-    document.getElementById("bar");
+document.getElementById("bar");
 
 const buttons =
-    [...document.querySelectorAll(".choice")];
-
+[...document.querySelectorAll(".choice")];
 
 
 /* =====================================================
@@ -416,15 +392,17 @@ const buttons =
 ===================================================== */
 
 const faceMesh =
-    new FaceMesh({
+new FaceMesh({
 
-        locateFile:function(file){
+    locateFile:function(file){
 
-            return "https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/" + file;
+        return
+        "https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/"
+        + file;
 
-        }
+    }
 
-    });
+});
 
 
 faceMesh.setOptions({
@@ -433,12 +411,11 @@ faceMesh.setOptions({
 
     refineLandmarks:true,
 
-    minDetectionConfidence:0.5,
+    minDetectionConfidence:0.55,
 
-    minTrackingConfidence:0.5
+    minTrackingConfidence:0.55
 
 });
-
 
 
 /* =====================================================
@@ -469,46 +446,47 @@ let processing = false;
 
 
 /*
-   Gözün ekrandakı hərəkətini
-   yumşaltmaq üçün.
+   Daha yumşaq göz hərəkəti.
 */
 
-const SMOOTHING = 0.22;
+const SMOOTHING = 0.16;
 
 
 /*
-   Düyməni seçmək üçün
-   baxış müddəti.
+   Düyməyə baxış müddəti.
 */
 
 const DWELL_TIME = 1800;
 
+
+/*
+   Düymə dəyişməsi üçün
+   əlavə sabitlik.
+*/
+
+const SWITCH_DELAY = 250;
+
+
+/*
+   Hazırkı düymənin
+   yaddaşda saxlanması.
+*/
+
+let possibleButton = null;
+
+let possibleButtonTime = 0;
 
 
 /* =====================================================
    GÖZ FEATURE-LƏRİ
 ===================================================== */
 
-/*
-   ƏVVƏLKİ KODDA PROBLEM BURADA İDİ.
-
-   Əvvəl:
-   iris.x və iris.y birbaşa istifadə olunurdu.
-
-   İndi:
-   iris-in gözün daxilindəki NİSBİ mövqeyini
-   hesablayırıq.
-
-   Bu, başın bir az sağa-sola hərəkət etməsinə
-   daha dözümlüdür.
-*/
-
 function getEyeFeatures(landmarks){
 
     try{
 
         /*
-           SOL GÖZ
+           SOL İRİS
         */
 
         const leftIris = [
@@ -523,42 +501,46 @@ function getEyeFeatures(landmarks){
         let leftIY = 0;
 
 
-        for(const index of leftIris){
+        for(
+            const index
+            of leftIris
+        ){
 
-            leftIX += landmarks[index].x;
-            leftIY += landmarks[index].y;
+            leftIX +=
+            landmarks[index].x;
+
+            leftIY +=
+            landmarks[index].y;
 
         }
 
 
-        leftIX /= leftIris.length;
-        leftIY /= leftIris.length;
+        leftIX /=
+        leftIris.length;
+
+        leftIY /=
+        leftIris.length;
 
 
         /*
-           Sol göz kənarları
+           SOL GÖZ KƏNARLARI
         */
 
         const leftOuter =
-            landmarks[33];
+        landmarks[33];
 
         const leftInner =
-            landmarks[133];
-
-
-        /*
-           Sol göz üst-alt
-        */
+        landmarks[133];
 
         const leftTop =
-            landmarks[159];
+        landmarks[159];
 
         const leftBottom =
-            landmarks[145];
+        landmarks[145];
 
 
         /*
-           Sağ göz
+           SAĞ İRİS
         */
 
         const rightIris = [
@@ -573,129 +555,130 @@ function getEyeFeatures(landmarks){
         let rightIY = 0;
 
 
-        for(const index of rightIris){
+        for(
+            const index
+            of rightIris
+        ){
 
-            rightIX += landmarks[index].x;
-            rightIY += landmarks[index].y;
+            rightIX +=
+            landmarks[index].x;
+
+            rightIY +=
+            landmarks[index].y;
 
         }
 
 
-        rightIX /= rightIris.length;
-        rightIY /= rightIris.length;
+        rightIX /=
+        rightIris.length;
+
+        rightIY /=
+        rightIris.length;
 
 
         /*
-           Sağ göz kənarları
+           SAĞ GÖZ
         */
 
         const rightOuter =
-            landmarks[362];
+        landmarks[362];
 
         const rightInner =
-            landmarks[263];
-
-
-        /*
-           Sağ göz üst-alt
-        */
+        landmarks[263];
 
         const rightTop =
-            landmarks[386];
+        landmarks[386];
 
         const rightBottom =
-            landmarks[374];
+        landmarks[374];
 
 
         /*
-           Gözün eni
+           ÖLÇÜLƏR
         */
 
         const leftWidth =
-            Math.max(
-                Math.abs(
-                    leftInner.x -
-                    leftOuter.x
-                ),
-                0.0001
-            );
+        Math.max(
+
+            Math.abs(
+                leftInner.x -
+                leftOuter.x
+            ),
+
+            0.0001
+
+        );
 
 
         const rightWidth =
-            Math.max(
-                Math.abs(
-                    rightInner.x -
-                    rightOuter.x
-                ),
-                0.0001
-            );
+        Math.max(
 
+            Math.abs(
+                rightInner.x -
+                rightOuter.x
+            ),
 
-        /*
-           Gözün hündürlüyü
-        */
+            0.0001
+
+        );
+
 
         const leftHeight =
-            Math.max(
-                Math.abs(
-                    leftBottom.y -
-                    leftTop.y
-                ),
-                0.0001
-            );
+        Math.max(
+
+            Math.abs(
+                leftBottom.y -
+                leftTop.y
+            ),
+
+            0.0001
+
+        );
 
 
         const rightHeight =
-            Math.max(
-                Math.abs(
-                    rightBottom.y -
-                    rightTop.y
-                ),
-                0.0001
-            );
+        Math.max(
+
+            Math.abs(
+                rightBottom.y -
+                rightTop.y
+            ),
+
+            0.0001
+
+        );
 
 
         /*
-           İrisin göz daxilində
-           horizontal mövqeyi
+           İRİSİN GÖZ İÇİNDƏKİ
+           NİSBİ MÖVQEYİ
         */
 
         const leftX =
-            (leftIX - leftOuter.x) /
-            leftWidth;
+        (leftIX - leftOuter.x)
+        / leftWidth;
 
 
         const rightX =
-            (rightIX - rightOuter.x) /
-            rightWidth;
+        (rightIX - rightOuter.x)
+        / rightWidth;
 
-
-        /*
-           İrisin göz daxilində
-           vertical mövqeyi
-        */
 
         const leftY =
-            (leftIY - leftTop.y) /
-            leftHeight;
+        (leftIY - leftTop.y)
+        / leftHeight;
 
 
         const rightY =
-            (rightIY - rightTop.y) /
-            rightHeight;
+        (rightIY - rightTop.y)
+        / rightHeight;
 
 
         /*
-           İki gözün ortalaması
+           ORTA GÖSTƏRİCİLƏR
         */
 
         return {
-
-            x:
-                (leftX + rightX) / 2,
-
-            y:
-                (leftY + rightY) / 2,
 
             lx:leftX,
 
@@ -703,7 +686,13 @@ function getEyeFeatures(landmarks){
 
             rx:rightX,
 
-            ry:rightY
+            ry:rightY,
+
+            x:
+            (leftX + rightX) / 2,
+
+            y:
+            (leftY + rightY) / 2
 
         };
 
@@ -716,12 +705,12 @@ function getEyeFeatures(landmarks){
 }
 
 
-
 /* =====================================================
-   FACE MESH NƏTİCƏLƏRİ
+   FACE MESH
 ===================================================== */
 
-faceMesh.onResults(function(results){
+faceMesh.onResults(
+function(results){
 
     if(!running){
         return;
@@ -739,11 +728,11 @@ faceMesh.onResults(function(results){
 
 
     const landmarks =
-        results.multiFaceLandmarks[0];
+    results.multiFaceLandmarks[0];
 
 
     const eye =
-        getEyeFeatures(landmarks);
+    getEyeFeatures(landmarks);
 
 
     if(!eye){
@@ -760,15 +749,12 @@ faceMesh.onResults(function(results){
         currentSamples.push({
 
             x:eye.x,
-
             y:eye.y,
 
             lx:eye.lx,
-
             ly:eye.ly,
 
             rx:eye.rx,
-
             ry:eye.ry
 
         });
@@ -779,20 +765,25 @@ faceMesh.onResults(function(results){
 
 
     /*
-       NORMAL GÖZ İZLƏMƏ
+       GÖZ İZLƏMƏ
     */
 
-    if(calibrationData.length >= 5){
+    if(
+        calibrationData.length >= 7
+    ){
 
         const position =
-            predictGaze(eye);
+        predictGaze(eye);
 
 
         if(position){
 
             updateGaze(
+
                 position.x,
+
                 position.y
+
             );
 
         }
@@ -802,52 +793,52 @@ faceMesh.onResults(function(results){
 });
 
 
-
 /* =====================================================
-   KAMERA + SİSTEMİ BAŞLAT
+   KAMERA BAŞLAT
 ===================================================== */
 
 async function startSystem(){
 
     startButton.style.display =
-        "none";
+    "none";
 
 
     statusBox.innerText =
-        "Kamera açılır...";
+    "Kamera açılır...";
 
 
     try{
 
-        /*
-           Kameranı birbaşa video elementinə bağlayırıq.
-
-           Ayrı getUserMedia açıb sonra bağlamırıq.
-           Bu mobil telefonlarda problem yarada bilər.
-        */
-
         const stream =
-            await navigator.mediaDevices.getUserMedia({
+        await navigator.mediaDevices
+        .getUserMedia({
 
-                video:{
-                    facingMode:"user",
+            video:{
 
-                    width:{
-                        ideal:640
-                    },
+                facingMode:"user",
 
-                    height:{
-                        ideal:480
-                    }
+                width:{
+                    ideal:1280
                 },
 
-                audio:false
+                height:{
+                    ideal:720
+                },
 
-            });
+                frameRate:{
+                    ideal:30,
+                    max:30
+                }
+
+            },
+
+            audio:false
+
+        });
 
 
         video.srcObject =
-            stream;
+        stream;
 
 
         await video.play();
@@ -857,71 +848,61 @@ async function startSystem(){
 
 
         statusBox.innerText =
-            "Kamera hazırdır";
+        "Kamera hazırdır";
 
-
-        /*
-           MediaPipe Camera
-        */
 
         camera =
-            new Camera(
+        new Camera(
 
-                video,
+            video,
 
-                {
+            {
 
-                    onFrame:
-                    async function(){
+                onFrame:
+                async function(){
 
-                        if(processing){
-                            return;
-                        }
+                    if(processing){
+                        return;
+                    }
 
-                        processing = true;
 
-                        try{
+                    processing = true;
 
-                            await faceMesh.send({
 
-                                image:video
+                    try{
 
-                            });
+                        await faceMesh.send({
 
-                        }catch(error){
+                            image:video
 
-                            console.error(error);
+                        });
 
-                        }
+                    }catch(error){
 
-                        processing = false;
+                        console.error(error);
 
-                    },
+                    }
 
-                    width:640,
 
-                    height:480
+                    processing = false;
 
-                }
+                },
 
-            );
+                width:1280,
+
+                height:720
+
+            }
+
+        );
 
 
         camera.start();
 
 
-        /*
-           Kameranın üzünü tapması üçün
-           bir az vaxt veririk.
-        */
-
         setTimeout(
 
-            function(){
-
-                startCalibration();
-
-            },
+            startCalibration,
 
             1800
 
@@ -931,22 +912,21 @@ async function startSystem(){
     }catch(error){
 
         console.error(
-            "KAMERA XƏTASI:",
+            "KAMERA:",
             error
         );
 
 
         statusBox.innerText =
-            "Kameraya icazə verilmədi";
+        "Kameraya icazə verilmədi";
 
 
         startButton.style.display =
-            "block";
+        "block";
 
     }
 
 }
-
 
 
 /* =====================================================
@@ -957,16 +937,18 @@ function startCalibration(){
 
     calibrationData = [];
 
-    calibrationCollecting = false;
+    calibrationCollecting =
+    false;
+
 
     calibration.style.display =
-        "block";
+    "block";
 
 
     const points =
-        [
-            ...document.querySelectorAll(".point")
-        ];
+    [
+        ...document.querySelectorAll(".point")
+    ];
 
 
     let index = 0;
@@ -974,7 +956,9 @@ function startCalibration(){
 
     function nextPoint(){
 
-        if(index >= points.length){
+        if(
+            index >= points.length
+        ){
 
             finishCalibration();
 
@@ -984,81 +968,70 @@ function startCalibration(){
 
 
         const point =
-            points[index];
+        points[index];
 
 
         const rect =
-            point.getBoundingClientRect();
+        point.getBoundingClientRect();
 
 
         const targetX =
-            rect.left +
-            rect.width / 2;
+        rect.left +
+        rect.width / 2;
 
 
         const targetY =
-            rect.top +
-            rect.height / 2;
+        rect.top +
+        rect.height / 2;
 
-
-        /*
-           Əvvəlki nümunələri silirik.
-        */
 
         currentSamples = [];
 
 
-        /*
-           Nöqtəyə baxmağa
-           hazırlaşırıq.
-        */
-
         calibrationCollecting =
-            false;
+        false;
 
 
         statusBox.innerText =
-            "Nöqtəyə bax  " +
-            (index + 1) +
-            " / " +
-            points.length;
+        "Nöqtəyə bax  " +
+        (index + 1) +
+        " / " +
+        points.length;
 
 
         /*
-           500 ms gözləyirik.
-
-           Sonra nümunə toplama başlayır.
+           Xəstəyə nöqtəyə
+           fokuslanmaq üçün vaxt.
         */
 
-        setTimeout(function(){
+        setTimeout(
+        function(){
 
             currentSamples = [];
 
             calibrationCollecting =
-                true;
+            true;
 
 
             /*
-               1800 ms nümunə yığılır.
+               2200 ms nümunə yığırıq.
             */
 
-            setTimeout(function(){
+            setTimeout(
+            function(){
 
                 calibrationCollecting =
-                    false;
+                false;
 
 
-                /*
-                   Nümunələr kifayətdirsə
-                   ortalamasını götürürük.
-                */
-
-                if(currentSamples.length >= 10){
+                if(
+                    currentSamples.length >= 12
+                ){
 
                     const average =
-                        getAverageSample(
-                            currentSamples
-                        );
+                    getAverageSample(
+                        currentSamples
+                    );
 
 
                     calibrationData.push({
@@ -1077,23 +1050,19 @@ function startCalibration(){
                 index++;
 
 
-                /*
-                   Növbəti nöqtəyə keçirik.
-                */
-
                 setTimeout(
 
                     nextPoint,
 
-                    300
+                    350
 
                 );
 
 
-            },1800);
+            },2200);
 
 
-        },500);
+        },600);
 
     }
 
@@ -1103,7 +1072,6 @@ function startCalibration(){
 }
 
 
-
 /* =====================================================
    ORTA NÜMUNƏ
 ===================================================== */
@@ -1111,9 +1079,28 @@ function startCalibration(){
 function getAverageSample(samples){
 
     /*
-       Kənardakı səhv nümunələri
-       azaltmaq üçün ortalama.
+       İlk və son hissələrdə
+       baş hərəkəti ola bildiyi üçün
+       orta hissədən istifadə edirik.
     */
+
+    let start =
+    Math.floor(
+        samples.length * 0.15
+    );
+
+
+    let end =
+    Math.floor(
+        samples.length * 0.85
+    );
+
+
+    if(end <= start){
+        start = 0;
+        end = samples.length;
+    }
+
 
     let sx = 0;
     let sy = 0;
@@ -1125,7 +1112,18 @@ function getAverageSample(samples){
     let sry = 0;
 
 
-    for(const sample of samples){
+    let count = 0;
+
+
+    for(
+        let i=start;
+        i<end;
+        i++
+    ){
+
+        const sample =
+        samples[i];
+
 
         sx += sample.x;
         sy += sample.y;
@@ -1136,25 +1134,21 @@ function getAverageSample(samples){
         srx += sample.rx;
         sry += sample.ry;
 
+
+        count++;
+
     }
-
-
-    const count =
-        samples.length;
 
 
     return {
 
         x:sx/count,
-
         y:sy/count,
 
         lx:slx/count,
-
         ly:sly/count,
 
         rx:srx/count,
-
         ry:sry/count
 
     };
@@ -1162,252 +1156,509 @@ function getAverageSample(samples){
 }
 
 
-
 /* =====================================================
-   KALİBRASİYANIN BİTMƏSİ
+   XƏTTİ REGRESSİYA
 ===================================================== */
 
-function finishCalibration(){
-
-    calibrationCollecting =
-        false;
-
-
-    calibration.style.display =
-        "none";
-
-
-    choices.style.display =
-        "flex";
-
-
-    progress.style.display =
-        "block";
-
-
-    gazeX = null;
-    gazeY = null;
-
-
-    statusBox.innerText =
-        "Hazırdır — düyməyə bax";
-
+function getFeatureVector(f){
 
     /*
-       Əgər az nümunə yığılıbsa
+       5 əsas göstərici:
+
+       1
+       sol X
+       sol Y
+       sağ X
+       sağ Y
+
+       Bu 9 kalibrasiya nöqtəsindən
+       ekran koordinatı öyrənilir.
     */
 
-    if(calibrationData.length < 7){
+    return [
 
-        statusBox.innerText =
-            "Kalibrasiya zəif oldu — yenidən başlat";
+        1,
 
+        f.lx,
 
-        console.warn(
-            "Kalibrasiya nöqtələri:",
-            calibrationData.length
-        );
+        f.ly,
 
-    }
+        f.rx,
+
+        f.ry
+
+    ];
 
 }
 
+
+/* =====================================================
+   MATRİS HESABLAMA
+===================================================== */
+
+function transpose(matrix){
+
+    return matrix[0].map(
+        function(_,column){
+
+            return matrix.map(
+                function(row){
+
+                    return row[column];
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+function multiply(A,B){
+
+    const result = [];
+
+    for(
+        let i=0;
+        i<A.length;
+        i++
+    ){
+
+        result[i] = [];
+
+        for(
+            let j=0;
+            j<B[0].length;
+            j++
+        ){
+
+            let sum = 0;
+
+            for(
+                let k=0;
+                k<B.length;
+                k++
+            ){
+
+                sum +=
+                A[i][k] *
+                B[k][j];
+
+            }
+
+            result[i][j] =
+            sum;
+
+        }
+
+    }
+
+    return result;
+
+}
+
+
+/*
+   Kiçik matrisin tərsini
+   Gauss-Jordan ilə tapırıq.
+*/
+
+function inverse(matrix){
+
+    const n =
+    matrix.length;
+
+
+    const a =
+    matrix.map(
+        function(row,i){
+
+            return row.slice().concat(
+
+                Array.from(
+                    {length:n},
+                    function(_,j){
+
+                        return i === j
+                        ? 1
+                        : 0;
+
+                    }
+                )
+
+            );
+
+        }
+    );
+
+
+    for(
+        let i=0;
+        i<n;
+        i++
+    ){
+
+        let maxRow = i;
+
+
+        for(
+            let r=i+1;
+            r<n;
+            r++
+        ){
+
+            if(
+                Math.abs(a[r][i]) >
+                Math.abs(a[maxRow][i])
+            ){
+
+                maxRow = r;
+
+            }
+
+        }
+
+
+        if(
+            Math.abs(a[maxRow][i]) <
+            0.0000001
+        ){
+
+            return null;
+
+        }
+
+
+        const temp =
+        a[i];
+
+        a[i] =
+        a[maxRow];
+
+        a[maxRow] =
+        temp;
+
+
+        const pivot =
+        a[i][i];
+
+
+        for(
+            let j=0;
+            j<2*n;
+            j++
+        ){
+
+            a[i][j] /=
+            pivot;
+
+        }
+
+
+        for(
+            let r=0;
+            r<n;
+            r++
+        ){
+
+            if(r === i){
+                continue;
+            }
+
+
+            const factor =
+            a[r][i];
+
+
+            for(
+                let j=0;
+                j<2*n;
+                j++
+            ){
+
+                a[r][j] -=
+                factor *
+                a[i][j];
+
+            }
+
+        }
+
+    }
+
+
+    return a.map(
+        function(row){
+
+            return row.slice(n);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   REGRESSİYA MODELİ
+===================================================== */
+
+let modelX = null;
+let modelY = null;
+
+
+function trainModel(){
+
+    if(
+        calibrationData.length < 7
+    ){
+
+        return false;
+
+    }
+
+
+    const X =
+    calibrationData.map(
+        function(point){
+
+            return getFeatureVector(
+                point.features
+            );
+
+        }
+    );
+
+
+    const Yx =
+    calibrationData.map(
+        function(point){
+
+            return [
+                point.screenX
+            ];
+
+        }
+    );
+
+
+    const Yy =
+    calibrationData.map(
+        function(point){
+
+            return [
+                point.screenY
+            ];
+
+        }
+    );
+
+
+    const XT =
+    transpose(X);
+
+
+    const XTX =
+    multiply(
+        XT,
+        X
+    );
+
+
+    /*
+       Kiçik regularizasiya.
+       Bu modelin 9 nöqtədə
+       daha stabil olmasına kömək edir.
+    */
+
+    for(
+        let i=1;
+        i<XTX.length;
+        i++
+    ){
+
+        XTX[i][i] +=
+        0.001;
+
+    }
+
+
+    const inv =
+    inverse(XTX);
+
+
+    if(!inv){
+
+        return false;
+
+    }
+
+
+    modelX =
+    multiply(
+        multiply(
+            inv,
+            XT
+        ),
+        Yx
+    ).map(
+        function(row){
+
+            return row[0];
+
+        }
+    );
+
+
+    modelY =
+    multiply(
+        multiply(
+            inv,
+            XT
+        ),
+        Yy
+    ).map(
+        function(row){
+
+            return row[0];
+
+        }
+    );
+
+
+    return true;
+
+}
 
 
 /* =====================================================
    GÖZÜ EKRANA XƏRİTƏLƏ
 ===================================================== */
 
-/*
-   9 nöqtədən ən yaxın nöqtələri tapırıq.
-
-   Amma artıq sadəcə x/y deyil,
-   4 göz xüsusiyyətindən istifadə olunur.
-*/
-
-function featureDistance(a,b){
-
-    const dx =
-        a.lx - b.features.lx;
-
-    const dy =
-        a.ly - b.features.ly;
-
-    const rx =
-        a.rx - b.features.rx;
-
-    const ry =
-        a.ry - b.features.ry;
-
-
-    return Math.sqrt(
-
-        dx*dx +
-        dy*dy +
-        rx*rx +
-        ry*ry
-
-    );
-
-}
-
-
-
 function predictGaze(eye){
 
-    if(calibrationData.length < 5){
+    if(
+        !modelX ||
+        !modelY
+    ){
 
         return null;
 
     }
 
 
-    /*
-       Bütün kalibrasiya nöqtələrinin
-       məsafəsini hesablayırıq.
-    */
-
-    const distances =
-        calibrationData.map(function(point){
-
-            return {
-
-                point:point,
-
-                distance:
-                    featureDistance(
-                        eye,
-                        point
-                    )
-
-            };
-
-        });
+    const features =
+    getFeatureVector(eye);
 
 
-    distances.sort(function(a,b){
-
-        return a.distance -
-               b.distance;
-
-    });
+    let x = 0;
+    let y = 0;
 
 
-    /*
-       Ən yaxın 4 nöqtəni götürürük.
-    */
-
-    const nearest =
-        distances.slice(0,4);
-
-
-    /*
-       Birbaşa nöqtənin üstündəyiksə
-       həmin nöqtəni qaytar.
-    */
-
-    if(
-        nearest[0].distance <
-        0.015
+    for(
+        let i=0;
+        i<features.length;
+        i++
     ){
 
-        return {
-
-            x:
-                nearest[0].point.screenX,
-
-            y:
-                nearest[0].point.screenY
-
-        };
-
-    }
+        x +=
+        features[i] *
+        modelX[i];
 
 
-    let totalWeight = 0;
-
-    let screenX = 0;
-
-    let screenY = 0;
-
-
-    for(const item of nearest){
-
-        /*
-           Yaxın nöqtəyə daha çox
-           ağırlıq verilir.
-        */
-
-        const weight =
-            1 /
-            Math.pow(
-                Math.max(
-                    item.distance,
-                    0.005
-                ),
-                2
-            );
-
-
-        screenX +=
-            item.point.screenX *
-            weight;
-
-
-        screenY +=
-            item.point.screenY *
-            weight;
-
-
-        totalWeight +=
-            weight;
+        y +=
+        features[i] *
+        modelY[i];
 
     }
-
-
-    screenX /=
-        totalWeight;
-
-
-    screenY /=
-        totalWeight;
 
 
     /*
-       Ekrandan kənara çıxmasına
-       icazə vermirik.
+       Ekranın kənarına çıxmasın.
     */
 
-    screenX =
-        Math.max(
-            0,
-            Math.min(
-                window.innerWidth,
-                screenX
-            )
-        );
+    x =
+    Math.max(
+        0,
+        Math.min(
+            window.innerWidth,
+            x
+        )
+    );
 
 
-    screenY =
-        Math.max(
-            0,
-            Math.min(
-                window.innerHeight,
-                screenY
-            )
-        );
+    y =
+    Math.max(
+        0,
+        Math.min(
+            window.innerHeight,
+            y
+        )
+    );
 
 
     return {
 
-        x:screenX,
+        x:x,
 
-        y:screenY
+        y:y
 
     };
 
 }
 
+
+/* =====================================================
+   KALİBRASİYA BİTDİ
+===================================================== */
+
+function finishCalibration(){
+
+    calibrationCollecting =
+    false;
+
+
+    /*
+       Modeli burada öyrədirik.
+    */
+
+    const success =
+    trainModel();
+
+
+    calibration.style.display =
+    "none";
+
+
+    choices.style.display =
+    "flex";
+
+
+    progress.style.display =
+    "block";
+
+
+    gazeX = null;
+    gazeY = null;
+
+    currentButton = null;
+
+    possibleButton = null;
+
+
+    if(success){
+
+        statusBox.innerText =
+        "Hazırdır — düyməyə bax";
+
+    }else{
+
+        statusBox.innerText =
+        "Kalibrasiya alınmadı";
+
+    }
+
+}
 
 
 /* =====================================================
@@ -1422,19 +1673,18 @@ function updateGaze(x,y){
     ){
 
         gazeX = x;
-
         gazeY = y;
 
     }else{
 
         gazeX +=
-            (x - gazeX) *
-            SMOOTHING;
+        (x-gazeX) *
+        SMOOTHING;
 
 
         gazeY +=
-            (y - gazeY) *
-            SMOOTHING;
+        (y-gazeY) *
+        SMOOTHING;
 
     }
 
@@ -1447,7 +1697,6 @@ function updateGaze(x,y){
 }
 
 
-
 /* =====================================================
    DÜYMƏNİ TAP
 ===================================================== */
@@ -1455,91 +1704,91 @@ function updateGaze(x,y){
 function checkButton(x,y){
 
     if(locked){
-
         return;
-
     }
 
 
     let target = null;
 
     let bestDistance =
-        Infinity;
+    Infinity;
 
 
-    for(const button of buttons){
+    for(
+        const button
+        of buttons
+    ){
 
         const rect =
-            button.getBoundingClientRect();
+        button.getBoundingClientRect();
 
 
         /*
-           Bir az geniş zona yaradırıq.
+           Böyük qəbul zonası.
 
-           Məsələn göz düymənin tam
-           kənarına düşsə belə qəbul edir.
+           Düymənin özündən
+           55 px kənara qədər.
         */
 
-        const tolerance = 35;
+        const tolerance =
+        55;
 
 
         const left =
-            rect.left -
-            tolerance;
+        rect.left -
+        tolerance;
 
 
         const right =
-            rect.right +
-            tolerance;
+        rect.right +
+        tolerance;
 
 
         const top =
-            rect.top -
-            tolerance;
+        rect.top -
+        tolerance;
 
 
         const bottom =
-            rect.bottom +
-            tolerance;
+        rect.bottom +
+        tolerance;
 
 
         const inside =
-            x >= left &&
-            x <= right &&
-            y >= top &&
-            y <= bottom;
+        x >= left &&
+        x <= right &&
+        y >= top &&
+        y <= bottom;
 
 
         if(!inside){
-
             continue;
-
         }
 
 
         const cx =
-            rect.left +
-            rect.width / 2;
+        rect.left +
+        rect.width / 2;
 
 
         const cy =
-            rect.top +
-            rect.height / 2;
+        rect.top +
+        rect.height / 2;
 
 
         const dx =
-            x - cx;
+        x-cx;
 
 
         const dy =
-            y - cy;
+        y-cy;
 
 
         const distance =
-            Math.sqrt(
-                dx*dx +
-                dy*dy
-            );
+        Math.sqrt(
+            dx*dx +
+            dy*dy
+        );
 
 
         if(
@@ -1548,10 +1797,10 @@ function checkButton(x,y){
         ){
 
             bestDistance =
-                distance;
+            distance;
 
             target =
-                button;
+            button;
 
         }
 
@@ -1559,30 +1808,40 @@ function checkButton(x,y){
 
 
     /*
-       Heç bir düyməyə baxmır.
+       Heç bir düymə yoxdursa.
     */
 
     if(!target){
 
+        possibleButton =
+        null;
+
+
+        possibleButtonTime =
+        0;
+
+
         currentButton =
-            null;
+        null;
 
 
         lookStart =
-            0;
+        0;
 
 
-        buttons.forEach(function(button){
+        buttons.forEach(
+            function(button){
 
-            button.classList.remove(
-                "active"
-            );
+                button.classList.remove(
+                    "active"
+                );
 
-        });
+            }
+        );
 
 
         bar.style.width =
-            "0%";
+        "0%";
 
 
         return;
@@ -1591,7 +1850,7 @@ function checkButton(x,y){
 
 
     /*
-       Yeni düymə.
+       Yeni düymə ehtimalı.
     */
 
     if(
@@ -1599,21 +1858,58 @@ function checkButton(x,y){
         currentButton
     ){
 
-        currentButton =
+        if(
+            possibleButton !==
+            target
+        ){
+
+            possibleButton =
             target;
+
+            possibleButtonTime =
+            Date.now();
+
+            return;
+
+        }
+
+
+        /*
+           250 ms eyni düymədə qalmalıdır.
+        */
+
+        if(
+            Date.now() -
+            possibleButtonTime <
+            SWITCH_DELAY
+        ){
+
+            return;
+
+        }
+
+
+        currentButton =
+        target;
 
 
         lookStart =
-            Date.now();
+        Date.now();
 
 
-        buttons.forEach(function(button){
+        possibleButton =
+        null;
 
-            button.classList.remove(
-                "active"
-            );
 
-        });
+        buttons.forEach(
+            function(button){
+
+                button.classList.remove(
+                    "active"
+                );
+
+            }
+        );
 
 
         target.classList.add(
@@ -1622,7 +1918,7 @@ function checkButton(x,y){
 
 
         bar.style.width =
-            "0%";
+        "0%";
 
 
         return;
@@ -1631,29 +1927,29 @@ function checkButton(x,y){
 
 
     /*
-       Eyni düyməyə baxmağa davam edir.
+       Eyni düyməyə baxır.
     */
 
     const elapsed =
-        Date.now() -
-        lookStart;
+    Date.now() -
+    lookStart;
 
 
     const percent =
-        Math.min(
+    Math.min(
 
-            100,
+        100,
 
-            (
-                elapsed /
-                DWELL_TIME
-            ) * 100
+        (
+            elapsed /
+            DWELL_TIME
+        ) * 100
 
-        );
+    );
 
 
     bar.style.width =
-        percent + "%";
+    percent + "%";
 
 
     /*
@@ -1674,7 +1970,6 @@ function checkButton(x,y){
 }
 
 
-
 /* =====================================================
    SEÇİM
 ===================================================== */
@@ -1682,9 +1977,7 @@ function checkButton(x,y){
 function selectButton(button){
 
     if(locked){
-
         return;
-
     }
 
 
@@ -1692,39 +1985,38 @@ function selectButton(button){
 
 
     const action =
-        button.dataset.action;
+    button.dataset.action;
 
 
-    if(action === "YES"){
+    if(
+        action === "YES"
+    ){
 
         statusBox.innerText =
-            "✅ HƏ";
+        "✅ HƏ";
 
     }
 
 
-    if(action === "CALL"){
+    if(
+        action === "CALL"
+    ){
 
         statusBox.innerText =
-            "🚨 PALATA 402 — OTAĞA GƏL";
+        "🚨 PALATA 402 — OTAĞA GƏL";
 
     }
 
 
-    if(action === "NO"){
+    if(
+        action === "NO"
+    ){
 
         statusBox.innerText =
-            "❌ YOX";
+        "❌ YOX";
 
     }
 
-
-    /*
-       Hazırda sadəcə test üçündür.
-       Daha sonra CALL düyməsini backend-ə
-       qoşub tibb bacısının telefonuna
-       bildiriş göndərə bilərik.
-    */
 
     console.log(
         "PALATA 402 →",
@@ -1733,28 +2025,37 @@ function selectButton(button){
 
 
     bar.style.width =
-        "100%";
+    "100%";
 
 
-    setTimeout(function(){
+    setTimeout(
+    function(){
 
         locked = false;
 
 
         currentButton =
-            null;
+        null;
+
+
+        possibleButton =
+        null;
+
+
+        possibleButtonTime =
+        0;
 
 
         lookStart =
-            0;
+        0;
 
 
         gazeX =
-            null;
+        null;
 
 
         gazeY =
-            null;
+        null;
 
 
         button.classList.remove(
@@ -1763,18 +2064,16 @@ function selectButton(button){
 
 
         bar.style.width =
-            "0%"
-        ;
+        "0%";
 
 
         statusBox.innerText =
-            "Hazırdır — düyməyə bax";
+        "Hazırdır — düyməyə bax";
 
 
     },1200);
 
 }
-
 
 
 /* =====================================================
