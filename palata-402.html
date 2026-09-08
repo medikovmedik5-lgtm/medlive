@@ -2,13 +2,19 @@
 <html lang="az">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
 
 <title>MEDELIN — PALATA 402</title>
 
 <script src="https://webgazer.cs.brown.edu/webgazer.js"></script>
 
 <style>
+
 *{
     box-sizing:border-box;
     -webkit-tap-highlight-color:transparent;
@@ -33,7 +39,7 @@ header{
 }
 
 #status{
-    height:60px;
+    height:55px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -70,34 +76,41 @@ header{
     border:4px solid white;
     border-radius:50%;
     transform:translate(-50%,-50%);
-    box-shadow:0 0 0 6px rgba(255,0,0,.2);
+    box-shadow:0 0 0 5px rgba(255,0,0,.2);
 }
 
 #choices{
     display:none;
-    height:calc(100vh - 125px);
-    padding:20px;
-    gap:18px;
+    height:calc(100vh - 120px);
+    padding:25px 20px;
+    gap:22px;
     align-items:center;
     justify-content:center;
     flex-direction:column;
 }
 
 .choice{
-    width:90vw;
+    width:88vw;
     max-width:520px;
-    height:135px;
+    height:125px;
+
     border:0;
     border-radius:25px;
+
     color:white;
     font-size:38px;
     font-weight:bold;
-    transition:transform .15s,box-shadow .15s;
+
+    transition:
+        transform .15s ease,
+        box-shadow .15s ease;
 }
 
 .choice.active{
-    transform:scale(1.04);
-    box-shadow:0 0 0 8px rgba(0,0,0,.18);
+    transform:scale(1.035);
+
+    box-shadow:
+        0 0 0 7px rgba(0,0,0,.20);
 }
 
 .yes{
@@ -114,13 +127,17 @@ header{
 
 #progress{
     display:none;
+
     position:fixed;
-    left:5%;
-    bottom:15px;
-    width:90%;
-    height:13px;
+    left:10%;
+    bottom:18px;
+
+    width:80%;
+    height:12px;
+
     background:#ddd;
     border-radius:20px;
+
     overflow:hidden;
     z-index:200;
 }
@@ -131,7 +148,11 @@ header{
     background:#0b7285;
 }
 
-/* Kamera və WebGazer görüntüsü ekranda görünməsin */
+/*
+   WEBGAZER KAMERA GÖRÜNTÜSÜ
+   EKRANDA GÖRÜNMƏSİN
+*/
+
 #webgazerVideoContainer,
 #webgazerVideoFeed,
 #webgazerFaceOverlay,
@@ -139,8 +160,10 @@ header{
 #webgazerGazeDot{
     display:none !important;
 }
+
 </style>
 </head>
+
 
 <body>
 
@@ -157,35 +180,83 @@ header{
 </button>
 
 
+<!-- =========================
+     KALİBRASİYA
+========================= -->
+
 <div id="calibration">
 
-    <div class="point" style="left:8%;top:12%"></div>
-    <div class="point" style="left:50%;top:12%"></div>
-    <div class="point" style="left:92%;top:12%"></div>
+    <div class="point"
+         style="left:10%;top:15%">
+    </div>
 
-    <div class="point" style="left:8%;top:50%"></div>
-    <div class="point" style="left:50%;top:50%"></div>
-    <div class="point" style="left:92%;top:50%"></div>
+    <div class="point"
+         style="left:50%;top:15%">
+    </div>
 
-    <div class="point" style="left:8%;top:88%"></div>
-    <div class="point" style="left:50%;top:88%"></div>
-    <div class="point" style="left:92%;top:88%"></div>
+    <div class="point"
+         style="left:90%;top:15%">
+    </div>
+
+
+    <div class="point"
+         style="left:10%;top:50%">
+    </div>
+
+    <div class="point"
+         style="left:50%;top:50%">
+    </div>
+
+    <div class="point"
+         style="left:90%;top:50%">
+    </div>
+
+
+    <div class="point"
+         style="left:10%;top:85%">
+    </div>
+
+    <div class="point"
+         style="left:50%;top:85%">
+    </div>
+
+    <div class="point"
+         style="left:90%;top:85%">
+    </div>
 
 </div>
 
 
+<!-- =========================
+     DÜYMƏLƏR
+========================= -->
+
 <div id="choices">
 
-    <button class="choice yes" data-action="YES">
+    <button
+        class="choice yes"
+        data-action="YES">
+
         HƏ
+
     </button>
 
-    <button class="choice call" data-action="CALL">
+
+    <button
+        class="choice call"
+        data-action="CALL">
+
         🚨 OTAĞA GƏL
+
     </button>
 
-    <button class="choice no" data-action="NO">
+
+    <button
+        class="choice no"
+        data-action="NO">
+
         YOX
+
     </button>
 
 </div>
@@ -198,72 +269,118 @@ header{
 
 <script>
 
-const statusBox = document.getElementById("status");
-const startButton = document.getElementById("start");
-const calibration = document.getElementById("calibration");
-const choices = document.getElementById("choices");
-const progress = document.getElementById("progress");
-const bar = document.getElementById("bar");
+/* =========================
+   ELEMENTLƏR
+========================= */
 
-const buttons = [
-    ...document.querySelectorAll(".choice")
-];
+const statusBox =
+    document.getElementById("status");
+
+const startButton =
+    document.getElementById("start");
+
+const calibration =
+    document.getElementById("calibration");
+
+const choices =
+    document.getElementById("choices");
+
+const progress =
+    document.getElementById("progress");
+
+const bar =
+    document.getElementById("bar");
+
+const buttons =
+    [...document.querySelectorAll(".choice")];
 
 
 /* =========================
    AYARLAR
 ========================= */
 
-const DWELL_TIME = 1800;
+/*
+   1.6 saniyə baxış
+*/
 
-/* Daha güclü stabilizasiya */
-const SMOOTHING = 0.08;
+const DWELL_TIME = 1600;
 
-/* Düymənin ətrafında geniş zona */
-const EXTRA_ZONE = 85;
+
+/*
+   Göz hərəkətini yumşaldırıq.
+
+   0.10 = daha stabil
+*/
+
+const SMOOTHING = 0.10;
+
+
+/*
+   Düymənin normal qəbul sahəsi.
+   Əvvəlki kimi həddindən artıq böyük deyil.
+*/
+
+const EXTRA_ZONE = 25;
+
+
+/*
+   Yeni düyməyə keçmək üçün
+   kiçik təhlükəsizlik gecikməsi.
+*/
+
+const SWITCH_DELAY = 300;
 
 
 /* =========================
-   DAXİLİ DƏYİŞƏNLƏR
+   DƏYİŞƏNLƏR
 ========================= */
 
 let smoothX = null;
 let smoothY = null;
 
 let currentButton = null;
+
 let currentStart = 0;
 
 let locked = false;
 
 
 /* =========================
-   SƏS TAM SÖNDÜRÜLÜR
+   SƏS YOX
 ========================= */
 
-if ("speechSynthesis" in window) {
+if(
+    "speechSynthesis" in window
+){
+
     speechSynthesis.cancel();
+
 }
 
 
 /* =========================
-   GÖZ İZLƏMƏNİ BAŞLAT
+   WEBGAZER BAŞLAT
 ========================= */
 
 async function startEyeTracking(){
 
-    startButton.style.display = "none";
+    startButton.style.display =
+        "none";
 
     statusBox.innerText =
-        "Kamera və göz izləmə hazırlanır...";
+        "Kamera hazırlanır...";
+
 
     try{
 
         /*
-         Kameranı ayrıca açmırıq.
-         WebGazer özü açır.
+           BURA ƏVVƏLKİ İŞLƏYƏN
+           SİSTEMDİR.
+
+           Kameranı ayrıca açmırıq.
         */
 
-        await webgazer
+        webgazer
             .setRegression("ridge")
             .setTracker("TFFacemesh")
             .saveDataAcrossSessions(false)
@@ -271,26 +388,32 @@ async function startEyeTracking(){
             .showVideo(false)
             .showFaceOverlay(false)
             .showFaceFeedbackBox(false)
-            .showPredictionPoints(false)
-            .begin();
+            .showPredictionPoints(false);
+
+
+        await webgazer.begin();
 
 
         statusBox.innerText =
             "Kalibrasiya başlayır...";
 
+
         startCalibration();
 
-    }
-    catch(error){
 
-        console.error("WEBGAZER ERROR:",error);
+    }catch(error){
+
+        console.error(error);
+
 
         statusBox.innerText =
             "Kamera açıla bilmədi";
 
+
         startButton.style.display =
             "block";
     }
+
 }
 
 
@@ -303,29 +426,44 @@ function startCalibration(){
     calibration.style.display =
         "block";
 
+
     const points =
-        [...document.querySelectorAll(".point")];
+        [
+            ...document.querySelectorAll(".point")
+        ];
+
 
     let index = 0;
 
 
     function nextPoint(){
 
-        if(index >= points.length){
+        /*
+           Bütün nöqtələr bitdi
+        */
+
+        if(
+            index >= points.length
+        ){
 
             calibration.style.display =
                 "none";
 
+
             choices.style.display =
                 "flex";
+
 
             progress.style.display =
                 "block";
 
+
             statusBox.innerText =
                 "Hazırdır — düyməyə bax";
 
-            startGazeTracking();
+
+            startGaze();
+
 
             return;
         }
@@ -333,6 +471,7 @@ function startCalibration(){
 
         const point =
             points[index];
+
 
         statusBox.innerText =
             "Nöqtəyə bax  " +
@@ -345,6 +484,10 @@ function startCalibration(){
             Date.now();
 
 
+        /*
+           Hər 100 ms nümunə
+        */
+
         const timer =
             setInterval(()=>{
 
@@ -355,6 +498,7 @@ function startCalibration(){
                 const x =
                     rect.left +
                     rect.width / 2;
+
 
                 const y =
                     rect.top +
@@ -374,19 +518,24 @@ function startCalibration(){
 
                     clearInterval(timer);
 
+
                     index++;
+
 
                     setTimeout(
                         nextPoint,
                         250
                     );
+
                 }
 
             },100);
+
     }
 
 
     nextPoint();
+
 }
 
 
@@ -394,40 +543,93 @@ function startCalibration(){
    DÜYMƏNİ TAP
 ========================= */
 
-function getButtonAt(x,y){
+function findButton(x,y){
 
-    for(const button of buttons){
+    let closest = null;
+
+    let closestDistance =
+        Infinity;
+
+
+    for(
+        const button of buttons
+    ){
 
         const rect =
             button.getBoundingClientRect();
 
 
-        const left =
-            rect.left - EXTRA_ZONE;
+        /*
+           Düymənin mərkəzi
+        */
 
-        const right =
-            rect.right + EXTRA_ZONE;
+        const centerX =
+            rect.left +
+            rect.width / 2;
 
-        const top =
-            rect.top - EXTRA_ZONE;
 
-        const bottom =
-            rect.bottom + EXTRA_ZONE;
+        const centerY =
+            rect.top +
+            rect.height / 2;
 
+
+        /*
+           Əvvəl normal zonanı yoxlayırıq
+        */
+
+        const inside =
+            x >= rect.left - EXTRA_ZONE &&
+            x <= rect.right + EXTRA_ZONE &&
+            y >= rect.top - EXTRA_ZONE &&
+            y <= rect.bottom + EXTRA_ZONE;
+
+
+        if(!inside){
+
+            continue;
+
+        }
+
+
+        /*
+           Mərkəzə məsafə
+        */
+
+        const dx =
+            x - centerX;
+
+        const dy =
+            y - centerY;
+
+
+        const distance =
+            Math.sqrt(
+                dx * dx +
+                dy * dy
+            );
+
+
+        /*
+           Ən yaxın düyməni seç
+        */
 
         if(
-            x >= left &&
-            x <= right &&
-            y >= top &&
-            y <= bottom
+            distance <
+            closestDistance
         ){
 
-            return button;
+            closest =
+                button;
+
+            closestDistance =
+                distance;
         }
+
     }
 
 
-    return null;
+    return closest;
+
 }
 
 
@@ -435,7 +637,7 @@ function getButtonAt(x,y){
    GÖZ İZLƏMƏ
 ========================= */
 
-function startGazeTracking(){
+function startGaze(){
 
     webgazer.setGazeListener(
         function(data){
@@ -444,14 +646,16 @@ function startGazeTracking(){
                 !data ||
                 locked
             ){
+
                 return;
+
             }
 
 
-            const x =
+            let x =
                 Number(data.x);
 
-            const y =
+            let y =
                 Number(data.y);
 
 
@@ -459,15 +663,20 @@ function startGazeTracking(){
                 !Number.isFinite(x) ||
                 !Number.isFinite(y)
             ){
+
                 return;
+
             }
 
 
             /*
-             GÖZ NÖQTƏSİNİ SAKİTLƏŞDİRİRİK
+               GÖZ NÖQTƏSİNİ
+               YUMŞALDIRIQ
             */
 
-            if(smoothX === null){
+            if(
+                smoothX === null
+            ){
 
                 smoothX = x;
                 smoothY = y;
@@ -475,70 +684,102 @@ function startGazeTracking(){
             }
             else{
 
-                smoothX +=
+                smoothX =
+                    smoothX +
                     (x - smoothX) *
                     SMOOTHING;
 
-                smoothY +=
+
+                smoothY =
+                    smoothY +
                     (y - smoothY) *
                     SMOOTHING;
+
             }
 
 
+            /*
+               Hansı düyməyə baxır?
+            */
+
             const target =
-                getButtonAt(
+                findButton(
                     smoothX,
                     smoothY
                 );
 
 
             /*
-             Heç bir düyməyə baxmır
+               Heç bir düymə deyil
             */
 
             if(!target){
 
-                currentButton = null;
-                currentStart = 0;
+                currentButton =
+                    null;
+
+                currentStart =
+                    0;
+
 
                 buttons.forEach(
-                    b => b.classList.remove("active")
+                    button =>
+                        button.classList.remove(
+                            "active"
+                        )
                 );
+
 
                 bar.style.width =
                     "0%";
 
+
                 return;
+
             }
 
 
             /*
-             Yeni düyməyə keçdi
+               YENİ DÜYMƏ
             */
 
-            if(target !== currentButton){
+            if(
+                target !==
+                currentButton
+            ){
 
                 currentButton =
                     target;
 
+
                 currentStart =
                     Date.now();
 
+
                 buttons.forEach(
-                    b => b.classList.remove("active")
+                    button =>
+                        button.classList.remove(
+                            "active"
+                        )
                 );
 
-                target.classList.add("active");
+
+                target.classList.add(
+                    "active"
+                );
+
 
                 bar.style.width =
                     "0%";
 
+
                 return;
+
             }
 
 
             /*
-             Eyni düyməyə baxır
+               EYNİ DÜYMƏDƏ QALIB
             */
 
             const elapsed =
@@ -549,7 +790,9 @@ function startGazeTracking(){
             const percent =
                 Math.min(
                     100,
-                    (elapsed / DWELL_TIME) * 100
+                    elapsed /
+                    DWELL_TIME *
+                    100
                 );
 
 
@@ -558,18 +801,23 @@ function startGazeTracking(){
 
 
             /*
-             1.8 saniyə tamamlandı
+               1.6 saniyə tamamlandı
             */
 
             if(
-                elapsed >= DWELL_TIME
+                elapsed >=
+                DWELL_TIME
             ){
 
-                selectButton(target);
+                selectButton(
+                    target
+                );
+
             }
 
         }
     );
+
 }
 
 
@@ -580,7 +828,9 @@ function startGazeTracking(){
 function selectButton(button){
 
     if(locked){
+
         return;
+
     }
 
 
@@ -591,10 +841,14 @@ function selectButton(button){
         button.dataset.action;
 
 
-    button.classList.add("active");
+    button.classList.add(
+        "active"
+    );
 
 
-    if(action === "CALL"){
+    if(
+        action === "CALL"
+    ){
 
         statusBox.innerText =
             "🚨 PALATA 402 — OTAĞA GƏL";
@@ -602,10 +856,13 @@ function selectButton(button){
         console.log(
             "PALATA 402 → OTAĞA GƏL"
         );
+
     }
 
 
-    if(action === "YES"){
+    if(
+        action === "YES"
+    ){
 
         statusBox.innerText =
             "HƏ seçildi";
@@ -613,10 +870,13 @@ function selectButton(button){
         console.log(
             "PALATA 402 → HƏ"
         );
+
     }
 
 
-    if(action === "NO"){
+    if(
+        action === "NO"
+    ){
 
         statusBox.innerText =
             "YOX seçildi";
@@ -624,6 +884,7 @@ function selectButton(button){
         console.log(
             "PALATA 402 → YOX"
         );
+
     }
 
 
@@ -631,45 +892,44 @@ function selectButton(button){
         "100%";
 
 
+    /*
+       Seçimdən sonra
+       yenidən baxış gözləyirik.
+    */
+
     setTimeout(()=>{
 
         locked = false;
 
-        currentButton = null;
+        currentButton =
+            null;
 
-        currentStart = 0;
+        currentStart =
+            0;
 
-        smoothX = null;
-        smoothY = null;
+        smoothX =
+            null;
+
+        smoothY =
+            null;
+
 
         button.classList.remove(
             "active"
         );
 
+
         bar.style.width =
             "0%";
+
 
         statusBox.innerText =
             "Hazırdır — düyməyə bax";
 
+
     },1200);
+
 }
-
-
-/* =========================
-   ƏL İLƏ TEST
-========================= */
-
-buttons.forEach(button => {
-
-    button.addEventListener(
-        "click",
-        ()=>{
-            selectButton(button);
-        }
-    );
-
-});
 
 
 /* =========================
@@ -679,6 +939,24 @@ buttons.forEach(button => {
 startButton.addEventListener(
     "click",
     startEyeTracking
+);
+
+
+/* =========================
+   BARMAQLA DA TEST
+========================= */
+
+buttons.forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            ()=>{
+                selectButton(button);
+            }
+        );
+
+    }
 );
 
 </script>
