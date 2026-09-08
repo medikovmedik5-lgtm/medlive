@@ -2,504 +2,684 @@
 <html lang="az">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>MEDELIN — PALATA 402</title>
 
 <script src="https://webgazer.cs.brown.edu/webgazer.js"></script>
 
 <style>
-*{box-sizing:border-box}
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
 body{
- margin:0;
- background:#f4f7fa;
- font-family:Arial,sans-serif;
- overflow:hidden;
+    margin:0;
+    background:#f4f7fa;
+    font-family:Arial,sans-serif;
+    overflow:hidden;
 }
+
 header{
- height:65px;
- background:#0b7285;
- color:white;
- display:flex;
- align-items:center;
- justify-content:center;
- font-size:22px;
- font-weight:bold;
+    height:65px;
+    background:#0b7285;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    font-weight:bold;
 }
+
 #status{
- height:60px;
- display:flex;
- align-items:center;
- justify-content:center;
- font-size:18px;
- font-weight:bold;
- text-align:center;
+    height:60px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+    color:#222;
 }
+
 #start{
- display:block;
- margin:20px auto;
- padding:20px 30px;
- border:0;
- border-radius:18px;
- background:#0b7285;
- color:white;
- font-size:20px;
- font-weight:bold;
+    display:block;
+    margin:20px auto;
+    padding:20px 28px;
+    border:0;
+    border-radius:18px;
+    background:#0b7285;
+    color:white;
+    font-size:20px;
+    font-weight:bold;
 }
+
 #calibration{
- display:none;
- position:fixed;
- inset:0;
- z-index:50;
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:100;
 }
+
 .point{
- position:absolute;
- width:30px;
- height:30px;
- background:red;
- border:4px solid white;
- border-radius:50%;
- transform:translate(-50%,-50%);
- box-shadow:0 0 0 6px rgba(255,0,0,.2);
+    position:absolute;
+    width:30px;
+    height:30px;
+    background:red;
+    border:4px solid white;
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+    box-shadow:0 0 0 6px rgba(255,0,0,.2);
 }
+
 #choices{
- display:none;
- height:calc(100vh - 125px);
- padding:20px;
- gap:18px;
- align-items:center;
- justify-content:center;
- flex-direction:column;
+    display:none;
+    height:calc(100vh - 125px);
+    padding:20px;
+    gap:18px;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
 }
+
 .choice{
- width:90vw;
- max-width:520px;
- height:135px;
- border:0;
- border-radius:25px;
- color:white;
- font-size:38px;
- font-weight:bold;
- transition:.15s;
+    width:90vw;
+    max-width:520px;
+    height:135px;
+    border:0;
+    border-radius:25px;
+    color:white;
+    font-size:38px;
+    font-weight:bold;
+    transition:transform .15s,box-shadow .15s;
 }
+
 .choice.active{
- transform:scale(1.05);
- box-shadow:0 0 0 8px rgba(0,0,0,.18);
+    transform:scale(1.04);
+    box-shadow:0 0 0 8px rgba(0,0,0,.18);
 }
-.yes{background:#198754}
-.call{background:#dc3545}
-.no{background:#6c757d}
+
+.yes{
+    background:#198754;
+}
+
+.call{
+    background:#dc3545;
+}
+
+.no{
+    background:#6c757d;
+}
 
 #progress{
- display:none;
- position:fixed;
- bottom:15px;
- left:5%;
- width:90%;
- height:13px;
- background:#ddd;
- border-radius:20px;
- overflow:hidden;
- z-index:100;
-}
-#bar{
- width:0%;
- height:100%;
- background:#0b7285;
+    display:none;
+    position:fixed;
+    left:5%;
+    bottom:15px;
+    width:90%;
+    height:13px;
+    background:#ddd;
+    border-radius:20px;
+    overflow:hidden;
+    z-index:200;
 }
 
+#bar{
+    width:0%;
+    height:100%;
+    background:#0b7285;
+}
+
+/* Kamera və WebGazer görüntüsü ekranda görünməsin */
 #webgazerVideoContainer,
 #webgazerVideoFeed,
 #webgazerFaceOverlay,
 #webgazerFaceFeedbackBox,
 #webgazerGazeDot{
- display:none!important;
+    display:none !important;
 }
 </style>
 </head>
 
 <body>
 
-<header>MEDELIN — PALATA 402</header>
+<header>
+    MEDELIN — PALATA 402
+</header>
 
-<div id="status">Sistem hazır deyil</div>
+<div id="status">
+    Sistem hazır deyil
+</div>
 
-<button id="start">👁️ GÖZ İZLƏMƏNİ BAŞLAT</button>
+<button id="start">
+    👁️ GÖZ İZLƏMƏNİ BAŞLAT
+</button>
+
 
 <div id="calibration">
 
- <div class="point" style="left:8%;top:12%"></div>
- <div class="point" style="left:50%;top:12%"></div>
- <div class="point" style="left:92%;top:12%"></div>
+    <div class="point" style="left:8%;top:12%"></div>
+    <div class="point" style="left:50%;top:12%"></div>
+    <div class="point" style="left:92%;top:12%"></div>
 
- <div class="point" style="left:8%;top:50%"></div>
- <div class="point" style="left:50%;top:50%"></div>
- <div class="point" style="left:92%;top:50%"></div>
+    <div class="point" style="left:8%;top:50%"></div>
+    <div class="point" style="left:50%;top:50%"></div>
+    <div class="point" style="left:92%;top:50%"></div>
 
- <div class="point" style="left:8%;top:88%"></div>
- <div class="point" style="left:50%;top:88%"></div>
- <div class="point" style="left:92%;top:88%"></div>
+    <div class="point" style="left:8%;top:88%"></div>
+    <div class="point" style="left:50%;top:88%"></div>
+    <div class="point" style="left:92%;top:88%"></div>
 
 </div>
+
 
 <div id="choices">
 
- <button class="choice yes" data-action="YES">HƏ</button>
+    <button class="choice yes" data-action="YES">
+        HƏ
+    </button>
 
- <button class="choice call" data-action="CALL">
- 🚨 OTAĞA GƏL
- </button>
+    <button class="choice call" data-action="CALL">
+        🚨 OTAĞA GƏL
+    </button>
 
- <button class="choice no" data-action="NO">YOX</button>
+    <button class="choice no" data-action="NO">
+        YOX
+    </button>
 
 </div>
+
 
 <div id="progress">
- <div id="bar"></div>
+    <div id="bar"></div>
 </div>
+
 
 <script>
 
-const statusBox=document.getElementById("status");
-const start=document.getElementById("start");
-const calibration=document.getElementById("calibration");
-const choices=document.getElementById("choices");
-const progress=document.getElementById("progress");
-const bar=document.getElementById("bar");
-const buttons=[...document.querySelectorAll(".choice")];
+const statusBox = document.getElementById("status");
+const startButton = document.getElementById("start");
+const calibration = document.getElementById("calibration");
+const choices = document.getElementById("choices");
+const progress = document.getElementById("progress");
+const bar = document.getElementById("bar");
 
-let smoothX=null;
-let smoothY=null;
-let current=null;
-let currentStart=0;
-let locked=false;
-
-const DWELL=1500;
-const SMOOTH=.12;
-const EXTRA=75;
+const buttons = [
+    ...document.querySelectorAll(".choice")
+];
 
 
-/* SƏSİ TAM LƏĞV ET */
-if("speechSynthesis" in window){
- speechSynthesis.cancel();
+/* =========================
+   AYARLAR
+========================= */
+
+const DWELL_TIME = 1800;
+
+/* Daha güclü stabilizasiya */
+const SMOOTHING = 0.08;
+
+/* Düymənin ətrafında geniş zona */
+const EXTRA_ZONE = 85;
+
+
+/* =========================
+   DAXİLİ DƏYİŞƏNLƏR
+========================= */
+
+let smoothX = null;
+let smoothY = null;
+
+let currentButton = null;
+let currentStart = 0;
+
+let locked = false;
+
+
+/* =========================
+   SƏS TAM SÖNDÜRÜLÜR
+========================= */
+
+if ("speechSynthesis" in window) {
+    speechSynthesis.cancel();
 }
 
 
-/* KAMERANI ƏVVƏL YOXLAYIRIQ */
-async function cameraCheck(){
+/* =========================
+   GÖZ İZLƏMƏNİ BAŞLAT
+========================= */
 
- statusBox.innerText="Kamera yoxlanılır...";
+async function startEyeTracking(){
 
- try{
+    startButton.style.display = "none";
 
-  const stream=await navigator.mediaDevices.getUserMedia({
-   video:{
-    facingMode:"user",
-    width:{ideal:640},
-    height:{ideal:480}
-   },
-   audio:false
-  });
+    statusBox.innerText =
+        "Kamera və göz izləmə hazırlanır...";
 
-  /* Kamera icazəsi alındı */
-  stream.getTracks().forEach(t=>t.stop());
+    try{
 
-  statusBox.innerText="Kamera hazırdır...";
+        /*
+         Kameranı ayrıca açmırıq.
+         WebGazer özü açır.
+        */
 
-  setTimeout(startWebGazer,500);
+        await webgazer
+            .setRegression("ridge")
+            .setTracker("TFFacemesh")
+            .saveDataAcrossSessions(false)
+            .applyKalmanFilter(true)
+            .showVideo(false)
+            .showFaceOverlay(false)
+            .showFaceFeedbackBox(false)
+            .showPredictionPoints(false)
+            .begin();
 
- }catch(e){
 
-  console.error(e);
+        statusBox.innerText =
+            "Kalibrasiya başlayır...";
 
-  statusBox.innerText=
-   "Kamera açıla bilmədi. Kamera icazəsini yoxla.";
+        startCalibration();
 
-  start.style.display="block";
- }
+    }
+    catch(error){
+
+        console.error("WEBGAZER ERROR:",error);
+
+        statusBox.innerText =
+            "Kamera açıla bilmədi";
+
+        startButton.style.display =
+            "block";
+    }
 }
 
 
-/* WEBGAZER */
-async function startWebGazer(){
+/* =========================
+   KALİBRASİYA
+========================= */
 
- try{
-
-  statusBox.innerText="Göz izləmə hazırlanır...";
-
-  await webgazer
-   .setRegression("ridge")
-   .setTracker("TFFacemesh")
-   .saveDataAcrossSessions(false)
-   .applyKalmanFilter(true)
-   .showVideo(false)
-   .showFaceOverlay(false)
-   .showFaceFeedbackBox(false)
-   .showPredictionPoints(false)
-   .begin();
-
-  statusBox.innerText=
-   "Kalibrasiya başlayır...";
-
-  startCalibration();
-
- }catch(e){
-
-  console.error(e);
-
-  statusBox.innerText=
-   "Göz izləmə başlatmaq olmadı.";
-
-  start.style.display="block";
- }
-}
-
-
-/* KALİBRASİYA */
 function startCalibration(){
 
- calibration.style.display="block";
+    calibration.style.display =
+        "block";
 
- const points=[...document.querySelectorAll(".point")];
+    const points =
+        [...document.querySelectorAll(".point")];
 
- let i=0;
+    let index = 0;
 
- function next(){
 
-  if(i>=points.length){
+    function nextPoint(){
 
-   calibration.style.display="none";
-   choices.style.display="flex";
-   progress.style.display="block";
+        if(index >= points.length){
 
-   statusBox.innerText=
-    "Hazırdır — düyməyə bax";
+            calibration.style.display =
+                "none";
 
-   beginGaze();
+            choices.style.display =
+                "flex";
 
-   return;
-  }
+            progress.style.display =
+                "block";
 
-  const p=points[i];
+            statusBox.innerText =
+                "Hazırdır — düyməyə bax";
 
-  statusBox.innerText=
-   "Qırmızı nöqtəyə bax  "+(i+1)+"/"+points.length;
+            startGazeTracking();
 
-  const started=Date.now();
+            return;
+        }
 
-  const timer=setInterval(()=>{
 
-   const r=p.getBoundingClientRect();
+        const point =
+            points[index];
 
-   webgazer.recordScreenPosition(
-    r.left+r.width/2,
-    r.top+r.height/2,
-    "click"
-   );
+        statusBox.innerText =
+            "Nöqtəyə bax  " +
+            (index + 1) +
+            " / " +
+            points.length;
 
-   if(Date.now()-started>=2200){
 
-    clearInterval(timer);
-    i++;
+        const started =
+            Date.now();
 
-    setTimeout(next,300);
-   }
 
-  },100);
- }
+        const timer =
+            setInterval(()=>{
 
- next();
+                const rect =
+                    point.getBoundingClientRect();
+
+
+                const x =
+                    rect.left +
+                    rect.width / 2;
+
+                const y =
+                    rect.top +
+                    rect.height / 2;
+
+
+                webgazer.recordScreenPosition(
+                    x,
+                    y,
+                    "click"
+                );
+
+
+                if(
+                    Date.now() - started >= 2500
+                ){
+
+                    clearInterval(timer);
+
+                    index++;
+
+                    setTimeout(
+                        nextPoint,
+                        250
+                    );
+                }
+
+            },100);
+    }
+
+
+    nextPoint();
 }
 
 
-/* DÜYMƏ ZONASI */
-function findButton(x,y){
+/* =========================
+   DÜYMƏNİ TAP
+========================= */
 
- for(const b of buttons){
+function getButtonAt(x,y){
 
-  const r=b.getBoundingClientRect();
+    for(const button of buttons){
 
-  if(
-   x>=r.left-EXTRA &&
-   x<=r.right+EXTRA &&
-   y>=r.top-EXTRA &&
-   y<=r.bottom+EXTRA
-  ){
-   return b;
-  }
- }
+        const rect =
+            button.getBoundingClientRect();
 
- return null;
+
+        const left =
+            rect.left - EXTRA_ZONE;
+
+        const right =
+            rect.right + EXTRA_ZONE;
+
+        const top =
+            rect.top - EXTRA_ZONE;
+
+        const bottom =
+            rect.bottom + EXTRA_ZONE;
+
+
+        if(
+            x >= left &&
+            x <= right &&
+            y >= top &&
+            y <= bottom
+        ){
+
+            return button;
+        }
+    }
+
+
+    return null;
 }
 
 
-/* GÖZ İZLƏMƏ */
-function beginGaze(){
+/* =========================
+   GÖZ İZLƏMƏ
+========================= */
 
- webgazer.setGazeListener((data)=>{
+function startGazeTracking(){
 
-  if(!data || locked)return;
+    webgazer.setGazeListener(
+        function(data){
 
-  let x=Number(data.x);
-  let y=Number(data.y);
-
-  if(!Number.isFinite(x)||!Number.isFinite(y))return;
-
-
-  /* ÇOX GÜCLÜ YUMŞALTMA */
-
-  if(smoothX===null){
-
-   smoothX=x;
-   smoothY=y;
-
-  }else{
-
-   smoothX += (x-smoothX)*SMOOTH;
-   smoothY += (y-smoothY)*SMOOTH;
-  }
+            if(
+                !data ||
+                locked
+            ){
+                return;
+            }
 
 
-  const target=findButton(smoothX,smoothY);
+            const x =
+                Number(data.x);
+
+            const y =
+                Number(data.y);
 
 
-  /* Düymədən çıxıbsa */
-
-  if(!target){
-
-   current=null;
-   currentStart=0;
-
-   buttons.forEach(b=>b.classList.remove("active"));
-
-   bar.style.width="0%";
-
-   return;
-  }
+            if(
+                !Number.isFinite(x) ||
+                !Number.isFinite(y)
+            ){
+                return;
+            }
 
 
-  /* Yeni düymə */
+            /*
+             GÖZ NÖQTƏSİNİ SAKİTLƏŞDİRİRİK
+            */
 
-  if(target!==current){
+            if(smoothX === null){
 
-   current=target;
-   currentStart=Date.now();
+                smoothX = x;
+                smoothY = y;
 
-   buttons.forEach(b=>b.classList.remove("active"));
-   target.classList.add("active");
+            }
+            else{
 
-   bar.style.width="0%";
+                smoothX +=
+                    (x - smoothX) *
+                    SMOOTHING;
 
-   return;
-  }
-
-
-  /* Eyni düymədə qalır */
-
-  const elapsed=Date.now()-currentStart;
-
-  const percent=Math.min(
-   100,
-   elapsed/DWELL*100
-  );
-
-  bar.style.width=percent+"%";
+                smoothY +=
+                    (y - smoothY) *
+                    SMOOTHING;
+            }
 
 
-  /* 1.5 saniyə tamamlandı */
+            const target =
+                getButtonAt(
+                    smoothX,
+                    smoothY
+                );
 
-  if(elapsed>=DWELL){
 
-   choose(target);
-  }
+            /*
+             Heç bir düyməyə baxmır
+            */
 
- });
+            if(!target){
+
+                currentButton = null;
+                currentStart = 0;
+
+                buttons.forEach(
+                    b => b.classList.remove("active")
+                );
+
+                bar.style.width =
+                    "0%";
+
+                return;
+            }
+
+
+            /*
+             Yeni düyməyə keçdi
+            */
+
+            if(target !== currentButton){
+
+                currentButton =
+                    target;
+
+                currentStart =
+                    Date.now();
+
+                buttons.forEach(
+                    b => b.classList.remove("active")
+                );
+
+                target.classList.add("active");
+
+                bar.style.width =
+                    "0%";
+
+                return;
+            }
+
+
+            /*
+             Eyni düyməyə baxır
+            */
+
+            const elapsed =
+                Date.now() -
+                currentStart;
+
+
+            const percent =
+                Math.min(
+                    100,
+                    (elapsed / DWELL_TIME) * 100
+                );
+
+
+            bar.style.width =
+                percent + "%";
+
+
+            /*
+             1.8 saniyə tamamlandı
+            */
+
+            if(
+                elapsed >= DWELL_TIME
+            ){
+
+                selectButton(target);
+            }
+
+        }
+    );
 }
 
 
-/* SEÇİM */
-function choose(button){
+/* =========================
+   SEÇİM
+========================= */
 
- if(locked)return;
+function selectButton(button){
 
- locked=true;
-
- const action=button.dataset.action;
-
- button.classList.add("active");
-
- if(action==="CALL"){
-
-  statusBox.innerText=
-   "🚨 PALATA 402 — OTAĞA GƏL";
-
-  console.log(
-   "PALATA 402 → OTAĞA GƏL"
-  );
-
- }
-
- if(action==="YES"){
-
-  statusBox.innerText=
-   "HƏ seçildi";
-
-  console.log(
-   "PALATA 402 → HƏ"
-  );
-
- }
-
- if(action==="NO"){
-
-  statusBox.innerText=
-   "YOX seçildi";
-
-  console.log(
-   "PALATA 402 → YOX"
-  );
- }
-
- bar.style.width="100%";
+    if(locked){
+        return;
+    }
 
 
- /* 1 saniyə sonra yenidən hazır */
+    locked = true;
 
- setTimeout(()=>{
 
-  locked=false;
-  current=null;
-  currentStart=0;
+    const action =
+        button.dataset.action;
 
-  button.classList.remove("active");
 
-  bar.style.width="0%";
+    button.classList.add("active");
 
-  statusBox.innerText=
-   "Hazırdır — düyməyə bax";
 
- },1000);
+    if(action === "CALL"){
+
+        statusBox.innerText =
+            "🚨 PALATA 402 — OTAĞA GƏL";
+
+        console.log(
+            "PALATA 402 → OTAĞA GƏL"
+        );
+    }
+
+
+    if(action === "YES"){
+
+        statusBox.innerText =
+            "HƏ seçildi";
+
+        console.log(
+            "PALATA 402 → HƏ"
+        );
+    }
+
+
+    if(action === "NO"){
+
+        statusBox.innerText =
+            "YOX seçildi";
+
+        console.log(
+            "PALATA 402 → YOX"
+        );
+    }
+
+
+    bar.style.width =
+        "100%";
+
+
+    setTimeout(()=>{
+
+        locked = false;
+
+        currentButton = null;
+
+        currentStart = 0;
+
+        smoothX = null;
+        smoothY = null;
+
+        button.classList.remove(
+            "active"
+        );
+
+        bar.style.width =
+            "0%";
+
+        statusBox.innerText =
+            "Hazırdır — düyməyə bax";
+
+    },1200);
 }
 
 
-/* BAŞLAT */
-start.addEventListener("click",()=>{
+/* =========================
+   ƏL İLƏ TEST
+========================= */
 
- start.style.display="none";
+buttons.forEach(button => {
 
- cameraCheck();
+    button.addEventListener(
+        "click",
+        ()=>{
+            selectButton(button);
+        }
+    );
 
 });
 
 
-/* BARMAQLA DA TEST ET */
-buttons.forEach(b=>{
+/* =========================
+   START
+========================= */
 
- b.addEventListener("click",()=>{
-  choose(b);
- });
-
-});
+startButton.addEventListener(
+    "click",
+    startEyeTracking
+);
 
 </script>
 
