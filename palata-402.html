@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Medelin — Palata 402</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #eef4f9;
+      color: #172033;
+      text-align: center;
+    }
+
+    header {
+      background: #1769aa;
+      color: white;
+      padding: 20px;
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    #cameraBox {
+      width: 260px;
+      margin: 20px auto 10px;
+    }
+
+    #cameraBox video {
+      width: 100%;
+      border-radius: 15px;
+    }
+
+    #status {
+      margin: 15px auto;
+      padding: 14px;
+      max-width: 700px;
+      background: white;
+      border-radius: 12px;
+      font-size: 18px;
+    }
+
+    #calibration {
+      max-width: 700px;
+      margin: 20px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 20px;
+    }
+
+    #calibration button {
+      padding: 15px 25px;
+      font-size: 20px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background: #1769aa;
+      color: white;
+    }
+
+    #question {
+      display: none;
+      margin: 20px auto;
+      max-width: 800px;
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+    }
+
+    #question h2 {
+      font-size: 30px;
+    }
+
+    .choices {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .choice {
+      width: 30%;
+      min-width: 180px;
+      height: 150px;
+      border: none;
+      border-radius: 20px;
+      font-size: 27px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+    }
+
+    #yes {
+      background: #2dbd68;
+    }
+
+    #come {
+      background: #1769aa;
+    }
+
+    #no {
+      background: #e74c3c;
+    }
+
+    .selected {
+      outline: 7px solid #ffd43b;
+      transform: scale(1.05);
+    }
+
+    #gazePoint {
+      position: fixed;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: red;
+      pointer-events: none;
+      display: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 25px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  🏥 MEDELIN — PALATA 402
+</header>
+
+<div id="cameraBox"></div>
+
+<div id="status">
+  📷 Kamera hazırlanır...
+</div>
+
+<div id="calibration">
+  <h2>👁️ Gözlə idarəetmə testi</h2>
+
+  <p>
+    Əvvəl kameraya icazə ver.
+    Sonra ekrandakı nöqtələrə gözünlə bax.
+  </p>
+
+  <button onclick="startEyeTracking()">
+    👁️ GÖZ İZLƏMƏNİ BAŞLAT
+  </button>
+</div>
+
+<div id="question">
+
+  <h2>
+    Tibb bacısı sual verəndə gözünlə cavab seç
+  </h2>
+
+  <div class="choices">
+
+    <button class="choice" id="yes">
+      🟢 HƏ
+    </button>
+
+    <button class="choice" id="come">
+      👩‍⚕️ OTAĞA GƏL
+    </button>
+
+    <button class="choice" id="no">
+      🔴 YOХ
+    </button>
+
+  </div>
+
+  <div id="result">
+    Cavab gözlənilir...
+  </div>
+
+</div>
+
+<div id="gazePoint"></div>
+
+
+<!-- WebGazer -->
+<script src="https://webgazer.cs.brown.edu/webgazer.js"></script>
+
+<script>
+
+let trackingStarted = false;
+
+let lastChoice = null;
+let choiceStartTime = 0;
+let confirmed = false;
+
+
+/* GÖZ İZLƏMƏNİ BAŞLAT */
+
+async function startEyeTracking() {
+
+  if (trackingStarted) return;
+
+  trackingStarted = true;
+
+  document.getElementById("status").innerHTML =
+    "📷 Kamera açılır...";
+
+  try {
+
+    await webgazer
+      .setRegression("ridge")
+      .setTracker("TFFacemesh")
+      .setGazeListener(function(data) {
+
+        if (!data) return;
+
+        const x = data.x;
+        const y = data.y;
+
+        showGazePoint(x, y);
+        checkChoice(x, y);
+
+      })
+      .begin();
+
+    webgazer.showVideoPreview(true);
+    webgazer.showPredictionPoints(false);
+
+    document.getElementById("status").innerHTML =
+      "🟢 Kamera işləyir. İndi gözlə idarəetmə aktivdir.";
+
+    document.getElementById("calibration").style.display =
+      "none";
+
+    document.getElementById("question").style.display =
+      "block";
+
+  } catch(error) {
+
+    console.error(error);
+
+    document.getElementById("status").innerHTML =
+      "🔴 Kamera açıla bilmədi. Brauzerdə kamera icazəsini yoxla.";
+
+  }
+
+}
+
+
+/* GÖZÜN BAXDIĞI NÖQTƏ */
+
+function showGazePoint(x, y) {
+
+  const point = document.getElementById("gazePoint");
+
+  point.style.display = "block";
+
+  point.style.left = x + "px";
+  point.style.top = y + "px";
+
+}
+
+
+/* HANSI DÜYMƏYƏ BAXIR? */
+
+function checkChoice(x, y) {
+
+  if (confirmed) return;
+
+  const buttons = [
+    {
+      element: document.getElementById("yes"),
+      name: "HƏ"
+    },
+    {
+      element: document.getElementById("come"),
+      name: "OTAĞA GƏL"
+    },
+    {
+      element: document.getElementById("no"),
+      name: "YOX"
+    }
+  ];
+
+  let found = null;
+
+  for (const item of buttons) {
+
+    const rect = item.element.getBoundingClientRect();
+
+    if (
+      x >= rect.left &&
+      x <= rect.right &&
+      y >= rect.top &&
+      y <= rect.bottom
+    ) {
+
+      found = item;
+
+      break;
+    }
+  }
+
+
+  if (!found) {
+
+    clearSelection();
+
+    lastChoice = null;
+
+    return;
+  }
+
+
+  if (lastChoice !== found.name) {
+
+    clearSelection();
+
+    found.element.classList.add("selected");
+
+    lastChoice = found.name;
+    choiceStartTime = Date.now();
+
+    document.getElementById("result").innerHTML =
+      "👁️ " + found.name + " seçilir...";
+
+    return;
+  }
+
+
+  const elapsed = Date.now() - choiceStartTime;
+
+
+  /* 2 saniyə baxış saxlanılmalıdır */
+
+  if (elapsed >= 2000) {
+
+    confirmed = true;
+
+    found.element.classList.add("selected");
+
+    document.getElementById("result").innerHTML =
+      "✅ CAVAB: " + found.name;
+
+    speak(found.name);
+
+  }
+
+}
+
+
+/* SEÇİMİ SIFIRLA */
+
+function clearSelection() {
+
+  document.getElementById("yes").classList.remove("selected");
+  document.getElementById("come").classList.remove("selected");
+  document.getElementById("no").classList.remove("selected");
+
+}
+
+
+/* SƏSLƏNDİRMƏ */
+
+function speak(text) {
+
+  const speech = new SpeechSynthesisUtterance(text);
+
+  speech.lang = "az-AZ";
+
+  window.speechSynthesis.speak(speech);
+
+}
+
+
+/* TESTİ YENİDƏN BAŞLATMAQ ÜÇÜN */
+
+function resetTest() {
+
+  confirmed = false;
+
+  lastChoice = null;
+
+  clearSelection();
+
+  document.getElementById("result").innerHTML =
+    "Cavab gözlənilir...";
+
+}
+
+</script>
+
+</body>
+</html>
