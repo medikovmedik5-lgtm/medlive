@@ -51,7 +51,9 @@ header{
   padding:10px 20px 40px;
 }
 
-h1{font-size:30px}
+h1{
+  font-size:30px;
+}
 
 .info{
   font-size:20px;
@@ -115,9 +117,17 @@ h1{font-size:30px}
   font-weight:bold;
 }
 
-#yes{background:#22a447}
-#call{background:#e53935}
-#no{background:#555}
+#yes{
+  background:#22a447;
+}
+
+#call{
+  background:#e53935;
+}
+
+#no{
+  background:#555;
+}
 
 .selected{
   outline:8px solid #ffd600;
@@ -136,7 +146,7 @@ h1{font-size:30px}
   font-size:14px;
 }
 
-/* KAMERA GİZLİ */
+/* Kamera istifadə olunur, amma görünmür */
 #camera{
   position:fixed;
   width:1px;
@@ -167,8 +177,8 @@ h1{font-size:30px}
 </header>
 
 <div class="status">
-  <span class="dot" id="dot"></span>
-  <span id="statusText">Sistem hazır deyil</span>
+<span class="dot" id="dot"></span>
+<span id="statusText">Sistem hazır deyil</span>
 </div>
 
 <div class="main">
@@ -187,29 +197,29 @@ Kamera sizi görür, amma görüntünüz ekranda göstərilmir.
 
 <div id="calibration">
 
-  <div id="calibrationText">
-    🎯 Nöqtəyə baxın
-  </div>
+<div id="calibrationText">
+🎯 Qırmızı nöqtəyə baxın
+</div>
 
-  <div id="progress">
-    Hazırlanır...
-  </div>
+<div id="progress">
+Hazırlanır...
+</div>
 
 </div>
 
 <div id="choices">
 
-  <button class="choice" id="yes">
-    HƏ
-  </button>
+<button class="choice" id="yes">
+HƏ
+</button>
 
-  <button class="choice" id="call">
-    🚨 OTAĞA GƏL
-  </button>
+<button class="choice" id="call">
+🚨 OTAĞA GƏL
+</button>
 
-  <button class="choice" id="no">
-    YOX
-  </button>
+<button class="choice" id="no">
+YOX
+</button>
 
 </div>
 
@@ -233,23 +243,30 @@ const choices = document.getElementById("choices");
 
 const statusText = document.getElementById("statusText");
 const dot = document.getElementById("dot");
-const gazeText = document.getElementById("gazeText");
 
 const calibration = document.getElementById("calibration");
 const calibrationDot = document.getElementById("calibrationDot");
 const calibrationText = document.getElementById("calibrationText");
 const progress = document.getElementById("progress");
 
+const gazeText = document.getElementById("gazeText");
+
 let faceMesh;
 let stream;
 
 let currentFeature = null;
+
 let calibrated = false;
 
 let calibrationIndex = 0;
+
+/*
+  ƏSAS DÜZƏLİŞ:
+  Hər nöqtənin məlumatını ayrıca saxlayırıq.
+*/
 let calibrationSamples = [];
 
-let gazeCalibration = null;
+let calibrationModel = [];
 
 let currentButton = null;
 let gazeStart = 0;
@@ -257,10 +274,11 @@ let lastSelection = 0;
 
 
 /* =========================
-   KALİBRASİYA NÖQTƏLƏRİ
+   9 KALİBRASİYA NÖQTƏSİ
 ========================= */
 
 const points = [
+
   {x:10,y:10},
   {x:50,y:10},
   {x:90,y:10},
@@ -272,6 +290,7 @@ const points = [
   {x:10,y:90},
   {x:50,y:90},
   {x:90,y:90}
+
 ];
 
 
@@ -285,7 +304,8 @@ function speak(text){
 
   speechSynthesis.cancel();
 
-  const s = new SpeechSynthesisUtterance(text);
+  const s =
+    new SpeechSynthesisUtterance(text);
 
   s.lang = "az-AZ";
   s.rate = .85;
@@ -295,42 +315,7 @@ function speak(text){
 
 
 /* =========================
-   DÜYMƏ SEÇ
-========================= */
-
-function selectButton(button){
-
-  const now = Date.now();
-
-  if(now - lastSelection < 2500) return;
-
-  lastSelection = now;
-
-  document.querySelectorAll(".choice").forEach(b=>{
-    b.classList.remove("selected");
-  });
-
-  button.classList.add("selected");
-
-  const text = button.innerText;
-
-  gazeText.innerText = "✅ Seçildi: " + text;
-
-  speak(text);
-
-  if(button.id === "call"){
-
-    console.log(
-      "PALATA 402 → OTAĞA GƏL"
-    );
-
-  }
-
-}
-
-
-/* =========================
-   GÖZ MƏLUMATI
+   GÖZ FEATURE
 ========================= */
 
 function getEyeFeature(face){
@@ -338,21 +323,42 @@ function getEyeFeature(face){
   const leftIris = face[468];
   const rightIris = face[473];
 
+  const leftWidth =
+    face[133].x - face[33].x;
+
+  const rightWidth =
+    face[263].x - face[362].x;
+
+  const leftHeight =
+    face[145].y - face[159].y;
+
+  const rightHeight =
+    face[374].y - face[386].y;
+
+  if(
+    Math.abs(leftWidth) < 0.001 ||
+    Math.abs(rightWidth) < 0.001 ||
+    Math.abs(leftHeight) < 0.001 ||
+    Math.abs(rightHeight) < 0.001
+  ){
+    return null;
+  }
+
   const leftX =
     (leftIris.x - face[33].x) /
-    (face[133].x - face[33].x);
+    leftWidth;
 
   const leftY =
     (leftIris.y - face[159].y) /
-    (face[145].y - face[159].y);
+    leftHeight;
 
   const rightX =
     (rightIris.x - face[362].x) /
-    (face[263].x - face[362].x);
+    rightWidth;
 
   const rightY =
     (rightIris.y - face[386].y) /
-    (face[374].y - face[386].y);
+    rightHeight;
 
   return [
     leftX,
@@ -364,28 +370,57 @@ function getEyeFeature(face){
 
 
 /* =========================
+   ORTA MƏLUMAT
+========================= */
+
+function average(samples){
+
+  if(!samples.length) return null;
+
+  const result=[0,0,0,0];
+
+  samples.forEach(s=>{
+
+    for(let i=0;i<4;i++){
+      result[i]+=s[i];
+    }
+
+  });
+
+  for(let i=0;i<4;i++){
+    result[i]/=samples.length;
+  }
+
+  return result;
+}
+
+
+/* =========================
    KALİBRASİYA BAŞLA
 ========================= */
 
 function startCalibration(){
 
-  calibration.style.display = "block";
+  calibrated=false;
 
-  choices.style.display = "none";
+  calibrationIndex=0;
 
-  calibrationDot.style.display = "block";
+  calibrationSamples=[];
 
-  calibrationIndex = 0;
+  calibrationModel=[];
 
-  calibrationSamples = [];
+  calibration.style.display="block";
+
+  choices.style.display="none";
+
+  calibrationDot.style.display="block";
 
   showPoint();
-
 }
 
 
 /* =========================
-   NÖQTƏ GÖSTƏR
+   NÖQTƏ
 ========================= */
 
 function showPoint(){
@@ -397,40 +432,58 @@ function showPoint(){
     return;
   }
 
-  const p = points[calibrationIndex];
+  const p=points[calibrationIndex];
 
-  calibrationDot.style.left =
-    p.x + "%";
+  calibrationDot.style.left=
+    p.x+"%";
 
-  calibrationDot.style.top =
-    p.y + "%";
+  calibrationDot.style.top=
+    p.y+"%";
 
-  calibrationSamples = [];
+  calibrationSamples=[];
 
-  calibrationText.innerText =
+  calibrationText.innerText=
     "🎯 Qırmızı nöqtəyə baxın";
 
-  progress.innerText =
-    "Kalibrasiya: " +
-    (calibrationIndex + 1) +
-    " / " +
+  progress.innerText=
+    "Kalibrasiya: "+
+    (calibrationIndex+1)+
+    " / "+
     points.length;
 
   /*
-    300 ms gözləyirik,
-    sonra 1.5 saniyə ərzində
-    DAVAMLI nümunə yığırıq.
+    500 ms gözləyirik.
+    Sonra 2 saniyə ərzində
+    çoxlu göz nümunəsi yığırıq.
   */
 
   setTimeout(()=>{
 
-    const start = Date.now();
+    const start=Date.now();
 
     function collect(){
 
-      if(
-        Date.now() - start >= 1500
-      ){
+      const elapsed=
+        Date.now()-start;
+
+      if(elapsed>=2000){
+
+        const avg=
+          average(calibrationSamples);
+
+        if(avg){
+
+          calibrationModel.push({
+
+            feature:avg,
+
+            x:window.innerWidth*p.x/100,
+
+            y:window.innerHeight*p.y/100
+
+          });
+
+        }
 
         calibrationIndex++;
 
@@ -441,9 +494,9 @@ function showPoint(){
 
       if(currentFeature){
 
-        calibrationSamples.push([
-          ...currentFeature
-        ]);
+        calibrationSamples.push(
+          [...currentFeature]
+        );
 
       }
 
@@ -453,143 +506,114 @@ function showPoint(){
 
     collect();
 
-  },300);
-
+  },500);
 }
 
 
 /* =========================
-   ORTA GÖZ MƏLUMATI
+   KALİBRASİYA BİTİR
 ========================= */
 
-function averageSamples(samples){
+function finishCalibration(){
 
-  if(!samples.length) return null;
+  calibrationDot.style.display="none";
 
-  const result = [0,0,0,0];
+  calibration.style.display="none";
 
-  samples.forEach(s=>{
+  /*
+    ƏN AZI 6 NÖQTƏ lazımdır.
+  */
 
-    for(let i=0;i<4;i++){
+  if(calibrationModel.length < 6){
 
-      result[i] += s[i];
+    calibrated=false;
+
+    statusText.innerText=
+      "🔴 Kalibrasiya alınmadı";
+
+    dot.style.background="red";
+
+    gazeText.innerText=
+      calibrationModel.length+
+      " nöqtə qeydə alındı. Yenidən başladın.";
+
+    startBtn.style.display="block";
+
+    return;
+  }
+
+  calibrated=true;
+
+  choices.style.display="flex";
+
+  statusText.innerText=
+    "🟢 Göz idarəsi hazırdır";
+
+  dot.style.background="#20b957";
+
+  gazeText.innerText=
+    "👁️ İndi HƏ, OTAĞA GƏL və ya YOX-a baxın.";
+}
+
+
+/* =========================
+   İKİ GÖZ ARASINDA MƏSAFƏ
+========================= */
+
+function distance(a,b){
+
+  let total=0;
+
+  for(let i=0;i<4;i++){
+
+    const d=a[i]-b[i];
+
+    total+=d*d;
+
+  }
+
+  return Math.sqrt(total);
+}
+
+
+/* =========================
+   BAXIŞI TAP
+========================= */
+
+function estimateGaze(feature){
+
+  if(!calibrated) return;
+
+  if(!calibrationModel.length) return;
+
+  let nearest=null;
+
+  let best=Infinity;
+
+  calibrationModel.forEach(point=>{
+
+    const d=
+      distance(
+        feature,
+        point.feature
+      );
+
+    if(d<best){
+
+      best=d;
+
+      nearest=point;
 
     }
 
   });
 
-  for(let i=0;i<4;i++){
-
-    result[i] /= samples.length;
-
-  }
-
-  return result;
-}
-
-
-/* =========================
-   KALİBRASİYANI HESABLA
-========================= */
-
-function finishCalibration(){
-
-  calibrationDot.style.display = "none";
-
-  calibration.style.display = "none";
-
-  /*
-    Burada real nümunələri yenidən
-    toplaya bilmədiyimiz nöqtələr yoxlanılır.
-  */
-
-  /*
-    Sadə olaraq ekranın
-    9 nöqtəsinə uyğun göz məlumatlarını
-    saxlayırıq.
-  */
-
-  gazeCalibration = [];
-
-  /*
-    Bu prototipdə hər nöqtənin
-    orta göz məlumatını ayrıca
-    yenidən almaq üçün növbəti
-    mərhələdə daha dəqiq model
-    quracağıq.
-  */
-
-  calibrated = true;
-
-  choices.style.display = "flex";
-
-  statusText.innerText =
-    "🟢 Göz idarəsi aktivdir";
-
-  dot.style.background =
-    "#20b957";
-
-  gazeText.innerText =
-    "👁️ İndi HƏ, OTAĞA GƏL və ya YOX-a baxın.";
-
-}
-
-
-/* =========================
-   GÖZÜN İSTİQAMƏTİNİ
-   TƏXMİN ET
-========================= */
-
-function estimateGaze(feature){
-
-  if(!feature) return;
-
-  /*
-    Gözün kameradakı nisbi
-    vəziyyəti.
-
-    Bu hissə prototipdir.
-  */
-
-  const eyeX =
-    (feature[0] + feature[2]) / 2;
-
-  const eyeY =
-    (feature[1] + feature[3]) / 2;
-
-
-  /*
-    Kameranın görüntüsü güzgü
-    kimi olduğuna görə X tərsinə çevrilir.
-  */
-
-  let x =
-    1 - eyeX;
-
-  let y =
-    eyeY;
-
-
-  /*
-    Normalizasiya
-  */
-
-  x = Math.max(0,Math.min(1,x));
-  y = Math.max(0,Math.min(1,y));
-
-
-  const screenX =
-    x * window.innerWidth;
-
-  const screenY =
-    y * window.innerHeight;
-
+  if(!nearest) return;
 
   checkButton(
-    screenX,
-    screenY
+    nearest.x,
+    nearest.y
   );
-
 }
 
 
@@ -599,66 +623,108 @@ function estimateGaze(feature){
 
 function checkButton(x,y){
 
-  if(!calibrated) return;
-
-  let found = null;
+  let found=null;
 
   document.querySelectorAll(".choice")
   .forEach(button=>{
 
-    const r =
+    const r=
       button.getBoundingClientRect();
 
     if(
-      x >= r.left &&
-      x <= r.right &&
-      y >= r.top &&
-      y <= r.bottom
+      x>=r.left &&
+      x<=r.right &&
+      y>=r.top &&
+      y<=r.bottom
     ){
 
-      found = button;
+      found=button;
 
     }
 
   });
 
 
-  if(found !== currentButton){
+  if(found!==currentButton){
 
-    currentButton = found;
+    currentButton=found;
 
-    gazeStart = Date.now();
+    gazeStart=Date.now();
+
+    document.querySelectorAll(".choice")
+    .forEach(b=>{
+      b.classList.remove("selected");
+    });
 
   }
 
 
   if(found){
 
-    const elapsed =
-      Date.now() - gazeStart;
+    const elapsed=
+      Date.now()-gazeStart;
 
-    const seconds =
+    const remaining=
       Math.max(
         0,
-        1.5 - elapsed / 1000
+        1.5-elapsed/1000
       );
 
-    gazeText.innerText =
-      "👁️ " +
-      found.innerText +
-      " — " +
-      seconds.toFixed(1) +
+    gazeText.innerText=
+      "👁️ "+
+      found.innerText+
+      " — "+
+      remaining.toFixed(1)+
       " saniyə";
 
 
-    if(elapsed >= 1500){
+    if(elapsed>=1500){
 
       selectButton(found);
 
-      gazeStart =
-        Date.now() + 1000;
+      gazeStart=
+        Date.now()+1000;
 
     }
+
+  }
+
+}
+
+
+/* =========================
+   SEÇİM
+========================= */
+
+function selectButton(button){
+
+  const now=Date.now();
+
+  if(now-lastSelection<2500)
+    return;
+
+  lastSelection=now;
+
+  document.querySelectorAll(".choice")
+  .forEach(b=>{
+    b.classList.remove("selected");
+  });
+
+  button.classList.add("selected");
+
+  const text=
+    button.innerText;
+
+  gazeText.innerText=
+    "✅ Seçildi: "+text;
+
+  speak(text);
+
+  if(button.id==="call"){
+
+    console.log(
+      "PALATA 402 → OTAĞA GƏL"
+    );
 
   }
 
@@ -671,12 +737,10 @@ function checkButton(x,y){
 
 async function startFaceMesh(){
 
-  faceMesh = new FaceMesh({
+  faceMesh=new FaceMesh({
 
-    locateFile: function(file){
-
-      return "https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/" + file;
-
+    locateFile:function(file){
+      return "https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/"+file;
     }
 
   });
@@ -699,23 +763,23 @@ async function startFaceMesh(){
 
     if(
       results.multiFaceLandmarks &&
-      results.multiFaceLandmarks.length
+      results.multiFaceLandmarks.length>0
     ){
 
-      const face =
+      const face=
         results.multiFaceLandmarks[0];
 
-      try{
+      currentFeature=
+        getEyeFeature(face);
 
-        currentFeature =
-          getEyeFeature(face);
+      if(currentFeature){
 
-        statusText.innerText =
-          "🟢 ÜZ VƏ GÖZLƏR AŞKARLANDI";
+        statusText.innerText=
+          calibrated
+          ? "🟢 Göz izlənilir"
+          : "🟢 ÜZ VƏ GÖZLƏR AŞKARLANDI";
 
-        dot.style.background =
-          "#20b957";
-
+        dot.style.background="#20b957";
 
         if(calibrated){
 
@@ -725,21 +789,16 @@ async function startFaceMesh(){
 
         }
 
-      }catch(e){
-
-        console.log(e);
-
       }
 
     }else{
 
-      currentFeature = null;
+      currentFeature=null;
 
-      statusText.innerText =
+      statusText.innerText=
         "🟡 Üz axtarılır...";
 
-      dot.style.background =
-        "#ff9800";
+      dot.style.background="#ff9800";
 
     }
 
@@ -748,7 +807,7 @@ async function startFaceMesh(){
 
   async function process(){
 
-    if(video.videoWidth > 0){
+    if(video.videoWidth>0){
 
       await faceMesh.send({
         image:video
@@ -766,21 +825,20 @@ async function startFaceMesh(){
 
 
 /* =========================
-   KAMERA BAŞLAT
+   KAMERA
 ========================= */
 
 async function startCamera(){
 
   try{
 
-    statusText.innerText =
+    statusText.innerText=
       "🟡 Kamera açılır...";
 
-    dot.style.background =
-      "#ff9800";
+    dot.style.background="#ff9800";
 
 
-    stream =
+    stream=
       await navigator.mediaDevices.getUserMedia({
 
         video:{
@@ -794,34 +852,24 @@ async function startCamera(){
       });
 
 
-    video.srcObject =
-      stream;
+    video.srcObject=stream;
 
     await video.play();
 
 
-    statusText.innerText =
+    statusText.innerText=
       "🟢 Kamera işləyir";
 
-    dot.style.background =
-      "#20b957";
+    dot.style.background="#20b957";
 
+    startBtn.style.display="none";
 
-    startBtn.style.display =
-      "none";
-
-
-    gazeText.innerText =
+    gazeText.innerText=
       "👁️ Üzünüzü kameraya tərəf saxlayın...";
 
 
     await startFaceMesh();
 
-
-    /*
-      Üzün aşkarlanması üçün
-      bir az gözləyirik.
-    */
 
     setTimeout(()=>{
 
@@ -834,13 +882,12 @@ async function startCamera(){
 
     console.error(error);
 
-    statusText.innerText =
+    statusText.innerText=
       "🔴 Kamera açıla bilmədi";
 
-    dot.style.background =
-      "red";
+    dot.style.background="red";
 
-    gazeText.innerText =
+    gazeText.innerText=
       error.message ||
       "Kamera xətası";
 
@@ -850,7 +897,7 @@ async function startCamera(){
 
 
 /* =========================
-   BAŞLAT DÜYMƏSİ
+   BAŞLAT
 ========================= */
 
 startBtn.addEventListener(
@@ -865,23 +912,17 @@ startBtn.addEventListener(
 
 document.getElementById("yes")
 .addEventListener("click",function(){
-
   selectButton(this);
-
 });
 
 document.getElementById("call")
 .addEventListener("click",function(){
-
   selectButton(this);
-
 });
 
 document.getElementById("no")
 .addEventListener("click",function(){
-
   selectButton(this);
-
 });
 
 </script>
