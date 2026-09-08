@@ -9,162 +9,168 @@
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
 
 <style>
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  background:#eef5fb;
-  font-family:Arial,sans-serif;
-  color:#172b4d;
-  text-align:center;
+* {
+  box-sizing: border-box;
 }
 
-header{
-  background:#1976b9;
-  color:white;
-  padding:25px 10px;
-  font-size:30px;
-  font-weight:bold;
+body {
+  margin: 0;
+  background: #eef5fb;
+  font-family: Arial, sans-serif;
+  color: #172b4d;
+  text-align: center;
 }
 
-.status{
-  background:white;
-  margin:25px 0;
-  padding:18px;
-  border-radius:20px;
-  font-size:19px;
-  box-shadow:0 4px 12px rgba(0,0,0,.08);
+header {
+  background: #1976b9;
+  color: white;
+  padding: 24px 10px;
+  font-size: 30px;
+  font-weight: bold;
 }
 
-.dot{
-  display:inline-block;
-  width:17px;
-  height:17px;
-  border-radius:50%;
-  background:red;
-  margin-right:8px;
+.status {
+  background: white;
+  margin: 25px 0;
+  padding: 18px;
+  border-radius: 20px;
+  font-size: 19px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
 }
 
-.main{
-  max-width:850px;
-  margin:auto;
-  padding:10px 20px 40px;
+.dot {
+  display: inline-block;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: red;
+  margin-right: 8px;
 }
 
-h1{
-  font-size:30px;
+.main {
+  max-width: 900px;
+  margin: auto;
+  padding: 10px 20px 40px;
 }
 
-.info{
-  font-size:20px;
-  line-height:1.5;
-  margin:20px 0 30px;
+h1 {
+  font-size: 30px;
 }
 
-#startBtn{
-  width:90%;
-  max-width:650px;
-  padding:24px;
-  border:0;
-  border-radius:22px;
-  background:#1976b9;
-  color:white;
-  font-size:23px;
-  font-weight:bold;
+.info {
+  font-size: 19px;
+  line-height: 1.5;
+  margin: 20px auto 30px;
+  max-width: 700px;
 }
 
-#calibration{
-  display:none;
+#startBtn {
+  width: 90%;
+  max-width: 650px;
+  padding: 24px;
+  border: 0;
+  border-radius: 22px;
+  background: #1976b9;
+  color: white;
+  font-size: 23px;
+  font-weight: bold;
 }
 
-#calibrationText{
-  font-size:23px;
-  font-weight:bold;
-  margin:20px;
+#calibration {
+  display: none;
 }
 
-#progress{
-  font-size:18px;
-  color:#666;
+#calibrationText {
+  font-size: 23px;
+  font-weight: bold;
+  margin: 20px;
 }
 
-#calibrationDot{
-  position:fixed;
-  width:38px;
-  height:38px;
-  border-radius:50%;
-  background:#ff1744;
-  border:5px solid white;
-  box-shadow:0 0 18px rgba(0,0,0,.5);
-  display:none;
-  z-index:9999;
-  transform:translate(-50%,-50%);
+#progress {
+  font-size: 18px;
+  color: #666;
 }
 
-#choices{
-  display:none;
-  margin-top:30px;
-  gap:18px;
-  flex-direction:column;
+#calibrationDot {
+  position: fixed;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #ff1744;
+  border: 5px solid white;
+  box-shadow: 0 0 20px rgba(0,0,0,.5);
+  display: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
 }
 
-.choice{
-  border:0;
-  border-radius:25px;
-  min-height:140px;
-  color:white;
-  font-size:32px;
-  font-weight:bold;
+#choices {
+  display: none;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 30px;
 }
 
-#yes{
-  background:#22a447;
+.choice {
+  border: 0;
+  border-radius: 25px;
+  min-height: 145px;
+  color: white;
+  font-size: 34px;
+  font-weight: bold;
+  box-shadow: 0 5px 12px rgba(0,0,0,.12);
+  transition: .15s;
 }
 
-#call{
-  background:#e53935;
+#yes {
+  background: #22a447;
 }
 
-#no{
-  background:#555;
+#call {
+  background: #e53935;
 }
 
-.selected{
-  outline:8px solid #ffd600;
-  transform:scale(1.02);
+#no {
+  background: #555;
 }
 
-#gazeText{
-  margin-top:25px;
-  font-size:20px;
-  min-height:35px;
+.selected {
+  outline: 8px solid #ffd600;
+  transform: scale(1.02);
 }
 
-.warning{
-  margin-top:40px;
-  color:#777;
-  font-size:14px;
+#gazeText {
+  margin-top: 25px;
+  font-size: 20px;
+  min-height: 35px;
 }
 
-/* Kamera istifadə olunur, amma görünmür */
-#camera{
-  position:fixed;
-  width:1px;
-  height:1px;
-  left:-9999px;
-  top:-9999px;
-  opacity:0;
-  pointer-events:none;
+.warning {
+  margin-top: 40px;
+  color: #777;
+  font-size: 14px;
 }
 
-@media(min-width:650px){
-  #choices{
-    flex-direction:row;
+/* Kamera işləyir, amma görünmür */
+#camera {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  left: -9999px;
+  top: -9999px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (min-width: 650px) {
+
+  #choices {
+    flex-direction: row;
   }
 
-  .choice{
-    flex:1;
-    min-height:180px;
+  .choice {
+    flex: 1;
+    min-height: 190px;
   }
 }
 </style>
@@ -177,8 +183,8 @@ h1{
 </header>
 
 <div class="status">
-<span class="dot" id="dot"></span>
-<span id="statusText">Sistem hazır deyil</span>
+  <span class="dot" id="dot"></span>
+  <span id="statusText">Sistem hazır deyil</span>
 </div>
 
 <div class="main">
@@ -197,29 +203,29 @@ Kamera sizi görür, amma görüntünüz ekranda göstərilmir.
 
 <div id="calibration">
 
-<div id="calibrationText">
-🎯 Qırmızı nöqtəyə baxın
-</div>
+  <div id="calibrationText">
+    🎯 Qırmızı nöqtəyə baxın
+  </div>
 
-<div id="progress">
-Hazırlanır...
-</div>
+  <div id="progress">
+    Kalibrasiya hazırlanır...
+  </div>
 
 </div>
 
 <div id="choices">
 
-<button class="choice" id="yes">
-HƏ
-</button>
+  <button class="choice" id="yes">
+    HƏ
+  </button>
 
-<button class="choice" id="call">
-🚨 OTAĞA GƏL
-</button>
+  <button class="choice" id="call">
+    🚨 OTAĞA GƏL
+  </button>
 
-<button class="choice" id="no">
-YOX
-</button>
+  <button class="choice" id="no">
+    YOX
+  </button>
 
 </div>
 
@@ -237,22 +243,47 @@ Prototip sistemdir. Tibbi istifadə üçün nəzərdə tutulmayıb.
 
 <script>
 
+/* =====================================================
+   ELEMENTLƏR
+===================================================== */
+
 const video = document.getElementById("camera");
-const startBtn = document.getElementById("startBtn");
-const choices = document.getElementById("choices");
 
-const statusText = document.getElementById("statusText");
-const dot = document.getElementById("dot");
+const startBtn =
+  document.getElementById("startBtn");
 
-const calibration = document.getElementById("calibration");
-const calibrationDot = document.getElementById("calibrationDot");
-const calibrationText = document.getElementById("calibrationText");
-const progress = document.getElementById("progress");
+const choices =
+  document.getElementById("choices");
 
-const gazeText = document.getElementById("gazeText");
+const statusText =
+  document.getElementById("statusText");
 
-let faceMesh;
-let stream;
+const dot =
+  document.getElementById("dot");
+
+const calibration =
+  document.getElementById("calibration");
+
+const calibrationDot =
+  document.getElementById("calibrationDot");
+
+const calibrationText =
+  document.getElementById("calibrationText");
+
+const progress =
+  document.getElementById("progress");
+
+const gazeText =
+  document.getElementById("gazeText");
+
+
+/* =====================================================
+   DƏYİŞƏNLƏR
+===================================================== */
+
+let faceMesh = null;
+
+let stream = null;
 
 let currentFeature = null;
 
@@ -260,105 +291,100 @@ let calibrated = false;
 
 let calibrationIndex = 0;
 
-/*
-  ƏSAS DÜZƏLİŞ:
-  Hər nöqtənin məlumatını ayrıca saxlayırıq.
-*/
-let calibrationSamples = [];
+let collecting = false;
 
 let calibrationModel = [];
 
 let currentButton = null;
-let gazeStart = 0;
-let lastSelection = 0;
+
+let gazeStartTime = 0;
+
+let lastSelectionTime = 0;
 
 
-/* =========================
-   9 KALİBRASİYA NÖQTƏSİ
-========================= */
+/* =====================================================
+   KALİBRASİYA NÖQTƏLƏRİ
+===================================================== */
 
-const points = [
+const calibrationPoints = [
 
-  {x:10,y:10},
-  {x:50,y:10},
-  {x:90,y:10},
+  { x: 10, y: 12 },
+  { x: 50, y: 12 },
+  { x: 90, y: 12 },
 
-  {x:10,y:50},
-  {x:50,y:50},
-  {x:90,y:50},
+  { x: 10, y: 50 },
+  { x: 50, y: 50 },
+  { x: 90, y: 50 },
 
-  {x:10,y:90},
-  {x:50,y:90},
-  {x:90,y:90}
+  { x: 10, y: 88 },
+  { x: 50, y: 88 },
+  { x: 90, y: 88 }
 
 ];
 
 
-/* =========================
-   SƏS
-========================= */
-
-function speak(text){
-
-  if(!("speechSynthesis" in window)) return;
-
-  speechSynthesis.cancel();
-
-  const s =
-    new SpeechSynthesisUtterance(text);
-
-  s.lang = "az-AZ";
-  s.rate = .85;
-
-  speechSynthesis.speak(s);
-}
-
-
-/* =========================
+/* =====================================================
    GÖZ FEATURE
-========================= */
+===================================================== */
 
-function getEyeFeature(face){
+function getEyeFeature(face) {
 
   const leftIris = face[468];
   const rightIris = face[473];
 
+  const leftOuter = face[33];
+  const leftInner = face[133];
+
+  const leftTop = face[159];
+  const leftBottom = face[145];
+
+  const rightOuter = face[362];
+  const rightInner = face[263];
+
+  const rightTop = face[386];
+  const rightBottom = face[374];
+
+
   const leftWidth =
-    face[133].x - face[33].x;
+    leftInner.x - leftOuter.x;
 
   const rightWidth =
-    face[263].x - face[362].x;
+    rightInner.x - rightOuter.x;
 
   const leftHeight =
-    face[145].y - face[159].y;
+    leftBottom.y - leftTop.y;
 
   const rightHeight =
-    face[374].y - face[386].y;
+    rightBottom.y - rightTop.y;
 
-  if(
-    Math.abs(leftWidth) < 0.001 ||
-    Math.abs(rightWidth) < 0.001 ||
-    Math.abs(leftHeight) < 0.001 ||
-    Math.abs(rightHeight) < 0.001
-  ){
+
+  if (
+    Math.abs(leftWidth) < 0.002 ||
+    Math.abs(rightWidth) < 0.002 ||
+    Math.abs(leftHeight) < 0.002 ||
+    Math.abs(rightHeight) < 0.002
+  ) {
     return null;
   }
 
+
   const leftX =
-    (leftIris.x - face[33].x) /
+    (leftIris.x - leftOuter.x) /
     leftWidth;
 
   const leftY =
-    (leftIris.y - face[159].y) /
+    (leftIris.y - leftTop.y) /
     leftHeight;
 
+
   const rightX =
-    (rightIris.x - face[362].x) /
+    (rightIris.x - rightOuter.x) /
     rightWidth;
 
   const rightY =
-    (rightIris.y - face[386].y) /
+    (rightIris.y - rightTop.y) /
     rightHeight;
+
 
   return [
     leftX,
@@ -369,206 +395,53 @@ function getEyeFeature(face){
 }
 
 
-/* =========================
-   ORTA MƏLUMAT
-========================= */
+/* =====================================================
+   ORTA GÖZ MƏLUMATI
+===================================================== */
 
-function average(samples){
+function averageFeatures(samples) {
 
-  if(!samples.length) return null;
+  if (samples.length === 0) {
+    return null;
+  }
 
-  const result=[0,0,0,0];
+  const result = [0, 0, 0, 0];
 
-  samples.forEach(s=>{
+  for (const sample of samples) {
 
-    for(let i=0;i<4;i++){
-      result[i]+=s[i];
+    for (let i = 0; i < 4; i++) {
+
+      result[i] += sample[i];
+
     }
 
-  });
+  }
 
-  for(let i=0;i<4;i++){
-    result[i]/=samples.length;
+  for (let i = 0; i < 4; i++) {
+
+    result[i] /= samples.length;
+
   }
 
   return result;
 }
 
 
-/* =========================
-   KALİBRASİYA BAŞLA
-========================= */
+/* =====================================================
+   MƏSAFƏ
+===================================================== */
 
-function startCalibration(){
+function featureDistance(a, b) {
 
-  calibrated=false;
+  let total = 0;
 
-  calibrationIndex=0;
+  for (let i = 0; i < 4; i++) {
 
-  calibrationSamples=[];
+    const difference =
+      a[i] - b[i];
 
-  calibrationModel=[];
-
-  calibration.style.display="block";
-
-  choices.style.display="none";
-
-  calibrationDot.style.display="block";
-
-  showPoint();
-}
-
-
-/* =========================
-   NÖQTƏ
-========================= */
-
-function showPoint(){
-
-  if(calibrationIndex >= points.length){
-
-    finishCalibration();
-
-    return;
-  }
-
-  const p=points[calibrationIndex];
-
-  calibrationDot.style.left=
-    p.x+"%";
-
-  calibrationDot.style.top=
-    p.y+"%";
-
-  calibrationSamples=[];
-
-  calibrationText.innerText=
-    "🎯 Qırmızı nöqtəyə baxın";
-
-  progress.innerText=
-    "Kalibrasiya: "+
-    (calibrationIndex+1)+
-    " / "+
-    points.length;
-
-  /*
-    500 ms gözləyirik.
-    Sonra 2 saniyə ərzində
-    çoxlu göz nümunəsi yığırıq.
-  */
-
-  setTimeout(()=>{
-
-    const start=Date.now();
-
-    function collect(){
-
-      const elapsed=
-        Date.now()-start;
-
-      if(elapsed>=2000){
-
-        const avg=
-          average(calibrationSamples);
-
-        if(avg){
-
-          calibrationModel.push({
-
-            feature:avg,
-
-            x:window.innerWidth*p.x/100,
-
-            y:window.innerHeight*p.y/100
-
-          });
-
-        }
-
-        calibrationIndex++;
-
-        showPoint();
-
-        return;
-      }
-
-      if(currentFeature){
-
-        calibrationSamples.push(
-          [...currentFeature]
-        );
-
-      }
-
-      requestAnimationFrame(collect);
-
-    }
-
-    collect();
-
-  },500);
-}
-
-
-/* =========================
-   KALİBRASİYA BİTİR
-========================= */
-
-function finishCalibration(){
-
-  calibrationDot.style.display="none";
-
-  calibration.style.display="none";
-
-  /*
-    ƏN AZI 6 NÖQTƏ lazımdır.
-  */
-
-  if(calibrationModel.length < 6){
-
-    calibrated=false;
-
-    statusText.innerText=
-      "🔴 Kalibrasiya alınmadı";
-
-    dot.style.background="red";
-
-    gazeText.innerText=
-      calibrationModel.length+
-      " nöqtə qeydə alındı. Yenidən başladın.";
-
-    startBtn.style.display="block";
-
-    return;
-  }
-
-  calibrated=true;
-
-  choices.style.display="flex";
-
-  statusText.innerText=
-    "🟢 Göz idarəsi hazırdır";
-
-  dot.style.background="#20b957";
-
-  gazeText.innerText=
-    "👁️ İndi HƏ, OTAĞA GƏL və ya YOX-a baxın.";
-}
-
-
-/* =========================
-   İKİ GÖZ ARASINDA MƏSAFƏ
-========================= */
-
-function distance(a,b){
-
-  let total=0;
-
-  for(let i=0;i<4;i++){
-
-    const d=a[i]-b[i];
-
-    total+=d*d;
+    total +=
+      difference * difference;
 
   }
 
@@ -576,151 +449,468 @@ function distance(a,b){
 }
 
 
-/* =========================
-   BAXIŞI TAP
-========================= */
+/* =====================================================
+   KALİBRASİYA BAŞLA
+===================================================== */
 
-function estimateGaze(feature){
+function startCalibration() {
 
-  if(!calibrated) return;
+  calibrated = false;
 
-  if(!calibrationModel.length) return;
+  calibrationIndex = 0;
 
-  let nearest=null;
+  calibrationModel = [];
 
-  let best=Infinity;
+  calibration.style.display = "block";
 
-  calibrationModel.forEach(point=>{
+  choices.style.display = "none";
 
-    const d=
-      distance(
-        feature,
-        point.feature
-      );
+  calibrationDot.style.display = "block";
 
-    if(d<best){
+  showCalibrationPoint();
 
-      best=d;
-
-      nearest=point;
-
-    }
-
-  });
-
-  if(!nearest) return;
-
-  checkButton(
-    nearest.x,
-    nearest.y
-  );
 }
 
 
-/* =========================
-   DÜYMƏNİ YOXLAYIR
-========================= */
+/* =====================================================
+   NÖQTƏ GÖSTƏR
+===================================================== */
 
-function checkButton(x,y){
+function showCalibrationPoint() {
 
-  let found=null;
+  if (
+    calibrationIndex >=
+    calibrationPoints.length
+  ) {
 
-  document.querySelectorAll(".choice")
-  .forEach(button=>{
+    finishCalibration();
 
-    const r=
-      button.getBoundingClientRect();
+    return;
+  }
 
-    if(
-      x>=r.left &&
-      x<=r.right &&
-      y>=r.top &&
-      y<=r.bottom
-    ){
 
-      found=button;
+  const point =
+    calibrationPoints[calibrationIndex];
+
+
+  calibrationDot.style.left =
+    point.x + "%";
+
+  calibrationDot.style.top =
+    point.y + "%";
+
+
+  progress.innerText =
+    "Kalibrasiya: " +
+    (calibrationIndex + 1) +
+    " / " +
+    calibrationPoints.length;
+
+
+  calibrationText.innerText =
+    "🎯 Qırmızı nöqtəyə baxın";
+
+
+  collecting = false;
+
+
+  /*
+    Bir az gözləyirik ki,
+    göz nöqtəyə yerləşsin.
+  */
+
+  setTimeout(() => {
+
+    collectCalibrationSamples(point);
+
+  }, 700);
+
+}
+
+
+/* =====================================================
+   DAVAMLI NÜMUNƏ TOPLA
+===================================================== */
+
+function collectCalibrationSamples(point) {
+
+  collecting = true;
+
+  const samples = [];
+
+  const start =
+    performance.now();
+
+
+  function collect() {
+
+    const elapsed =
+      performance.now() - start;
+
+
+    if (elapsed >= 1800) {
+
+      collecting = false;
+
+
+      const average =
+        averageFeatures(samples);
+
+
+      if (average) {
+
+        calibrationModel.push({
+
+          feature: average,
+
+          x:
+            window.innerWidth *
+            point.x / 100,
+
+          y:
+            window.innerHeight *
+            point.y / 100
+
+        });
+
+      }
+
+
+      calibrationIndex++;
+
+      showCalibrationPoint();
+
+      return;
+    }
+
+
+    if (currentFeature) {
+
+      samples.push(
+        [...currentFeature]
+      );
 
     }
 
-  });
+
+    requestAnimationFrame(collect);
+
+  }
 
 
-  if(found!==currentButton){
+  collect();
 
-    currentButton=found;
+}
 
-    gazeStart=Date.now();
 
-    document.querySelectorAll(".choice")
-    .forEach(b=>{
-      b.classList.remove("selected");
+/* =====================================================
+   KALİBRASİYA BİTİR
+===================================================== */
+
+function finishCalibration() {
+
+  calibrationDot.style.display = "none";
+
+  calibration.style.display = "none";
+
+
+  if (calibrationModel.length < 7) {
+
+    calibrated = false;
+
+    statusText.innerText =
+      "🔴 Kalibrasiya alınmadı";
+
+    dot.style.background = "red";
+
+    gazeText.innerText =
+      "Üzünüzü kameraya düz tutun və yenidən başlayın.";
+
+    startBtn.style.display = "block";
+
+    return;
+  }
+
+
+  calibrated = true;
+
+  choices.style.display = "flex";
+
+  statusText.innerText =
+    "🟢 Göz idarəsi hazırdır";
+
+  dot.style.background =
+    "#20b957";
+
+  gazeText.innerText =
+    "👁️ İndi seçimə baxın.";
+
+}
+
+
+/* =====================================================
+   GÖZ BAXIŞINI HESABLA
+===================================================== */
+
+function estimateGaze(feature) {
+
+  if (!calibrated) {
+    return;
+  }
+
+  if (!calibrationModel.length) {
+    return;
+  }
+
+
+  /*
+    Ən yaxın 3 kalibrasiya nöqtəsini tapırıq.
+  */
+
+  const distances =
+    calibrationModel.map(point => {
+
+      return {
+
+        point: point,
+
+        distance:
+          featureDistance(
+            feature,
+            point.feature
+          )
+
+      };
+
     });
 
+
+  distances.sort(
+    (a, b) =>
+      a.distance - b.distance
+  );
+
+
+  const nearest =
+    distances.slice(0, 3);
+
+
+  let totalWeight = 0;
+
+  let x = 0;
+
+  let y = 0;
+
+
+  nearest.forEach(item => {
+
+    const weight =
+      1 / (item.distance + 0.05);
+
+    totalWeight += weight;
+
+    x +=
+      item.point.x *
+      weight;
+
+    y +=
+      item.point.y *
+      weight;
+
+  });
+
+
+  if (totalWeight === 0) {
+    return;
   }
 
 
-  if(found){
+  x /= totalWeight;
 
-    const elapsed=
-      Date.now()-gazeStart;
-
-    const remaining=
-      Math.max(
-        0,
-        1.5-elapsed/1000
-      );
-
-    gazeText.innerText=
-      "👁️ "+
-      found.innerText+
-      " — "+
-      remaining.toFixed(1)+
-      " saniyə";
+  y /= totalWeight;
 
 
-    if(elapsed>=1500){
+  /*
+    Baxışı yumşaldırırıq.
+    Bu, göz nöqtəsinin titrəməsini azaldır.
+  */
 
-      selectButton(found);
+  if (!window.smoothGaze) {
 
-      gazeStart=
-        Date.now()+1000;
+    window.smoothGaze = {
+      x: x,
+      y: y
+    };
+
+  } else {
+
+    window.smoothGaze.x =
+      window.smoothGaze.x * 0.72 +
+      x * 0.28;
+
+    window.smoothGaze.y =
+      window.smoothGaze.y * 0.72 +
+      y * 0.28;
+
+  }
+
+
+  checkGazeButton(
+    window.smoothGaze.x,
+    window.smoothGaze.y
+  );
+
+}
+
+
+/* =====================================================
+   HANSI DÜYMƏYƏ BAXIR?
+===================================================== */
+
+function checkGazeButton(x, y) {
+
+  let found = null;
+
+
+  document.querySelectorAll(".choice")
+  .forEach(button => {
+
+    const rect =
+      button.getBoundingClientRect();
+
+
+    /*
+      Düymənin kənarına bir az
+      tolerantlıq veririk.
+    */
+
+    const padding = 20;
+
+
+    if (
+      x >= rect.left - padding &&
+      x <= rect.right + padding &&
+      y >= rect.top - padding &&
+      y <= rect.bottom + padding
+    ) {
+
+      found = button;
 
     }
+
+  });
+
+
+  if (found !== currentButton) {
+
+    currentButton = found;
+
+    gazeStartTime =
+      performance.now();
+
+
+    document
+      .querySelectorAll(".choice")
+      .forEach(button => {
+
+        button.classList.remove(
+          "selected"
+        );
+
+      });
+
+  }
+
+
+  if (!found) {
+
+    gazeText.innerText =
+      "👁️ Seçimə baxın.";
+
+    return;
+  }
+
+
+  const elapsed =
+    performance.now() -
+    gazeStartTime;
+
+
+  const remaining =
+    Math.max(
+      0,
+      1.5 -
+      elapsed / 1000
+    );
+
+
+  found.classList.add("selected");
+
+
+  gazeText.innerText =
+    "👁️ " +
+    found.innerText +
+    " — " +
+    remaining.toFixed(1) +
+    " saniyə";
+
+
+  /*
+    1.5 saniyə baxışdan sonra seç.
+  */
+
+  if (
+    elapsed >= 1500 &&
+    performance.now() -
+    lastSelectionTime > 2500
+  ) {
+
+    selectButton(found);
 
   }
 
 }
 
 
-/* =========================
+/* =====================================================
    SEÇİM
-========================= */
+===================================================== */
 
-function selectButton(button){
+function selectButton(button) {
 
-  const now=Date.now();
+  lastSelectionTime =
+    performance.now();
 
-  if(now-lastSelection<2500)
-    return;
 
-  lastSelection=now;
+  document
+    .querySelectorAll(".choice")
+    .forEach(b => {
 
-  document.querySelectorAll(".choice")
-  .forEach(b=>{
-    b.classList.remove("selected");
-  });
+      b.classList.remove(
+        "selected"
+      );
+
+    });
+
 
   button.classList.add("selected");
 
-  const text=
+
+  const text =
     button.innerText;
 
-  gazeText.innerText=
-    "✅ Seçildi: "+text;
 
-  speak(text);
+  gazeText.innerText =
+    "✅ SEÇİLDİ: " + text;
 
-  if(button.id==="call"){
+
+  /*
+    SƏS YOXDUR.
+    Burada yalnız seçim edilir.
+  */
+
+
+  if (button.id === "call") {
 
     console.log(
       "PALATA 402 → OTAĞA GƏL"
@@ -728,166 +918,250 @@ function selectButton(button){
 
   }
 
+
+  setTimeout(() => {
+
+    button.classList.remove(
+      "selected"
+    );
+
+  }, 1200);
+
 }
 
 
-/* =========================
+/* =====================================================
    MEDIAPIPE
-========================= */
+===================================================== */
 
-async function startFaceMesh(){
+async function startFaceMesh() {
 
-  faceMesh=new FaceMesh({
+  try {
 
-    locateFile:function(file){
-      return "https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/"+file;
-    }
+    faceMesh =
+      new FaceMesh({
 
-  });
+        locateFile: function(file) {
 
-
-  faceMesh.setOptions({
-
-    maxNumFaces:1,
-
-    refineLandmarks:true,
-
-    minDetectionConfidence:.5,
-
-    minTrackingConfidence:.5
-
-  });
-
-
-  faceMesh.onResults(function(results){
-
-    if(
-      results.multiFaceLandmarks &&
-      results.multiFaceLandmarks.length>0
-    ){
-
-      const face=
-        results.multiFaceLandmarks[0];
-
-      currentFeature=
-        getEyeFeature(face);
-
-      if(currentFeature){
-
-        statusText.innerText=
-          calibrated
-          ? "🟢 Göz izlənilir"
-          : "🟢 ÜZ VƏ GÖZLƏR AŞKARLANDI";
-
-        dot.style.background="#20b957";
-
-        if(calibrated){
-
-          estimateGaze(
-            currentFeature
+          return (
+            "https://cdn.jsdelivr.net/npm/" +
+            "@mediapipe/face_mesh/" +
+            file
           );
 
         }
 
-      }
-
-    }else{
-
-      currentFeature=null;
-
-      statusText.innerText=
-        "🟡 Üz axtarılır...";
-
-      dot.style.background="#ff9800";
-
-    }
-
-  });
-
-
-  async function process(){
-
-    if(video.videoWidth>0){
-
-      await faceMesh.send({
-        image:video
       });
 
+
+    faceMesh.setOptions({
+
+      maxNumFaces: 1,
+
+      refineLandmarks: true,
+
+      minDetectionConfidence: 0.55,
+
+      minTrackingConfidence: 0.55
+
+    });
+
+
+    faceMesh.onResults(
+      function(results) {
+
+        if (
+          results.multiFaceLandmarks &&
+          results.multiFaceLandmarks.length > 0
+        ) {
+
+          const face =
+            results.multiFaceLandmarks[0];
+
+
+          currentFeature =
+            getEyeFeature(face);
+
+
+          if (currentFeature) {
+
+            if (calibrated) {
+
+              statusText.innerText =
+                "🟢 Göz izlənilir";
+
+              estimateGaze(
+                currentFeature
+              );
+
+            } else {
+
+              statusText.innerText =
+                "🟢 ÜZ VƏ GÖZLƏR AŞKARLANDI";
+
+            }
+
+
+            dot.style.background =
+              "#20b957";
+
+          }
+
+        } else {
+
+          currentFeature = null;
+
+          statusText.innerText =
+            "🟡 Üz axtarılır...";
+
+          dot.style.background =
+            "#ff9800";
+
+        }
+
+      }
+    );
+
+
+    async function processFrame() {
+
+      if (video.videoWidth > 0) {
+
+        await faceMesh.send({
+          image: video
+        });
+
+      }
+
+      requestAnimationFrame(
+        processFrame
+      );
+
     }
 
-    requestAnimationFrame(process);
+
+    processFrame();
+
+
+  } catch(error) {
+
+    console.error(error);
+
+    statusText.innerText =
+      "🟠 Göz izləmə xətası";
+
+    gazeText.innerText =
+      error.message ||
+      "Naməlum xəta";
 
   }
-
-  process();
 
 }
 
 
-/* =========================
+/* =====================================================
    KAMERA
-========================= */
+===================================================== */
 
-async function startCamera(){
+async function startCamera() {
 
-  try{
+  try {
 
-    statusText.innerText=
+    statusText.innerText =
       "🟡 Kamera açılır...";
 
-    dot.style.background="#ff9800";
+    dot.style.background =
+      "#ff9800";
 
 
-    stream=
-      await navigator.mediaDevices.getUserMedia({
+    if (
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia
+    ) {
 
-        video:{
-          facingMode:"user",
-          width:{ideal:640},
-          height:{ideal:480}
+      throw new Error(
+        "Brauzer kamera funksiyasını dəstəkləmir."
+      );
+
+    }
+
+
+    stream =
+      await navigator.mediaDevices
+      .getUserMedia({
+
+        video: {
+
+          facingMode: "user",
+
+          width: {
+            ideal: 640
+          },
+
+          height: {
+            ideal: 480
+          }
+
         },
 
-        audio:false
+        audio: false
 
       });
 
 
-    video.srcObject=stream;
+    video.srcObject =
+      stream;
+
 
     await video.play();
 
 
-    statusText.innerText=
+    statusText.innerText =
       "🟢 Kamera işləyir";
 
-    dot.style.background="#20b957";
+    dot.style.background =
+      "#20b957";
 
-    startBtn.style.display="none";
 
-    gazeText.innerText=
-      "👁️ Üzünüzü kameraya tərəf saxlayın...";
+    startBtn.style.display =
+      "none";
+
+
+    gazeText.innerText =
+      "👁️ Üzünüzü kameraya tərəf saxlayın.";
 
 
     await startFaceMesh();
 
 
-    setTimeout(()=>{
+    /*
+      Üz aşkarlanması üçün
+      3 saniyə gözləyirik.
+    */
+
+    setTimeout(() => {
 
       startCalibration();
 
-    },3000);
+    }, 3000);
 
 
-  }catch(error){
+  } catch(error) {
 
-    console.error(error);
+    console.error(
+      "KAMERA XƏTASI:",
+      error
+    );
 
-    statusText.innerText=
+
+    statusText.innerText =
       "🔴 Kamera açıla bilmədi";
 
-    dot.style.background="red";
+    dot.style.background =
+      "red";
 
-    gazeText.innerText=
+
+    gazeText.innerText =
       error.message ||
       "Kamera xətası";
 
@@ -896,9 +1170,9 @@ async function startCamera(){
 }
 
 
-/* =========================
+/* =====================================================
    BAŞLAT
-========================= */
+===================================================== */
 
 startBtn.addEventListener(
   "click",
@@ -906,24 +1180,44 @@ startBtn.addEventListener(
 );
 
 
-/* =========================
+/* =====================================================
    ƏL İLƏ TEST
-========================= */
+===================================================== */
 
-document.getElementById("yes")
-.addEventListener("click",function(){
-  selectButton(this);
-});
+document
+  .getElementById("yes")
+  .addEventListener(
+    "click",
+    function() {
 
-document.getElementById("call")
-.addEventListener("click",function(){
-  selectButton(this);
-});
+      selectButton(this);
 
-document.getElementById("no")
-.addEventListener("click",function(){
-  selectButton(this);
-});
+    }
+  );
+
+
+document
+  .getElementById("call")
+  .addEventListener(
+    "click",
+    function() {
+
+      selectButton(this);
+
+    }
+  );
+
+
+document
+  .getElementById("no")
+  .addEventListener(
+    "click",
+    function() {
+
+      selectButton(this);
+
+    }
+  );
 
 </script>
 
