@@ -31,13 +31,17 @@ body{
     overflow:hidden;
 }
 
+/* HEADER */
+
 header{
     height:68px;
     background:#102a43;
     color:#fff;
+
     display:flex;
     align-items:center;
     justify-content:space-between;
+
     padding:0 28px;
 }
 
@@ -48,56 +52,86 @@ header{
 }
 
 .room{
-    color:#c8d5e2;
     font-size:15px;
     font-weight:600;
+    color:#c8d5e2;
 }
+
+/* STATUS */
 
 #status{
     height:70px;
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     text-align:center;
-    color:#526579;
+
     font-size:18px;
     font-weight:600;
+
+    color:#526579;
 }
+
+/* START */
 
 #startPanel{
     width:min(680px,90vw);
+
     margin:35px auto;
+
     background:#fff;
+
     border:1px solid #e3e9ef;
+
     border-radius:28px;
+
     padding:42px 30px;
+
     text-align:center;
-    box-shadow:0 18px 50px rgba(16,42,67,.08);
+
+    box-shadow:
+        0 18px 50px
+        rgba(16,42,67,.08);
 }
 
 .startTitle{
     font-size:30px;
     font-weight:800;
+
     color:#102a43;
+
     margin-bottom:14px;
 }
 
 .startText{
     color:#718096;
+
     font-size:16px;
+
     line-height:1.6;
+
     margin-bottom:28px;
 }
 
 #start{
     border:0;
+
     background:#102a43;
+
     color:#fff;
+
     padding:20px 35px;
+
     border-radius:16px;
+
     font-size:18px;
+
     font-weight:700;
 }
+
+/* CAMERA */
 
 #video{
     display:none;
@@ -109,43 +143,69 @@ header{
 
 #calibration{
     display:none;
+
     position:fixed;
+
     inset:0;
+
     z-index:100;
+
     background:#f5f7fa;
 }
 
 .calTitle{
     position:absolute;
+
     top:28px;
+
     left:20px;
     right:20px;
+
     text-align:center;
+
     font-size:23px;
     font-weight:800;
+
     color:#102a43;
 }
 
 .calText{
     position:absolute;
+
     top:68px;
+
     left:20px;
     right:20px;
+
     text-align:center;
+
     font-size:15px;
+
     color:#718096;
 }
 
+/* YALNIZ AKTİV NÖQTƏ */
+
 .point{
     display:none;
+
     position:absolute;
+
     width:28px;
     height:28px;
-    transform:translate(-50%,-50%);
+
+    transform:
+        translate(-50%,-50%);
+
     border-radius:50%;
+
     background:#c62828;
+
     border:5px solid white;
-    box-shadow:0 0 0 7px rgba(198,40,40,.14);
+
+    box-shadow:
+        0 0 0 7px
+        rgba(198,40,40,.14);
 }
 
 .point.active{
@@ -154,41 +214,66 @@ header{
 
 /* =========================
    HƏ / YOX
+   MƏCBURİ ŞAQULİ
 ========================= */
 
 #choices{
     display:none;
 
+    position:fixed;
+
+    top:68px;
+    left:0;
+    right:0;
+    bottom:0;
+
     width:100%;
-    height:calc(100vh - 138px);
+    height:calc(100vh - 68px);
 
-    padding:25px 20px 70px;
+    padding:35px 20px 75px;
 
-    flex-direction:column;
-    align-items:center;
-    justify-content:space-between;
+    flex-direction:column !important;
+    flex-wrap:nowrap !important;
 
-    gap:70px;
+    align-items:center !important;
+    justify-content:center !important;
+
+    gap:100px !important;
 }
 
+/* DÜYMƏ */
+
 .choice{
-    width:min(650px,78vw);
-    height:240px;
+    display:flex;
+
+    flex:none !important;
+
+    width:min(680px,82vw);
+
+    height:230px;
+
+    margin:0 !important;
 
     border:0;
-    border-radius:30px;
+
+    border-radius:32px;
+
+    align-items:center;
+    justify-content:center;
 
     color:#fff;
 
-    font-size:58px;
+    font-size:60px;
+
     font-weight:800;
 
     box-shadow:
-        0 18px 45px rgba(16,42,67,.12);
+        0 18px 45px
+        rgba(16,42,67,.12);
 
     transition:
-        transform .18s,
-        box-shadow .18s;
+        transform .18s ease,
+        box-shadow .18s ease;
 }
 
 .yes{
@@ -203,8 +288,11 @@ header{
     transform:scale(1.045);
 
     box-shadow:
-        0 0 0 8px rgba(16,42,67,.12),
-        0 22px 50px rgba(16,42,67,.18);
+        0 0 0 8px
+        rgba(16,42,67,.12),
+
+        0 22px 50px
+        rgba(16,42,67,.18);
 }
 
 /* =========================
@@ -213,38 +301,63 @@ header{
 
 #progress{
     display:none;
+
     position:fixed;
-    left:20%;
-    right:20%;
+
+    left:18%;
+    right:18%;
+
     bottom:25px;
+
     height:8px;
+
     background:#dce3ea;
+
     border-radius:20px;
+
     overflow:hidden;
+
+    z-index:150;
 }
 
 #bar{
     width:0%;
+
     height:100%;
+
     background:#102a43;
 }
 
+/* RESET */
+
 #reset{
     display:none;
+
     position:fixed;
-    right:15px;
+
     top:78px;
+    right:15px;
+
     z-index:200;
+
     border:0;
+
     background:transparent;
+
     color:#718096;
+
     font-size:12px;
 }
 
-@media(max-width:650px){
+/* =========================
+   TELEFON
+========================= */
+
+@media(max-width:700px){
 
     header{
         height:60px;
+
         padding:0 18px;
     }
 
@@ -258,11 +371,13 @@ header{
 
     #status{
         height:60px;
+
         font-size:15px;
     }
 
     #startPanel{
         margin-top:25px;
+
         padding:35px 22px;
     }
 
@@ -274,17 +389,53 @@ header{
         font-size:15px;
     }
 
+    /*
+       ƏN VACİB:
+       mobil telefonda da
+       mütləq sütun
+    */
+
     #choices{
-        height:calc(100vh - 120px);
-        padding:25px 18px 65px;
-        gap:55px;
+        top:60px;
+
+        height:calc(100vh - 60px);
+
+        padding:
+            25px 18px
+            70px;
+
+        flex-direction:column !important;
+        flex-wrap:nowrap !important;
+
+        align-items:center !important;
+        justify-content:center !important;
+
+        gap:90px !important;
     }
 
     .choice{
-        width:78vw;
-        height:210px;
-        font-size:42px;
-        border-radius:25px;
+        width:82vw;
+
+        height:205px;
+
+        flex:none !important;
+
+        font-size:43px;
+    }
+}
+
+/* ÇOX BALACA TELEFON */
+
+@media(max-width:400px){
+
+    #choices{
+        gap:75px !important;
+    }
+
+    .choice{
+        width:84vw;
+        height:185px;
+        font-size:38px;
     }
 }
 </style>
@@ -293,13 +444,22 @@ header{
 <body>
 
 <header>
-    <div class="logo">MEDELIN</div>
-    <div class="room">PALATA 402</div>
+
+    <div class="logo">
+        MEDELIN
+    </div>
+
+    <div class="room">
+        PALATA 402
+    </div>
+
 </header>
+
 
 <div id="status">
     Sistem hazır deyil
 </div>
+
 
 <div id="startPanel">
 
@@ -318,7 +478,12 @@ header{
 
 </div>
 
-<video id="video" autoplay playsinline></video>
+
+<video
+    id="video"
+    autoplay
+    playsinline>
+</video>
 
 
 <!-- =========================
@@ -335,39 +500,49 @@ header{
         Qırmızı nöqtəyə sakit şəkildə baxın
     </div>
 
-    <!-- 1 MƏRKƏZ -->
 
-    <div class="point"
-         data-key="center"
-         style="left:50%;top:50%">
+    <!-- MƏRKƏZ -->
+
+    <div
+        class="point"
+        data-key="center"
+        style="left:50%;top:50%;">
     </div>
 
-    <!-- 2 SOL -->
 
-    <div class="point"
-         data-key="left"
-         style="left:15%;top:50%">
+    <!-- SOL -->
+
+    <div
+        class="point"
+        data-key="left"
+        style="left:15%;top:50%;">
     </div>
 
-    <!-- 3 SAĞ -->
 
-    <div class="point"
-         data-key="right"
-         style="left:85%;top:50%">
+    <!-- SAĞ -->
+
+    <div
+        class="point"
+        data-key="right"
+        style="left:85%;top:50%;">
     </div>
 
-    <!-- 4 YUXARI -->
 
-    <div class="point"
-         data-key="up"
-         style="left:50%;top:22%">
+    <!-- YUXARI -->
+
+    <div
+        class="point"
+        data-key="up"
+        style="left:50%;top:22%;">
     </div>
 
-    <!-- 5 AŞAĞI -->
 
-    <div class="point"
-         data-key="down"
-         style="left:50%;top:78%">
+    <!-- AŞAĞI -->
+
+    <div
+        class="point"
+        data-key="down"
+        style="left:50%;top:78%;">
     </div>
 
 </div>
@@ -387,6 +562,7 @@ header{
         HƏ
 
     </button>
+
 
     <button
         class="choice no"
@@ -411,9 +587,9 @@ header{
 
 <script>
 
-/* =====================================================
+/* =================================================
    ELEMENTLƏR
-===================================================== */
+================================================= */
 
 const video =
 document.getElementById("video");
@@ -453,12 +629,12 @@ const buttons =
 ];
 
 
-/* =====================================================
+/* =================================================
    PARAMETRLƏR
-===================================================== */
+================================================= */
 
 const STORAGE_KEY =
-"MEDELIN_402_VERTICAL_V3";
+"MEDELIN_402_VERTICAL_FINAL";
 
 const POINT_TIME =
 1600;
@@ -470,9 +646,9 @@ const SMOOTH =
 0.10;
 
 
-/* =====================================================
+/* =================================================
    DƏYİŞƏNLƏR
-===================================================== */
+================================================= */
 
 let running = false;
 
@@ -480,9 +656,9 @@ let collecting = false;
 
 let calibrationData = null;
 
-let lastEyeX = .5;
+let lastEyeX = 0.5;
 
-let lastEyeY = .5;
+let lastEyeY = 0.5;
 
 let gazeX = null;
 
@@ -495,9 +671,9 @@ let lookStarted = 0;
 let locked = false;
 
 
-/* =====================================================
+/* =================================================
    MEDIAPIPE
-===================================================== */
+================================================= */
 
 const faceMesh =
 new FaceMesh({
@@ -517,16 +693,16 @@ faceMesh.setOptions({
 
     refineLandmarks:true,
 
-    minDetectionConfidence:.55,
+    minDetectionConfidence:0.55,
 
-    minTrackingConfidence:.55
+    minTrackingConfidence:0.55
 
 });
 
 
-/* =====================================================
+/* =================================================
    ORTAQ NÖQTƏ
-===================================================== */
+================================================= */
 
 function average(
     landmarks,
@@ -573,9 +749,9 @@ function average(
 }
 
 
-/* =====================================================
-   GÖZ İSTİQAMƏTİ
-===================================================== */
+/* =================================================
+   GÖZ FEATURE
+================================================= */
 
 function getEye(
     landmarks
@@ -648,7 +824,7 @@ function getEye(
         Math.abs(
             li.x-lo.x
         ),
-        .0001
+        0.0001
     );
 
 
@@ -657,7 +833,7 @@ function getEye(
         Math.abs(
             ro.x-ri.x
         ),
-        .0001
+        0.0001
     );
 
 
@@ -666,7 +842,7 @@ function getEye(
         Math.abs(
             lb.y-lt.y
         ),
-        .0001
+        0.0001
     );
 
 
@@ -675,7 +851,7 @@ function getEye(
         Math.abs(
             rb.y-rt.y
         ),
-        .0001
+        0.0001
     );
 
 
@@ -710,9 +886,9 @@ function getEye(
 }
 
 
-/* =====================================================
-   FACE NƏTİCƏLƏRİ
-===================================================== */
+/* =================================================
+   FACE RESULTS
+================================================= */
 
 faceMesh.onResults(
 function(results){
@@ -751,8 +927,7 @@ function(results){
 
 
     /*
-       Kalibrasiya zamanı
-       heç nə etmə.
+       Kalibrasiya
     */
 
     if(collecting){
@@ -761,12 +936,16 @@ function(results){
 
 
     /*
-       Kalibrasiya hazırdırsa
-       göz istiqamətini hesabla.
+       Normal göz izləmə
     */
 
     if(
-        calibrationData
+        calibrationData &&
+        calibrationData.center &&
+        calibrationData.left &&
+        calibrationData.right &&
+        calibrationData.up &&
+        calibrationData.down
     ){
 
         const position =
@@ -786,9 +965,9 @@ function(results){
 });
 
 
-/* =====================================================
+/* =================================================
    SİSTEMİ BAŞLAT
-===================================================== */
+================================================= */
 
 async function startSystem(){
 
@@ -859,7 +1038,9 @@ async function startSystem(){
                     }
                     catch(error){
 
-                        console.log(error);
+                        console.log(
+                            error
+                        );
 
                     }
 
@@ -884,10 +1065,14 @@ async function startSystem(){
     }
     catch(error){
 
-        console.error(error);
+        console.error(
+            error
+        );
+
 
         statusBox.innerText =
         "Kamera açıla bilmədi";
+
 
         start.disabled =
         false;
@@ -897,9 +1082,9 @@ async function startSystem(){
 }
 
 
-/* =====================================================
+/* =================================================
    BAŞLA
-===================================================== */
+================================================= */
 
 function begin(){
 
@@ -928,7 +1113,9 @@ function begin(){
                 calibrationData =
                 data;
 
+
                 showChoices();
+
 
                 return;
 
@@ -951,9 +1138,9 @@ function begin(){
 }
 
 
-/* =====================================================
+/* =================================================
    KALİBRASİYA
-===================================================== */
+================================================= */
 
 function startCalibration(){
 
@@ -984,6 +1171,14 @@ function startCalibration(){
     "none";
 
 
+    points.forEach(
+        p =>
+        p.classList.remove(
+            "active"
+        )
+    );
+
+
     let index = 0;
 
 
@@ -998,7 +1193,7 @@ function startCalibration(){
 
 
         /*
-           5 nöqtə bitdi
+           BİTDİ
         */
 
         if(
@@ -1036,11 +1231,6 @@ function startCalibration(){
         true;
 
 
-        /*
-           Bu nöqtəyə baxmaq
-           üçün 1.6 saniyə.
-        */
-
         setTimeout(
         function(){
 
@@ -1053,8 +1243,7 @@ function startCalibration(){
 
 
             /*
-               Son görülən göz
-               koordinatını saxla.
+               Son göz mövqeyi
             */
 
             calibrationData[key] = {
@@ -1066,11 +1255,11 @@ function startCalibration(){
                 lastEyeY,
 
                 screenX:
-                rect.left+
+                rect.left +
                 rect.width/2,
 
                 screenY:
-                rect.top+
+                rect.top +
                 rect.height/2
 
             };
@@ -1096,11 +1285,15 @@ function startCalibration(){
 }
 
 
-/* =====================================================
+/* =================================================
    KALİBRASİYA BİTİR
-===================================================== */
+================================================= */
 
 function finishCalibration(){
+
+    collecting =
+    false;
+
 
     points.forEach(
         p =>
@@ -1127,9 +1320,9 @@ function finishCalibration(){
 }
 
 
-/* =====================================================
+/* =================================================
    HƏ / YOX EKRANI
-===================================================== */
+================================================= */
 
 function showChoices(){
 
@@ -1164,20 +1357,14 @@ function showChoices(){
 }
 
 
-/* =====================================================
+/* =================================================
    GÖZÜ EKRANA XƏRİTƏLƏ
-===================================================== */
+================================================= */
 
 function predictGaze(
     x,
     y
 ){
-
-    const left =
-    calibrationData.left;
-
-    const right =
-    calibrationData.right;
 
     const up =
     calibrationData.up;
@@ -1187,39 +1374,19 @@ function predictGaze(
 
 
     /*
-       X oxu
-    */
-
-    let nx =
-    (x-left.eyeX) /
-    Math.max(
-        right.eyeX-left.eyeX,
-        .0001
-    );
-
-
-    /*
-       Y oxu
-
-       YUXARI = HƏ
-       AŞAĞI = YOX
+       YUXARI / AŞAĞI
+       əsas idarəetmədir.
     */
 
     let ny =
-    (y-up.eyeY) /
+    (
+        y -
+        up.eyeY
+    ) /
     Math.max(
-        down.eyeY-up.eyeY,
-        .0001
-    );
-
-
-    nx =
-    Math.max(
-        0,
-        Math.min(
-            1,
-            nx
-        )
+        down.eyeY -
+        up.eyeY,
+        0.0001
     );
 
 
@@ -1234,24 +1401,22 @@ function predictGaze(
 
 
     /*
-       Ekran koordinatı
+       EKRANDA:
 
-       YUXARI hissə:
-       HƏ
-
-       AŞAĞI hissə:
-       YOX
+       0   = yuxarı
+       1   = aşağı
     */
 
     const screenX =
-    window.innerWidth/2;
+    window.innerWidth /
+    2;
 
 
     const screenY =
     window.innerHeight *
     (
-        .22 +
-        ny*.56
+        0.20 +
+        ny * 0.60
     );
 
 
@@ -1266,9 +1431,9 @@ function predictGaze(
 }
 
 
-/* =====================================================
-   GÖZÜ YUMŞALT
-===================================================== */
+/* =================================================
+   YUMŞALTMA
+================================================= */
 
 function updateGaze(
     x,
@@ -1289,12 +1454,18 @@ function updateGaze(
     else{
 
         gazeX +=
-        (x-gazeX) *
+        (
+            x -
+            gazeX
+        ) *
         SMOOTH;
 
 
         gazeY +=
-        (y-gazeY) *
+        (
+            y -
+            gazeY
+        ) *
         SMOOTH;
 
     }
@@ -1308,9 +1479,9 @@ function updateGaze(
 }
 
 
-/* =====================================================
+/* =================================================
    HƏ / YOX SEÇ
-===================================================== */
+================================================= */
 
 function checkButton(
     x,
@@ -1327,27 +1498,24 @@ function checkButton(
 
 
     /*
-       Yalnız Y koordinatına
-       əsaslanırıq.
+       ORTA ZONA
 
-       Ekranın yuxarısı:
-       HƏ
-
-       Ekranın aşağısı:
-       YOX
+       Burada heç nə seçilmir.
+       Bu böyük boşluqdur.
     */
 
     const middle =
-    window.innerHeight/2;
+    window.innerHeight /
+    2;
 
 
     /*
-       YUXARI ZONA
+       YUXARI = HƏ
     */
 
     if(
         y <
-        middle-35
+        middle - 65
     ){
 
         target =
@@ -1357,12 +1525,12 @@ function checkButton(
 
 
     /*
-       AŞAĞI ZONA
+       AŞAĞI = YOX
     */
 
     else if(
         y >
-        middle+35
+        middle + 65
     ){
 
         target =
@@ -1373,7 +1541,7 @@ function checkButton(
 
     /*
        Ortada qalırsa
-       seçim dəyişmir.
+       hazırkı seçim saxlanır.
     */
 
     else{
@@ -1384,7 +1552,7 @@ function checkButton(
 
 
     /*
-       Yeni düymə
+       Yeni seçim
     */
 
     if(
@@ -1423,8 +1591,7 @@ function checkButton(
 
 
     /*
-       Eyni düyməyə
-       sabit baxış
+       Sabit baxış
     */
 
     const elapsed =
@@ -1442,7 +1609,8 @@ function checkButton(
 
 
     bar.style.width =
-    percent+"%";
+    percent +
+    "%";
 
 
     if(
@@ -1459,9 +1627,9 @@ function checkButton(
 }
 
 
-/* =====================================================
+/* =================================================
    SEÇİM
-===================================================== */
+================================================= */
 
 function selectButton(
     button
@@ -1557,9 +1725,9 @@ function selectButton(
 }
 
 
-/* =====================================================
+/* =================================================
    YENİDƏN KALİBRASİYA
-===================================================== */
+================================================= */
 
 reset.addEventListener(
     "click",
@@ -1587,9 +1755,9 @@ reset.addEventListener(
 );
 
 
-/* =====================================================
+/* =================================================
    START
-===================================================== */
+================================================= */
 
 start.addEventListener(
     "click",
